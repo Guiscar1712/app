@@ -1,20 +1,39 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# bluecore-template-node-api
+Template de projeto api, com arquitetura simples, utilizando:
+  - Node
+  - ExpressJS
+  - SQL Server
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+### Libs
+  - Dotenv
+  - JWT
+  - *Database*
+    - MSSQL
+  - *Framework*
+    - Express
+      - Express Validator
+    - Body Parser
+    - Multer
+    - Cookie Parser
+    - Cors
+  - *Logs*
+    - Morgan
+    - Winston
+      - Winston Rotate File
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+### Instalação
+Para realizar a instalação da aplicação:
+ - Executar o romando `npm install`
+### Executar em desenvolvimento
+Para realizar a execução da aplicação em desenvolvimento:
+ - Executar o romando `npm run dev`
+ - A aplicação rodará na porta **3000**
+### Execução em produção
+Para realizar a execução da aplicação em produção:
+ - Executar o comando `npm start`
+### Lint Check
+Para realizar a verificação do ESLINT:
+ - Executar o romando `npm run lint`
+### Lint Fix
+Para forçar o ajuste do ESLINT:
+ - Executar o romando `npm run lint:fix`
