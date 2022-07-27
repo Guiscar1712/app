@@ -1,5 +1,6 @@
 
 const database = require('./config.database')
+const table = 'User'
 
 module.exports = class UserDatabase {
   static async findByLogin (username, password) {
@@ -22,7 +23,7 @@ module.exports = class UserDatabase {
         'name',
         'username'
       )
-      .from('User')
+      .from(table)
       .where({ username, password })
       .first()
 
@@ -36,7 +37,7 @@ module.exports = class UserDatabase {
         'name',
         'username'
       )
-      .from('User')
+      .from(table)
 
     return result
   }
