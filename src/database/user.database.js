@@ -3,6 +3,7 @@ const database = require('./config.database')
 
 module.exports = class UserDatabase {
   static async findByLogin (username, password) {
+    // Exemplo usando query nativa
     /* const result = await database.raw(`
     Select
         Id as 'id',
