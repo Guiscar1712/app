@@ -28,9 +28,9 @@ module.exports = class UserController {
 
       jwt.verify(token, SECRET, (error, decoded) => {
         if (!error) {
-          return response.json(decoded)
+          response.json(decoded)
         } else {
-          return response.status(401).send('Invalid token')
+          response.status(401).send('Invalid token')
         }
       })
     } catch (error) {
@@ -42,7 +42,7 @@ module.exports = class UserController {
   static async list (request, response, next) {
     try {
       const users = await UserDatabase.list()
-      return response.json(users)
+      response.json(users)
     } catch (error) {
       console.log(error)
       next(error)
