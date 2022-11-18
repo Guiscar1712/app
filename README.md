@@ -1,4 +1,4 @@
-# bluecore-template-node-api 
+# kroton vitrine node api 
 Template de projeto api, com arquitetura simples, utilizando:
   - Node
   - ExpressJS
