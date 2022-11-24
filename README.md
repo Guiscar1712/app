@@ -49,3 +49,5 @@ Para realizar a criação de um seed para banco de dados:
 ### Rodar seeds
 Para realizar a execução dos seeds para banco de dados:
  - Executar o comando `npm run seeds`
+### rollback
+ - npx knex migrate:rollback
