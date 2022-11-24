@@ -6,7 +6,7 @@ module.exports = {
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     server: process.env.DATABASE_HOST,
-    port: parseInt(process.env.DATABASE_PORT),
+    //port: parseInt(process.env.DATABASE_PORT),
     database: process.env.DATABASE_NAME,
     encrypt: process.env.DATABASE_SSL.toLowerCase() === 'true'
   },

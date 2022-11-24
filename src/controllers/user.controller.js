@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken')
-const UserDatabase = require('../database/user.database')
+const UserService = require('../services/userService')
 
 const SECRET = process.env.JWT_SECRET
 
 module.exports = class UserController {
-  static async login (request, response, next) {
+  /*static async login (request, response, next) {
     try {
       const { username, password } = request.body
 
@@ -39,12 +39,48 @@ module.exports = class UserController {
     }
   }
 
-  static async list (request, response, next) {
+  
+
+  
+
+  */
+  static async get (request, response, next) {
     try {
-      const users = await UserDatabase.list()
-      response.json(users)
+      const data = await UserService.findById(request.params.id)
+      response.json(data)
     } catch (error) {
       console.log(error)
+      next(error)
+    }
+  }
+
+  static async list (request, response, next) {
+    try {
+      const data = await UserService.list()
+      response.json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async register(request, response, next){
+    try{
+      const data = await UserService.register(request.body);
+      response.json(data)
+    }catch(error){
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async login(request, response, next){
+    try{
+      const { email, password } = request.body
+      const data = await UserService.login(email, password);
+      response.json(data)
+    }catch(error){
+      console.log(error);
       next(error)
     }
   }
