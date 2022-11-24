@@ -3,6 +3,8 @@ const cors = require('cors')
 const logger = require('./utils/logger.util')
 const morgan = require('./middlewares/morgan.middleware')
 const cookieParser = require('cookie-parser')
+const dotenv = require('dotenv')
+dotenv.config()
 
 const app = express()
 
