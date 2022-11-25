@@ -36,6 +36,9 @@ module.exports = class UserRepository {
 }
 
 function format(row) {
+    if(!row){
+        return null;
+    }
     return {
         id: row.Id,
         createdAt: row.CreatedAt,

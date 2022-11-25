@@ -51,8 +51,9 @@ module.exports = class UserService {
                 UserId:user.id,
                 Password:md5(entity.password),
                 RecoveryKey:md5(user.id+" "+entity.password)
-            })
-        
+            });
+
+        return user;
     }
 
     static async login(email, password){
