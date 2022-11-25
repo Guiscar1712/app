@@ -84,4 +84,14 @@ module.exports = class UserController {
       next(error)
     }
   }
+
+  /*static async save(request, response, next){
+    try{
+      const data = await UserService.save(request.body);
+      response.json(data)
+    }catch(error){
+      console.log(error)
+      next(error)
+    }
+  }*/
 }

@@ -27,7 +27,7 @@ module.exports = class SimpleQuery {
     static async insert(entity, from, transaction) {
         try {
             const data = await (transaction ? transaction : database)(from)
-                .insert(entity, "id")
+                .insert(entity, "*")//, "id"
 
             return data[0];
         } catch (error) {
