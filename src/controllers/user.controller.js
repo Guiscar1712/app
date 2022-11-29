@@ -85,13 +85,35 @@ module.exports = class UserController {
     }
   }
 
-  /*static async save(request, response, next){
+  static async update(request, response, next){
     try{
-      const data = await UserService.save(request.body);
+      const data = await UserService.update(request.body);
       response.json(data)
     }catch(error){
       console.log(error)
       next(error)
     }
-  }*/
+  }
+
+  static async validateCode(request, response, next){
+    try{
+      const { email, code } = request.body
+      const data = await UserService.validateCode(email, code);
+      response.json(data)
+    }catch(error){
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async recoverPassword(request, response, next){
+    try{
+      const { cpf } = request.body
+      const data = await UserService.recoverPassword(cpf);
+      response.json(data)
+    }catch(error){
+      console.log(error)
+      next(error)
+    }
+  } 
 }

@@ -4,14 +4,14 @@ const sgMail = require('@sendgrid/mail')
 
 module.exports = class SendGridHelper{
   static async sendMessage(to, subject, html){
-    sgMail.setApiKey(config.sendGridKey)
+    sgMail.setApiKey(config.sendGrid.key)
     const msg = {
       to,
-      bcc: config.SENDGRID.BCC,
-      from: config.SENDGRID.FROM,
+      bcc: config.sendGrid.bcc,
+      from: config.sendGrid.from,
       subject,
       html
     }
-    sgMail.send(msg);
+    return await sgMail.send(msg);
   }
 }

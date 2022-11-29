@@ -1,16 +1,14 @@
-
-//const database = require('../database/config.database')
 const SimpleQuery = require('../database/simpleQuery')
 const table = 'User'
 
 module.exports = class UserRepository {
-    static async findBy(where, transaction) {
-        const row = await SimpleQuery.findBy(where, table, transaction);
+    static async findBy(query, transaction) {
+        const row = await SimpleQuery.findBy(query, table, transaction);
         return format(row);
     }
 
-    static async filterBy(where, transaction) {
-        const rows = await SimpleQuery.filterBy(where, table, transaction);
+    static async filterBy(query, transaction) {
+        const rows = await SimpleQuery.filterBy(query, table, transaction);
         const items = [];
         for (const row of rows) {
             items.push(format(row))
@@ -27,11 +25,11 @@ module.exports = class UserRepository {
     }
 
     static async insert(entity, transaction) {
-        return await SimpleQuery.insert(entity, table, transaction)
+        return format(await SimpleQuery.insert(entity, table, transaction))
     }
 
-    static async update(entity, transaction) {
-        return await SimpleQuery.update(entity, table, transaction)
+    static async update(id, entity, transaction) {
+        return format(await SimpleQuery.update({ Id: id }, entity, table, transaction))
     }
 }
 
