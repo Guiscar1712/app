@@ -68,8 +68,12 @@ module.exports = class UserService {
         return true;
     }
 
-    static async changePassword(code, password){
-        const membership = await MembershipRepository.findBy({ RecoveryKey: code });
+    static async changePassword(email, code, password){
+        const user = await UserRepository.findBy({ Email: email });
+        if (!user) {
+            throw new Error('email não cadastrado!');
+        }
+        const membership = await MembershipRepository.findBy({ UserId: user.id, RecoveryKey: code });
         if (!membership) {
             throw new Error('código inválido!');
         }

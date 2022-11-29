@@ -108,8 +108,8 @@ module.exports = class UserController {
 
   static async changePassword(request, response, next){
     try{
-      const { code, password } = request.body
-      const data = await UserService.changePassword(code, password);
+      const { email, code, password } = request.body
+      const data = await UserService.changePassword(email, code, password);
       response.json(data)
     }catch(error){
       console.log(error)
