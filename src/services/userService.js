@@ -16,8 +16,15 @@ module.exports = class UserService {
         return await UserRepository.list()
     }
 
+    static async sendCodeEmail(email){
+        const user = await UserRepository.findBy({ Email: email });
+        const membership = await MembershipRepository.findBy({ UserId: user.id })
+        await EmailService.recoverPassword(email, membership.recoveryKey);
+    }
+
     static async register(entity) {
         if (await UserRepository.findBy({ Email: entity.email })) {
+            await this.sendCodeEmail(entity.email);
             throw new Error('email já cadastrado!');
         }
         if (await UserRepository.findBy({ CPF: entity.cpf })) {
@@ -45,7 +52,7 @@ module.exports = class UserService {
 
             await transaction.commit();
 
-            //await EmailService.recoverPassword(entity.email, membership.recoveryKey);
+            await this.sendCodeEmail(entity.email);
 
             return user;
         } catch (error) {
@@ -126,12 +133,13 @@ module.exports = class UserService {
     }
 
     static async recoverPassword(cpf){
-        const user = await UserRepository.findBy({ CPF: entity.cpf })
+        const user = await UserRepository.findBy({ CPF: cpf })
         
         if (!user) {
             throw new Error('cpf não cadastrado!');
         }
 
-        const membership = await MembershipRepository.findBy({ UserId: user.id })
+        await this.sendCodeEmail(user.email);
+        return true;
     }
 }

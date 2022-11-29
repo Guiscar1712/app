@@ -69,7 +69,16 @@ module.exports = class UserController {
       const data = await UserService.register(request.body);
       response.json(data)
     }catch(error){
-      console.log(error)
+      if(error){
+        if(error.response &&  error.response.body && error.response.body.errors){
+          console.log(error.response.body.errors)
+        }
+        else{
+          console.log(error);
+        }
+      }
+      
+      
       next(error)
     }
   }

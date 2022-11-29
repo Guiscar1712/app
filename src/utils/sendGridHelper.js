@@ -8,7 +8,7 @@ module.exports = class SendGridHelper{
     const msg = {
       to,
       bcc: config.sendGrid.bcc,
-      from: config.sendGrid.from,
+      from: config.sendGrid.sender,
       subject,
       html
     }
