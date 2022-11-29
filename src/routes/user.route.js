@@ -10,6 +10,7 @@ router.post('/register', UserController.register)
 router.post('/update', UserController.update)
 router.post('/login', UserController.login)
 router.post('/validate', UserController.validateCode)
+router.post('/changePassword', UserController.changePassword)
 
 router.get('/:id', UserController.get)
 router.get('/', UserController.list)
