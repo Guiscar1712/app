@@ -17,7 +17,7 @@ module.exports = class UserService {
         return await UserRepository.list()
     }
 
-    static async sendCodeEmail(email){
+    static async sendCodeEmail(email) {
         const user = await UserRepository.findBy({ Email: email });
         const membership = await MembershipRepository.findBy({ UserId: user.id })
         await EmailService.recoverPassword(email, membership.recoveryKey);
@@ -46,9 +46,9 @@ module.exports = class UserService {
                 Birthday: entity.birthday
             }, transaction);
 
-            const membership = await MembershipRepository.insert({
+            await MembershipRepository.insert({
                 UserId: user.id,
-                RecoveryKey: Util.getNumbers(md5(user.id+" "+user.email), 5) 
+                RecoveryKey: Util.getNumbers(md5(user.id + " " + user.email), 5)
             }, transaction);
 
             await transaction.commit();
@@ -64,7 +64,7 @@ module.exports = class UserService {
 
     }
 
-    static async validateCode(email, code){
+    static async validateCode(email, code) {
         const user = await UserRepository.findBy({ Email: email });
         if (!user) {
             throw new Error('email não cadastrado!');
@@ -76,7 +76,7 @@ module.exports = class UserService {
         return true;
     }
 
-    static async changePassword(email, code, password){
+    static async changePassword(email, code, password) {
         const user = await UserRepository.findBy({ Email: email });
         if (!user) {
             throw new Error('email não cadastrado!');
@@ -85,9 +85,9 @@ module.exports = class UserService {
         if (!membership) {
             throw new Error('código inválido!');
         }
-        membership.password=md5(password);
+        membership.password = md5(password);
         await MembershipRepository.update(membership.id, {
-            Password:membership.password
+            Password: membership.password
         })
         return true;
     }
@@ -129,13 +129,13 @@ module.exports = class UserService {
             Birthday: entity.birthday
         };
 
-        if(entity.photo){
-            if(entity.photo.includes("/uploads/")){
-                const fileName=entity.photo.split("/").pop();
-                entity.photo = await AzureService.move("uploads","photos", fileName);
+        if (entity.photo) {
+            if (entity.photo.includes("/uploads/")) {
+                const fileName = entity.photo.split("/").pop();
+                entity.photo = await AzureService.move("uploads", "photos", fileName);
             }
-            
-            updateEntity={ ...updateEntity, Photo: entity.photo }
+
+            updateEntity = { ...updateEntity, Photo: entity.photo }
         }
 
         return await UserRepository.update(
@@ -144,9 +144,9 @@ module.exports = class UserService {
         );
     }
 
-    static async recoverPassword(cpf){
+    static async recoverPassword(cpf) {
         const user = await UserRepository.findBy({ CPF: cpf })
-        
+
         if (!user) {
             throw new Error('cpf não cadastrado!');
         }

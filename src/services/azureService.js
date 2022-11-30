@@ -15,7 +15,7 @@ module.exports = class AzureService {
           }
         });
 
-    return blobLink(container, fileName);
+    return this.blobLink(container, fileName);
   }
 
   static blobLink(container, fileName){
