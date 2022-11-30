@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
 const EmailService = require('./emailService')
 const Util = require('../utils/util')
+const AzureService = require('./azureService.js')
 
 module.exports = class UserService {
     static async findById(id) {
@@ -119,16 +120,27 @@ module.exports = class UserService {
         this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'email já cadastrado!');
         this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'phone já cadastrado!');
 
+        let updateEntity = {
+            Name: entity.name,
+            CPF: entity.cpf,
+            Email: entity.email,
+            Phone: entity.phone,
+            Gender: entity.gender,
+            Birthday: entity.birthday
+        };
+
+        if(entity.photo){
+            if(entity.photo.includes("/uploads/")){
+                const fileName=entity.photo.split("/").pop();
+                entity.photo = await AzureService.move("uploads","photos", fileName);
+            }
+            
+            updateEntity={ ...updateEntity, Photo: entity.photo }
+        }
+
         return await UserRepository.update(
             user.id,
-            {
-                Name: entity.name,
-                CPF: entity.cpf,
-                Email: entity.email,
-                Phone: entity.phone,
-                Gender: entity.gender,
-                Birthday: entity.birthday
-            }
+            updateEntity
         );
     }
 
