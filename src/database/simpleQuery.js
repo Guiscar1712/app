@@ -38,7 +38,7 @@ module.exports = class SimpleQuery {
 
     static async update(query, entity, from, transaction) {
         try {
-            const data = await (transaction ? transaction : database)(from)
+             await (transaction ? transaction : database)(from)
                 .update(entity)
                 .where(query)
 

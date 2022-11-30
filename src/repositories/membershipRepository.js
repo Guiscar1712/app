@@ -2,7 +2,7 @@
 const SimpleQuery = require('../database/simpleQuery')
 const table = 'Membership'
 
-module.exports = class UserRepository {
+module.exports = class MembershipRepository {
     static async findBy (query, transaction) {
         const row = await SimpleQuery.findBy(query, table, transaction);
         return format(row);
@@ -30,7 +30,7 @@ module.exports = class UserRepository {
     }
 
     static async update(id, entity, transaction) {
-        return format(await SimpleQuery.update({ Id: id }, entity, table, transaction))
+        return await SimpleQuery.update({ id }, entity, table, transaction)
     }
 }
 

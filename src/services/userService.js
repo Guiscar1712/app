@@ -86,8 +86,10 @@ module.exports = class UserService {
             throw new Error('código inválido!');
         }
         membership.password = md5(password);
+        membership.recoveryKey = Util.getNumbers(md5(user.id + " " + user.password), 5);
         await MembershipRepository.update(membership.id, {
-            Password: membership.password
+            Password: membership.password,
+            RecoveryKey: membership.recoveryKey
         })
         return true;
     }
@@ -120,14 +122,22 @@ module.exports = class UserService {
         this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'email já cadastrado!');
         this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'phone já cadastrado!');
 
-        let updateEntity = {
-            Name: entity.name,
-            CPF: entity.cpf,
-            Email: entity.email,
-            Phone: entity.phone,
-            Gender: entity.gender,
-            Birthday: entity.birthday
-        };
+        let updateEntity = {};
+
+        const add_to_update = (field) => {
+            if (entity[field]) {
+                const new_field = {}
+                new_field[field] = entity[field];
+                updateEntity = { ...updateEntity, ...new_field }
+            }
+        }
+
+        add_to_update("name");
+        add_to_update("cpf");
+        add_to_update("email");
+        add_to_update("phone");
+        add_to_update("gender");
+        add_to_update("birthday");
 
         if (entity.photo) {
             if (entity.photo.includes("/uploads/")) {

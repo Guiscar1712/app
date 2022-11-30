@@ -29,7 +29,7 @@ module.exports = class UserRepository {
     }
 
     static async update(id, entity, transaction) {
-        return format(await SimpleQuery.update({ Id: id }, entity, table, transaction))
+        return await SimpleQuery.update({ id }, entity, table, transaction)
     }
 }
 
