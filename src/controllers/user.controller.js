@@ -56,7 +56,7 @@ module.exports = class UserController {
 
   static async getMe (request, response, next) {
     try {
-      const data = await UserService.findById(response.user.id)
+      const data = await UserService.findById(request.user.id)
       response.json(data)
     } catch (error) {
       console.log(error)
@@ -106,7 +106,7 @@ module.exports = class UserController {
 
   static async update(request, response, next){
     try{
-      const data = await UserService.update(request.body);
+      const data = await UserService.update(request.user.id, request.body);
       response.json(data)
     }catch(error){
       console.log(error)
@@ -168,4 +168,16 @@ module.exports = class UserController {
       next(error)
     }
   }
+
+  static async photo (request, response, next) {
+    try {
+        const { base64 } = request.body;
+        const data = await UserService.photo(request.user.id, base64);
+        response.json(data)
+    }catch(error){
+        console.log(error);
+        next(error); 
+        //response.status(400).json({ success: false })
+    }
+}
 }

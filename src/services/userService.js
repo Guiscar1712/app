@@ -82,7 +82,7 @@ module.exports = class UserService {
         if (code != membership.recoveryKey) {
             throw new Error('código inválido!');
         }
-        return true;
+        return jwt.sign(user, config.jwtSecret);
     }
 
     static async changePassword(email, code, password) {
@@ -121,15 +121,27 @@ module.exports = class UserService {
         }
     }
 
-    static async update(entity) {
-        const user = await UserRepository.findBy({ CPF: entity.cpf })
+    static async photo (userId, base64){
+        const user = await UserRepository.findBy({ Id: userId })
+        const bloblink = await AzureService.uploadBase64('photos', base64);
+        const updateEntity = { Photo: bloblink }
+        
+        return await UserRepository.update(
+            user.id,
+            updateEntity
+        );
+    }
+
+    static async update(userId, entity) {
+        const user = await UserRepository.findBy({ Id: userId })
 
         if (!user) {
-            throw new Error('cpf não cadastrado!');
+            throw new Error('usuário não logado!');
         }
 
-        this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'email já cadastrado!');
-        this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'phone já cadastrado!');
+        this.duplicateRegister(user, await UserRepository.findBy({ CPF: entity.cpf }), 'CPF já cadastrado!');
+        this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'Email já cadastrado!');
+        this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'Phone já cadastrado!');
 
         let updateEntity = {};
 

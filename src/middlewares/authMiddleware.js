@@ -5,7 +5,7 @@ module.exports = class AuthMiddleware {
     static async isAuthenticated(req, res, next) {
         try {
             getUserAuthenticated(req).then(decoded => {
-                res.user = decoded;
+                req.user = decoded;
                 next();
             })
                 .catch(err => {
@@ -16,7 +16,12 @@ module.exports = class AuthMiddleware {
         }
     }
 
-
+    static isLocalhost(req, res, next) {
+        if (req.connection.remoteAddress == "::ffff:127.0.0.1" ||
+            req.connection.remoteAddress == "::1") {
+            next();
+        }
+    }
 }
 
 function getUserAuthenticated(req) {
