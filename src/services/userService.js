@@ -64,6 +64,15 @@ module.exports = class UserService {
 
     }
 
+    static async getRecoveryKey(email) {
+        const user = await UserRepository.findBy({ Email: email });
+        if (!user) {
+            throw new Error('email não cadastrado!');
+        }
+        const membership = await MembershipRepository.findBy({ UserId: user.id })
+        return membership.recoveryKey;
+    }
+
     static async validateCode(email, code) {
         const user = await UserRepository.findBy({ Email: email });
         if (!user) {
@@ -163,5 +172,20 @@ module.exports = class UserService {
 
         await this.sendCodeEmail(user.email);
         return true;
+    }
+
+    static async delete(id) {
+
+
+        const transaction = await database.transaction();
+        try {
+            await MembershipRepository.deleteBy({ UserId: id }, transaction);
+            await UserRepository.deleteBy({ Id: id }, transaction)
+            await transaction.commit();
+        } catch (error) {
+            console.log(error)
+            await transaction.rollback()
+            throw new Error('Internal error')
+        }
     }
 }

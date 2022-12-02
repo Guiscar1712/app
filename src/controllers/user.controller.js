@@ -54,6 +54,16 @@ module.exports = class UserController {
     }
   }
 
+  static async getMe (request, response, next) {
+    try {
+      const data = await UserService.findById(response.user.id)
+      response.json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
   static async list (request, response, next) {
     try {
       const data = await UserService.list()
@@ -104,6 +114,17 @@ module.exports = class UserController {
     }
   }
 
+  static async getRecoveryKey(request, response, next){
+    try{
+      const { email } = request.body
+      const data = await UserService.getRecoveryKey(email);
+      response.json(data)
+    }catch(error){
+      console.log(error)
+      next(error)
+    }
+  }
+
   static async validateCode(request, response, next){
     try{
       const { email, code } = request.body
@@ -135,5 +156,16 @@ module.exports = class UserController {
       console.log(error)
       next(error)
     }
-  } 
+  }
+  
+  static async delete(request, response, next){
+    try{
+      const data = await UserService.delete(request.params.id);
+      response.json(data)
+    }
+    catch(error){
+      console.log(error)
+      next(error)
+    }
+  }
 }

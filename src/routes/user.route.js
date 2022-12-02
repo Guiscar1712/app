@@ -3,17 +3,22 @@ const router = express.Router()
 
 const UserController = require('../controllers/user.controller')
 
-//router.post('/login', UserController.login)
-//router.get('/isAuthenticated', UserController.isAuthenticated)
+const AuthMiddleware = require('../middlewares/authMiddleware')
+const TrackMiddleware = require('../middlewares/trackMiddleware')
 
-router.post('/register', UserController.register)
-router.post('/update', UserController.update)
-router.post('/login', UserController.login)
-router.post('/validate', UserController.validateCode)
-router.post('/changePassword', UserController.changePassword)
-router.post('/recoverPassword', UserController.recoverPassword)
+router.post('/register', TrackMiddleware.tracking, UserController.register)
+router.post('/login', TrackMiddleware.tracking, UserController.login)
 
-router.get('/:id', UserController.get)
-router.get('/', UserController.list)
+router.post('/update', TrackMiddleware.tracking, UserController.update)
+router.post('/validate', TrackMiddleware.tracking, UserController.validateCode)
+router.post('/changePassword', TrackMiddleware.tracking, UserController.changePassword)
+router.post('/recoverPassword', TrackMiddleware.tracking, UserController.recoverPassword)
+router.post('/getRecoveryKey', TrackMiddleware.tracking, UserController.getRecoveryKey)
+
+router.get('/me', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.getMe)
+router.get('/:id', TrackMiddleware.tracking, UserController.get)
+router.get('/', TrackMiddleware.tracking, UserController.list)
+
+router.delete('/:id', TrackMiddleware.tracking, UserController.delete)
 
 module.exports = router

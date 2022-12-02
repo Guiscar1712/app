@@ -13,6 +13,19 @@ module.exports = class SimpleQuery {
         }
     }
 
+    static async deleteBy(query, from, transaction) {
+        try {
+            const data = await (transaction ? transaction : database)
+                .from(from)
+                .where(query)
+                .del("*")
+            return data;
+        } catch (error) {
+            console.log(error)
+            return error.code + ':' + error.message;
+        }
+    }
+
     static async filterBy(query, from, transaction) {
         try {
             return await (transaction ? transaction : database)

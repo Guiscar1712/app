@@ -7,6 +7,10 @@ module.exports = class UserRepository {
         return format(row);
     }
 
+    static async deleteBy (query, transaction) {
+        return await SimpleQuery.deleteBy(query, table, transaction);
+    }
+
     static async filterBy(query, transaction) {
         const rows = await SimpleQuery.filterBy(query, table, transaction);
         const items = [];
