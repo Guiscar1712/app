@@ -50,6 +50,7 @@ function format(row) {
         phone: row.Phone,
         gender: row.Gender,
         birthday: row.Birthday,
+        photo: row.Photo,
         city: row.City,
         address: row.Address,
         number: row.Number,
