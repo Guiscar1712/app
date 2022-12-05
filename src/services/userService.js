@@ -23,6 +23,19 @@ module.exports = class UserService {
         await EmailService.recoverPassword(email, membership.recoveryKey);
     }
 
+    static prepare(entity){
+        if(entity.cpf){
+            entity.cpf=Util.getNumbers(entity.cpf)
+        }
+        if(entity.phone){
+            entity.phone=Util.getNumbers(entity.phone)
+        }
+        if(entity.gender){
+            entity.gender = entity.gender.toUpperCase();
+        }
+        return entity;
+    }
+
     static async register(entity) {
         if (await UserRepository.findBy({ Email: entity.email })) {
             await this.sendCodeEmail(entity.email);
@@ -37,6 +50,7 @@ module.exports = class UserService {
 
         const transaction = await database.transaction();
         try {
+            entity=this.prepare(entity);
             const user = await UserRepository.insert({
                 Name: entity.name,
                 CPF: entity.cpf,
@@ -159,6 +173,15 @@ module.exports = class UserService {
         add_to_update("phone");
         add_to_update("gender");
         add_to_update("birthday");
+        add_to_update("city");
+        add_to_update("address");
+        add_to_update("number");
+        add_to_update("complement");
+        add_to_update("notifyFreeCourses");
+        add_to_update("notifyEvents");
+        add_to_update("notifyPromotions");
+        add_to_update("alertWarnings");
+        add_to_update("alertTeatchers");
 
         if (entity.photo) {
             if (entity.photo.includes("/uploads/")) {
@@ -169,6 +192,7 @@ module.exports = class UserService {
             updateEntity = { ...updateEntity, Photo: entity.photo }
         }
 
+        updateEntity=this.prepare(updateEntity);
         return await UserRepository.update(
             user.id,
             updateEntity

@@ -18,11 +18,11 @@ module.exports = class Util {
             if(this.isNumber(c)){
                 r+=c;
             }
-            if(r.length>=limit){
+            if(limit && r.length>=limit){
                 break;
             }
         }
-        if(r.length<limit){
+        if(limit && r.length<limit){
             r=r.padStart(limit, '0');
         }
         return r;

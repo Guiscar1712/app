@@ -19,8 +19,8 @@ router.post('/update', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated,
 router.post('/photo', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.photo)
 
 router.get('/me', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.getMe)
-router.get('/:id', TrackMiddleware.tracking, UserController.get)
-router.get('/', TrackMiddleware.tracking, UserController.list)
+router.get('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.get)
+router.get('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.list)
 
 router.delete('/:id', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, UserController.delete)
 

@@ -8,7 +8,7 @@ const register = async () => {
         }
     }
 
-    Rest.invoke("post", "http://localhost:3000/api/user/register", {
+    await Rest.invoke("post", "http://localhost:3000/api/user/register", {
         "name": "Ricardo Sampaio",
         "cpf": "305.250.918-74",
         "email": "ricardo.sampaio@bluecore.it",
@@ -64,7 +64,10 @@ const login = async ()=>{
 }
 
 const run = async () => {
+    await register();
+    await changePassword();
     await uploadPhoto();
+    await login();
 }
 
 run();

@@ -19,7 +19,7 @@ module.exports = class EmailService {
             "Message:" + message;
 
         //addLog(config.support, "Fale Conosco", htmlEmail);
-        sendGridHelper.sendMessage("suporte@formatalento.com.br ", "Fale Conosco - Forma Talento", htmlEmail)
+        sendGridHelper.sendMessage(config.support, "Kroton - Vitrine", htmlEmail)
     }
 
     static async byTemplate(params) {

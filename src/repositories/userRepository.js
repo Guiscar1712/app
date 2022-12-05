@@ -49,6 +49,15 @@ function format(row) {
         cpf: row.CPF,
         phone: row.Phone,
         gender: row.Gender,
-        birthday: row.Birthday
+        birthday: row.Birthday,
+        city: row.City,
+        address: row.Address,
+        number: row.Number,
+        complement: row.Complement,
+        notifyFreeCourses: row.NotifyFreeCourses,
+        notifyEvents: row.NotifyEvents,
+        notifyPromotions: row.NotifyPromotions,
+        alertWarnings: row.AlertWarnings,
+        alertTeatchers: row.AlertTeatchers
     }
 }
