@@ -207,7 +207,7 @@ module.exports = class UserService {
         }
 
         await this.sendCodeEmail(user.email);
-        return true;
+        return user;
     }
 
     static async delete(id) {
