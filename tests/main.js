@@ -57,17 +57,29 @@ const login = async ()=>{
         "password": "123456"
     })
 
-    const headers = { "token": token }
+    return token;
+}
 
-    const meData = await Rest.invoke("get", "http://localhost:3000/api/user/me", null, headers);
-    console.log("meData:", meData)
+const update = async (headers)=>{
+    let meData = await Rest.invoke("get", "http://localhost:3000/api/user/me", null, headers);
+    console.log("meData:", meData);
+
+    meData.city="Sorocaba";
+    meData.address="Laurindo Marques";
+    meData.number="153";
+
+    await Rest.invoke("put", "http://localhost:3000/api/user/", meData, headers);
 }
 
 const run = async () => {
-    await register();
-    await changePassword();
-    await uploadPhoto();
-    await login();
+    //await register();
+    //await changePassword();
+    //await uploadPhoto();
+
+    const token = await login();
+    const headers = { "token": token }
+
+    await update(headers);
 }
 
 run();

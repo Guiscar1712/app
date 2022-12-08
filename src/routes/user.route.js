@@ -15,12 +15,12 @@ router.post('/recoverPassword', TrackMiddleware.tracking, UserController.recover
 
 router.post('/getRecoveryKey', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, UserController.getRecoveryKey)
 
-router.post('/update', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.update)
+router.put('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.update)
 router.post('/photo', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.photo)
 
 router.get('/me', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.getMe)
 router.get('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.get)
-router.get('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.list)
+router.get('/', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, UserController.list)
 
 router.delete('/:id', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, UserController.delete)
 

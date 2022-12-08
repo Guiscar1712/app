@@ -23,6 +23,18 @@ module.exports = class UserService {
         await EmailService.recoverPassword(email, membership.recoveryKey);
     }
 
+    static duplicateRegister(user, userSearch, message) {
+        if(user == null){
+            if (userSearch) {
+                throw new Error(message);
+            }    
+        }else{
+            if (userSearch && userSearch.id != user.id) {
+                throw new Error(message);
+            }
+        }
+    }
+
     static prepare(entity){
         if(entity.cpf){
             entity.cpf=Util.getNumbers(entity.cpf)
@@ -36,17 +48,33 @@ module.exports = class UserService {
         return entity;
     }
 
+    static async validateEntity(user, entity){
+        if(!entity.cpf){
+            throw new Error('cpf não informado!');
+        }
+
+        if(!entity.email){
+            throw new Error('email não informado!');
+        }
+
+        this.duplicateRegister(user, await UserRepository.findBy({ CPF: entity.cpf }), 'CPF já cadastrado!');
+
+        if(entity.email){
+            this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'Email já cadastrado!');
+        }
+        
+        if(entity.phone){
+            this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'Phone já cadastrado!');
+        }
+    }
+
     static async register(entity) {
-        if (await UserRepository.findBy({ Email: entity.email })) {
-            await this.sendCodeEmail(entity.email);
-            throw new Error('email já cadastrado!');
+        // proteção para não atualizar outro registro
+        if(entity.id){
+            entity.id = null;
         }
-        if (await UserRepository.findBy({ CPF: entity.cpf })) {
-            throw new Error('cpf já cadastrado!');
-        }
-        if (await UserRepository.findBy({ Phone: entity.phone })) {
-            throw new Error('phone já cadastrado!');
-        }
+
+        await this.validateEntity(null, entity);
 
         const transaction = await database.transaction();
         try {
@@ -60,6 +88,10 @@ module.exports = class UserService {
                 Birthday: entity.birthday
             }, transaction);
 
+            if(!user){
+                throw new Error("erro ao adicionar o usuário");
+            }
+
             await MembershipRepository.insert({
                 UserId: user.id,
                 RecoveryKey: Util.getNumbers(md5(user.id + " " + user.email), 5)
@@ -71,7 +103,7 @@ module.exports = class UserService {
 
             return user;
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
             await transaction.rollback()
             throw new Error('Internal error')
         }
@@ -129,11 +161,7 @@ module.exports = class UserService {
         return jwt.sign(user, config.jwtSecret);
     }
 
-    static duplicateRegister(user, userSearch, message) {
-        if (userSearch && userSearch.id != user.id) {
-            throw new Error(message);
-        }
-    }
+
 
     static async photo (userId, base64){
         const user = await UserRepository.findBy({ Id: userId })
@@ -153,20 +181,8 @@ module.exports = class UserService {
             throw new Error('usuário não logado!');
         }
 
-        if(entity.cpf){
-            throw new Error('cpf não informado!');
-        }
+        await this.validateEntity(user, entity);
 
-        this.duplicateRegister(user, await UserRepository.findBy({ CPF: entity.cpf }), 'CPF já cadastrado!');
-
-        if(entity.email){
-            this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'Email já cadastrado!');
-        }
-        
-        if(entity.phone){
-            this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'Phone já cadastrado!');
-        }
-        
         let updateEntity = {};
 
         const add_to_update = (field) => {
