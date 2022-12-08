@@ -153,10 +153,20 @@ module.exports = class UserService {
             throw new Error('usuário não logado!');
         }
 
-        this.duplicateRegister(user, await UserRepository.findBy({ CPF: entity.cpf }), 'CPF já cadastrado!');
-        this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'Email já cadastrado!');
-        this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'Phone já cadastrado!');
+        if(entity.cpf){
+            throw new Error('cpf não informado!');
+        }
 
+        this.duplicateRegister(user, await UserRepository.findBy({ CPF: entity.cpf }), 'CPF já cadastrado!');
+
+        if(entity.email){
+            this.duplicateRegister(user, await UserRepository.findBy({ Email: entity.email }), 'Email já cadastrado!');
+        }
+        
+        if(entity.phone){
+            this.duplicateRegister(user, await UserRepository.findBy({ Phone: entity.phone }), 'Phone já cadastrado!');
+        }
+        
         let updateEntity = {};
 
         const add_to_update = (field) => {
