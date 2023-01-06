@@ -1,3 +1,6 @@
 knex
 https://knexjs.org/
 https://knexjs.org/guide/
+
+#tests
+http://localhost:3000/api/subscription/30525091874

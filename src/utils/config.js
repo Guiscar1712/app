@@ -8,5 +8,14 @@ module.exports = {
         sender:process.env.SENDGRID_SENDER,
         //bcc:process.env.SENDGRID_BCC
     },
-    azureBlobsConnection:process.env.AZUREBLOBS_CONNECTION
+    azureBlobsConnection:process.env.AZUREBLOBS_CONNECTION,
+    kroton:{
+        ingresso:{
+            url:process.env.KROTON_INGRESSO_URL,
+            client_id:process.env.KROTON_INGRESSO_CLIENT_ID,
+            client_secret:process.env.KROTON_INGRESSO_CLIENT_SECRET,
+            OcpApimSubscriptionKey:process.env.KROTON_INGRESSO_SUBSCRIPTION_KEY
+        }
+    }
+    
 }

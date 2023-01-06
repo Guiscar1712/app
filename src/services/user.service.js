@@ -4,9 +4,9 @@ const MembershipRepository = require('../repositories/membershipRepository')
 const md5 = require('md5')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
-const EmailService = require('./emailService')
+const EmailService = require('./email.service')
 const Util = require('../utils/util')
-const AzureService = require('./azureService.js')
+const AzureService = require('./azure.service.js')
 
 module.exports = class UserService {
     static async findById(id) {
