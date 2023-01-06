@@ -1,4 +1,4 @@
-const AzureService = require('../services/azureService')
+const AzureService = require('../services/azure.service')
 
 module.exports = class FileController {
     static async upload (request, response, next) {
