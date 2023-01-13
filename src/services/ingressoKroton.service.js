@@ -34,6 +34,15 @@ module.exports = class IngressoKrotonService {
             }
         })).data;
     }
+
+    static async getCourses(){
+        return (await axios.get("https://bluecore-kroton-anhanguera-facelift-api-homolog.azurewebsites.net/cursos/origem/app", {
+            headers:{
+                "Content-Type":"application/json",
+                "X-Access-Key":"vG?Czh-uGfF[Ad37+gDP-KIEQ<XLZ_tFG-ADd_3T@]F4RP3gZ?AH0r0i5GFS"
+            }
+        })).data;
+    }
 }
 
 /*
