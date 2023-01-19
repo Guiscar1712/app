@@ -1,27 +1,39 @@
-module.exports = class TrackMiddleware{
-  static async tracking(req, res, next){
+module.exports = class TrackMiddleware {
+  static async tracking (req, res, next) {
     try {
       req.body = RemoveCommands(req.body)
       req.params = RemoveCommands(req.params)
       addLog(req, res)
-    } catch (err){
+    } catch (err) {
       next(err)
     }
     next()
   }
 }
 
-function RemoveCommands(container){
-  if (container){
-    const commands = ['select ', 'from ', 'where ', 'delete ', 'create ', 'insert ', 'update ', 'drop ', 'truncate ', '*', '+']
+function RemoveCommands (container) {
+  if (container) {
+    const commands = [
+      'select ',
+      'from ',
+      'where ',
+      'delete ',
+      'create ',
+      'insert ',
+      'update ',
+      'drop ',
+      'truncate ',
+      '*',
+      '+'
+    ]
     const cols = Object.getOwnPropertyNames(container)
-    for (const col of cols){
-      for (const cmd of commands){
+    for (const col of cols) {
+      for (const cmd of commands) {
         const value = container[col]
-        if (typeof value !== 'string'){
+        if (typeof value !== 'string') {
           break
         }
-        if (value && value.toLowerCase().includes(cmd.toLowerCase())){
+        if (value && value.toLowerCase().includes(cmd.toLowerCase())) {
           const start = value.toLowerCase().indexOf(cmd.toLowerCase())
           const length = cmd.length
           const remove = value.slice(start, length)
@@ -33,7 +45,7 @@ function RemoveCommands(container){
   return container
 }
 
-function addLog(req, res){
+function addLog (req, res) {
   const ip = req.connection.remoteAddress
   const id = res.user ? res.user.id : 0
 
@@ -48,5 +60,5 @@ function addLog(req, res){
     UserId: id
   }
 
-  //LogService.save(log)
+  // LogService.save(log)
 }

@@ -1,8 +1,7 @@
-
 const table = 'User'
 
 exports.up = function (knex) {
-  return knex.schema.alterTable(table, (table) => {
+  return knex.schema.alterTable(table, table => {
     table.string('City', 60)
     table.string('Address', 60)
     table.string('Number', 20)
@@ -16,15 +15,15 @@ exports.up = function (knex) {
 }
 
 exports.down = function (knex) {
-  return knex.schema.alterTable(table, (table)=>{
-    table.dropColumn('City');
-    table.dropColumn('Address');
-    table.dropColumn('Number');
-    table.dropColumn('Complement');
+  return knex.schema.alterTable(table, table => {
+    table.dropColumn('City')
+    table.dropColumn('Address')
+    table.dropColumn('Number')
+    table.dropColumn('Complement')
     table.dropColumn('NotifyFreeCourses')
     table.dropColumn('NotifyEvents')
     table.dropColumn('NotifyPromotions')
     table.dropColumn('AlertWarnings')
     table.dropColumn('AlertTeatchers')
-  });
+  })
 }
