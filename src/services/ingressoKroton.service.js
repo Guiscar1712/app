@@ -53,12 +53,25 @@ module.exports = class IngressoKrotonService {
   static async getCourses () {
     return (
       await axios.get(
-        'https://bluecore-kroton-anhanguera-facelift-api-homolog.azurewebsites.net/cursos/origem/app',
+        `${process.env.KROTON_API_BASE_URL}/cursos/origem/app`,
         {
           headers: {
             'Content-Type': 'application/json',
-            'X-Access-Key':
-              'vG?Czh-uGfF[Ad37+gDP-KIEQ<XLZ_tFG-ADd_3T@]F4RP3gZ?AH0r0i5GFS'
+            'X-Access-Key': process.env.KROTON_API_X_ACCESS_KEY
+          }
+        }
+      )
+    ).data
+  }
+
+  static async getCourse ({ identifier }) {
+    return (
+      await axios.get(
+        `${process.env.KROTON_API_BASE_URL}/cursos/${identifier}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Access-Key': process.env.KROTON_API_X_ACCESS_KEY
           }
         }
       )

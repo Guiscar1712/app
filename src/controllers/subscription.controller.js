@@ -57,4 +57,21 @@ module.exports = class SubscriptionController {
       }
     }
   }
+
+  static async getCourse (request, response, next) {
+    try {
+      const identifier = request.params.identifier
+      const courses = await IngressoKrotonService.getCourse({ identifier })
+      response.json(courses)
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+        response.status(401).json(error.response.data)
+        // next(error.response.data)
+      } else {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
 }
