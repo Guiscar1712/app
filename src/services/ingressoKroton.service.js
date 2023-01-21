@@ -1,5 +1,6 @@
 const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../utils/config')
+const cheerio = require('cheerio')
 
 module.exports = class IngressoKrotonService {
   static async getToken () {
@@ -52,22 +53,19 @@ module.exports = class IngressoKrotonService {
 
   static async getCourses () {
     return (
-      await axios.get(
-        `${process.env.KROTON_API_BASE_URL}/cursos/origem/app`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Access-Key': process.env.KROTON_API_X_ACCESS_KEY
-          }
+      await axios.get(`${process.env.KROTON_API_BASE_URL}/cursos/origem/app`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Access-Key': process.env.KROTON_API_X_ACCESS_KEY
         }
-      )
+      })
     ).data
   }
 
   static async getCourse ({ identifier }) {
-    return (
+    const item = (
       await axios.get(
-        `${process.env.KROTON_API_BASE_URL}/cursos/${identifier}`,
+        `${process.env.KROTON_API_BASE_URL}/cursos/${identifier}/complete`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -76,7 +74,47 @@ module.exports = class IngressoKrotonService {
         }
       )
     ).data
+
+    return {
+      Identifier: item.Identifier,
+      Type: item.Type,
+      Name: item.Name,
+      Score: item.Score || 0,
+      Semesters: item.Semesters,
+      Description: htmlExtractItem(item.Description, 'p'),
+      KrotonId: item.KrotonId,
+      Image: item.Image,
+      // Modalities: item.Modalities,
+      // Origins: item.Origins,
+      AboutCourseCall: htmlExtractItem(item.AboutCourseCall, 'p'),
+      AboutCourseDescription: htmlExtractItem(item.AboutCourseDescription, 'p'),
+      CourseTargetCall: htmlExtractItem(item.CourseTargetCall, 'p'),
+      CourseTargetDescription: htmltoList(item.CourseTargetDescription),
+      CourseSubjectsCall: htmlExtractItem(item.CourseSubjectsCall, 'p'),
+      CourseSubjectsDescription: htmltoList(item.CourseSubjectsDescription),
+      MarketCall: item.MarketCall || '',
+      MarketDescription: htmlExtractItem(item.MarketDescription, 'p'),
+      RelatedCourses: item.RelatedCourses || [],
+      AverageSalaries: item.AverageSalaries || []
+    }
   }
+}
+
+function htmltoList (html) {
+  const items = []
+  if (!html) return []
+  const $ = cheerio.load(html)
+  $('li')
+    .get()
+    .map(e => items.push($(e).text().trim()))
+    .join(' ')
+  return items
+}
+
+function htmlExtractItem (html, tag) {
+  if (!html) return ''
+  const $ = cheerio.load(html)
+  return $(tag).text() || html
 }
 
 /* const sample_body = {
