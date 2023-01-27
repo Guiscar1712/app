@@ -3,7 +3,7 @@ const database = require('./config.database')
 module.exports = class SimpleQuery {
   static async findBy (query, from, transaction) {
     try {
-      return await (transaction ? transaction : database)
+      return await (transaction || database)
         .from(from)
         .where(query)
         .first()
@@ -15,7 +15,7 @@ module.exports = class SimpleQuery {
 
   static async deleteBy (query, from, transaction) {
     try {
-      const data = await (transaction ? transaction : database)
+      const data = await (transaction || database)
         .from(from)
         .where(query)
         .del('*')
@@ -28,7 +28,7 @@ module.exports = class SimpleQuery {
 
   static async filterBy (query, from, transaction) {
     try {
-      return await (transaction ? transaction : database)
+      return await (transaction || database)
         .from(from)
         .where(query)
     } catch (error) {
@@ -39,7 +39,7 @@ module.exports = class SimpleQuery {
 
   static async insert (entity, from, transaction) {
     try {
-      const data = await (transaction ? transaction : database)(from).insert(
+      const data = await (transaction || database)(from).insert(
         entity,
         '*'
       )
@@ -53,7 +53,7 @@ module.exports = class SimpleQuery {
 
   static async update (query, entity, from, transaction) {
     try {
-      await (transaction ? transaction : database)(from)
+      await (transaction || database)(from)
         .update(entity)
         .where(query)
 
