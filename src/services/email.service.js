@@ -36,7 +36,7 @@ module.exports = class EmailService {
   static async recoverPassword (email, code) {
     const htmlEmail =
     '<h3>Seu código para autenticação em duas etapas</h3>' +
-    '<p>Recebemos uma solicitação de acesso à sua conta. Utilize o código abaixo para confirmar:</p>'+
+    '<p>Recebemos uma solicitação de acesso à sua conta. Utilize o código abaixo para confirmar:</p>' +
     '<h2>' + code + '</h2>'
 
     return await sendGridHelper.sendMessage(email, '00vitrine - Codigo', htmlEmail)

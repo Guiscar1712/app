@@ -27,13 +27,13 @@ module.exports = class AzureService {
   }
 
   static async uploadBase64 (container, base64) {
-    var matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/)
-    var type = matches[1]
+    const matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/)
+    const type = matches[1]
 
-    var imageExtension = type.split('/')[1]
-    var fileName = 'f' + md5(uuid.v1()) + '.' + imageExtension
+    const imageExtension = type.split('/')[1]
+    const fileName = 'f' + md5(uuid.v1()) + '.' + imageExtension
 
-    var fileBuffer = new Buffer.from(matches[2], 'base64')
+    const fileBuffer = new Buffer.from(matches[2], 'base64')
 
     return await this.uploadBuffer(container, fileBuffer, fileName, type)
   }
@@ -51,7 +51,7 @@ module.exports = class AzureService {
   }
 }
 
-let createContainer = (container, safe) => {
+const createContainer = (container, safe) => {
   let accessLevel = { publicAccessLevel: 'blob' }
 
   if (safe) {
@@ -73,7 +73,7 @@ let createContainer = (container, safe) => {
   })
 }
 
-let deleteContainer = container => {
+const deleteContainer = container => {
   return new Promise((resolve, reject) => {
     blobService.deleteContainerIfExists(container, (err, res) => {
       if (!err) {
@@ -85,7 +85,7 @@ let deleteContainer = container => {
   })
 }
 
-let uploadFile = (container, fileName, filePath, keep) => {
+const uploadFile = (container, fileName, filePath, keep) => {
   return new Promise((resolve, reject) => {
     blobService.createBlockBlobFromLocalFile(
       container,
@@ -106,7 +106,7 @@ let uploadFile = (container, fileName, filePath, keep) => {
   })
 }
 
-let listBlobs = (container, continuationToken) => {
+const listBlobs = (container, continuationToken) => {
   return new Promise((resolve, reject) => {
     blobService.listBlobsSegmented(
       container,
@@ -122,11 +122,11 @@ let listBlobs = (container, continuationToken) => {
   })
 }
 
-let listAllBlobs = async (container, limit) => {
+const listAllBlobs = async (container, limit) => {
   let continuationToken = null
-  let results = []
+  const results = []
   do {
-    let response = await listBlobs(blobService, container, continuationToken)
+    const response = await listBlobs(blobService, container, continuationToken)
     continuationToken = response.continuationToken
 
     response.entries.forEach(BlobResult => {
@@ -140,7 +140,7 @@ let listAllBlobs = async (container, limit) => {
   return results
 }
 
-let copyBlob = (sourceUri, targetContainer, targetBlob) => {
+const copyBlob = (sourceUri, targetContainer, targetBlob) => {
   return new Promise((resolve, reject) => {
     blobService.startCopyBlob(
       sourceUri,
@@ -157,7 +157,7 @@ let copyBlob = (sourceUri, targetContainer, targetBlob) => {
   })
 }
 
-let deleteBlob = (container, blobname) => {
+const deleteBlob = (container, blobname) => {
   return new Promise((resolve, reject) => {
     blobService.deleteBlobIfExists(container, blobname, (err, res) => {
       if (!err) {
