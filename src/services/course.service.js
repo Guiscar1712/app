@@ -35,7 +35,7 @@ module.exports = class CourseService {
       limit: 10
     }
 
-    const courses = await this.getCourseFilter(params)
+    const courses = await this.getCourseFilter({ params })
 
     return courses
   }
@@ -46,7 +46,7 @@ module.exports = class CourseService {
       limit: 10
     }
 
-    const courses = await this.getCourseFilter(params)
+    const courses = await this.getCourseFilter({ params })
 
     return courses
   }
@@ -57,7 +57,7 @@ module.exports = class CourseService {
       limit: 10
     }
 
-    const courses = await this.getCourseFilter(params)
+    const courses = await this.getCourseFilter({ params })
 
     return courses
   }
@@ -68,7 +68,7 @@ module.exports = class CourseService {
       limit: 10
     }
 
-    const courses = await this.getCourseFilter(params)
+    const courses = await this.getCourseFilter({ params })
 
     return courses
   }
