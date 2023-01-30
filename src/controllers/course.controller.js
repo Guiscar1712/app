@@ -93,4 +93,19 @@ module.exports = class CourseController {
       }
     }
   }
+
+  static async getCourseAreas (request, response, next) {
+    try {
+      const courses = await CourseService.getCourseAreas()
+      response.json(courses)
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+        response.status(401).json(error.response.data)
+      } else {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
 }

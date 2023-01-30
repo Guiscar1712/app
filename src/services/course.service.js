@@ -1,5 +1,5 @@
 const axios = require('axios').create({ timeout: 1000000 })
-const { getCourseIdentifierDTO, getCourseDto } = require('../dto/course')
+const { getCourseIdentifierDTO, getCourseDto, getCourseAreasDto } = require('../dto/course')
 
 module.exports = class CourseService {
   static async getCourses () {
@@ -88,5 +88,21 @@ module.exports = class CourseService {
     ).data
 
     return getCourseDto(item)
+  }
+
+  static async getCourseAreas () {
+    const item = (
+      await axios.get(
+        `${process.env.KROTON_API_BASE_URL}/course-areas`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Access-Key': process.env.KROTON_API_X_ACCESS_KEY
+          }
+        }
+      )
+    ).data
+
+    return getCourseAreasDto(item)
   }
 }
