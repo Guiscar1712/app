@@ -10,5 +10,6 @@ router.get('/trending', TrackMiddleware.tracking, CourseController.getCourseTren
 router.get('/most-wanted', TrackMiddleware.tracking, CourseController.getCourseMostWanted)
 router.get('/study-at-home', TrackMiddleware.tracking, CourseController.getCourseStudyAtHome)
 router.get('/higher-wages', TrackMiddleware.tracking, CourseController.getCourseHigherWages)
+router.get('/areas', TrackMiddleware.tracking, CourseController.getCourseAreas)
 
 module.exports = router
