@@ -1,6 +1,7 @@
 
 function toDto (item) {
   return {
+    id: item.id,
     name: item.Name,
     icon: item.Icon,
     identifier: item.Identifier,

@@ -64,9 +64,7 @@ module.exports = class CourseController {
 
   static async getCourseStudyAtHome (request, response, next) {
     try {
-      const area = request.params.area
-      const modality = request.params.modality
-      const courses = await CourseService.getCourseStudyAtHome({ area, modality })
+      const courses = await CourseService.getCourseStudyAtHome()
       response.json(courses)
     } catch (error) {
       if (error.response) {
@@ -82,6 +80,22 @@ module.exports = class CourseController {
   static async getCourseHigherWages (request, response, next) {
     try {
       const courses = await CourseService.getCourseHigherWages()
+      response.json(courses)
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.data)
+        response.status(401).json(error.response.data)
+      } else {
+        console.log(error)
+        next(error)
+      }
+    }
+  }
+
+  static async findCourses (request, response, next) {
+    try {
+      const query = request.query
+      const courses = await CourseService.findCourses(query)
       response.json(courses)
     } catch (error) {
       if (error.response) {

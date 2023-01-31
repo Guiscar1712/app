@@ -73,6 +73,18 @@ module.exports = class CourseService {
     return courses
   }
 
+  static async findCourses (query) {
+    const params = {
+      area: query.area,
+      sort: 'visits',
+      limit: 10
+    }
+
+    const courses = await this.getCourseFilter({ params })
+
+    return courses
+  }
+
   static async getCourseFilter ({ params }) {
     const item = (
       await axios.get(
