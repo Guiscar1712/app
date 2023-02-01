@@ -75,9 +75,10 @@ module.exports = class CourseService {
 
   static async findCourses (query) {
     const params = {
+      search: query.search,
       area: query.area,
       sort: 'visits',
-      limit: 10
+      limit: query.limit || 10
     }
 
     const courses = await this.getCourseFilter({ params })
