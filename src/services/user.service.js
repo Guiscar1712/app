@@ -241,6 +241,7 @@ module.exports = class UserService {
   }
 
   static async recoverPassword (cpf) {
+    cpf = Util.getNumbers(cpf)
     const user = await UserRepository.findBy({ CPF: cpf })
 
     if (!user) {
