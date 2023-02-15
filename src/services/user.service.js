@@ -9,21 +9,21 @@ const Util = require('../utils/util')
 const AzureService = require('./azure.service.js')
 
 module.exports = class UserService {
-  static async findById (id) {
+  static async findById(id) {
     return await UserRepository.findById(id)
   }
 
-  static async list () {
+  static async list() {
     return await UserRepository.list()
   }
 
-  static async sendCodeEmail (email) {
+  static async sendCodeEmail(email) {
     const user = await UserRepository.findBy({ Email: email })
     const membership = await MembershipRepository.findBy({ UserId: user.id })
     await EmailService.recoverPassword(email, membership.recoveryKey)
   }
 
-  static duplicateRegister (user, userSearch, message) {
+  static duplicateRegister(user, userSearch, message) {
     if (user == null) {
       if (userSearch) {
         throw new Error(message)
@@ -35,7 +35,7 @@ module.exports = class UserService {
     }
   }
 
-  static prepare (entity) {
+  static prepare(entity) {
     if (entity.cpf) {
       entity.cpf = Util.getNumbers(entity.cpf)
     }
@@ -48,7 +48,7 @@ module.exports = class UserService {
     return entity
   }
 
-  static async validateEntity (user, entity) {
+  static async validateEntity(user, entity) {
     if (!entity.cpf) {
       throw new Error('cpf não informado!')
     }
@@ -80,7 +80,7 @@ module.exports = class UserService {
     }
   }
 
-  static async register (entity) {
+  static async register(entity) {
     // proteção para não atualizar outro registro
     if (entity.id) {
       entity.id = null
@@ -127,7 +127,7 @@ module.exports = class UserService {
     }
   }
 
-  static async getRecoveryKey (email) {
+  static async getRecoveryKey(email) {
     const user = await UserRepository.findBy({ Email: email })
     if (!user) {
       throw new Error('email não cadastrado!')
@@ -136,7 +136,7 @@ module.exports = class UserService {
     return membership.recoveryKey
   }
 
-  static async validateCode (email, code) {
+  static async validateCode(email, code) {
     const user = await UserRepository.findBy({ Email: email })
     if (!user) {
       throw new Error('email não cadastrado!')
@@ -148,7 +148,7 @@ module.exports = class UserService {
     return jwt.sign(user, config.jwtSecret)
   }
 
-  static async changePassword (email, code, password) {
+  static async changePassword(email, code, password) {
     const user = await UserRepository.findBy({ Email: email })
     if (!user) {
       throw new Error('email não cadastrado!')
@@ -172,7 +172,7 @@ module.exports = class UserService {
     return true
   }
 
-  static async login (email, password) {
+  static async login(email, password) {
     const user = await UserRepository.findBy({ Email: email })
     if (!user) {
       throw new Error('email não cadastrado!')
@@ -184,7 +184,7 @@ module.exports = class UserService {
     return jwt.sign(user, config.jwtSecret)
   }
 
-  static async photo (userId, base64) {
+  static async photo(userId, base64) {
     const user = await UserRepository.findBy({ Id: userId })
     const bloblink = await AzureService.uploadBase64('photos', base64)
     const updateEntity = { Photo: bloblink }
@@ -192,7 +192,7 @@ module.exports = class UserService {
     return await UserRepository.update(user.id, updateEntity)
   }
 
-  static async update (userId, entity) {
+  static async update(userId, entity) {
     const user = await UserRepository.findBy({ Id: userId })
 
     if (!user) {
@@ -240,7 +240,8 @@ module.exports = class UserService {
     return await UserRepository.update(user.id, updateEntity)
   }
 
-  static async recoverPassword (cpf) {
+  static async recoverPassword(cpf) {
+    cpf = Util.getNumbers(cpf)
     const user = await UserRepository.findBy({ CPF: cpf })
 
     if (!user) {
@@ -251,7 +252,7 @@ module.exports = class UserService {
     return user
   }
 
-  static async delete (id) {
+  static async delete(id) {
     const transaction = await database.transaction()
     try {
       await MembershipRepository.deleteBy({ UserId: id }, transaction)
