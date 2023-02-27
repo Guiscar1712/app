@@ -1,12 +1,12 @@
 const database = require('../database/config.database')
 const UserRepository = require('../repositories/userRepository')
 const MembershipRepository = require('../repositories/membershipRepository')
-const md5 = require('md5')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
 const EmailService = require('./email.service')
 const Util = require('../utils/util')
 const AzureService = require('./azure.service.js')
+const { encryptPassword, comparePassword, getRecoverKey } = require('../utils/auth')
 
 module.exports = class UserService {
   static async findById (id) {
@@ -109,8 +109,7 @@ module.exports = class UserService {
 
       await MembershipRepository.insert(
         {
-          UserId: user.id,
-          RecoveryKey: Util.getNumbers(md5(user.id + ' ' + user.email), 5)
+          UserId: user.id
         },
         transaction
       )
@@ -132,8 +131,18 @@ module.exports = class UserService {
     if (!user) {
       throw new Error('email não cadastrado!')
     }
-    const membership = await MembershipRepository.findBy({ UserId: user.id })
-    return membership.recoveryKey
+
+    const recoverKey = getRecoverKey()
+
+    const membership = await MembershipRepository.findBy({
+      UserId: user.id
+    })
+
+    await MembershipRepository.update(membership.id, {
+      RecoveryKey: recoverKey
+    })
+
+    return recoverKey
   }
 
   static async validateCode (email, code) {
@@ -149,26 +158,31 @@ module.exports = class UserService {
   }
 
   static async changePassword (email, code, password) {
+    if (!code) {
+      throw new Error('código inválido!')
+    }
+
     const user = await UserRepository.findBy({ Email: email })
     if (!user) {
       throw new Error('email não cadastrado!')
     }
+
     const membership = await MembershipRepository.findBy({
       UserId: user.id,
       RecoveryKey: code
     })
+
     if (!membership) {
       throw new Error('código inválido!')
     }
-    membership.password = md5(password)
-    membership.recoveryKey = Util.getNumbers(
-      md5(user.id + ' ' + user.password),
-      5
-    )
+
+    membership.password = encryptPassword(password)
+
     await MembershipRepository.update(membership.id, {
       Password: membership.password,
-      RecoveryKey: membership.recoveryKey
+      RecoveryKey: ''
     })
+
     return true
   }
 
@@ -178,7 +192,8 @@ module.exports = class UserService {
       throw new Error('email não cadastrado!')
     }
     const membership = await MembershipRepository.findBy({ UserId: user.id })
-    if (md5(password) !== membership.password) {
+
+    if (!comparePassword(password, membership.password)) {
       throw new Error('senha inválida!')
     }
     return jwt.sign(user, config.jwtSecret)
