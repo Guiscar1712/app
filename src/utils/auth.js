@@ -20,7 +20,7 @@ const comparePassword = (plainPassword, hash) => bcrypt.compareSync(plainPasswor
  * Gera um numero randomico de 6 digitos
  * @returns Numero de 6 digitos
  */
-const getRecoverKey = () => Math.floor(10000 + Math.random() * 90000)
+const getRecoverKey = async () => Math.floor(10000 + Math.random() * 90000)
 
 module.exports = {
   encryptPassword,

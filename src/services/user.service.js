@@ -132,7 +132,7 @@ module.exports = class UserService {
       throw new Error('email não cadastrado!')
     }
 
-    const recoverKey = getRecoverKey()
+    const recoverKey = await getRecoverKey()
 
     const membership = await MembershipRepository.findBy({
       UserId: user.id
@@ -193,7 +193,8 @@ module.exports = class UserService {
     }
     const membership = await MembershipRepository.findBy({ UserId: user.id })
 
-    if (!comparePassword(password, membership.password)) {
+    const passwordIsValid = comparePassword(password, membership.password)
+    if (!passwordIsValid) {
       throw new Error('senha inválida!')
     }
     return jwt.sign(user, config.jwtSecret)
