@@ -1,7 +1,4 @@
-const jwt = require('jsonwebtoken')
 const UserService = require('../services/user.service')
-
-const SECRET = process.env.JWT_SECRET
 
 module.exports = class UserController {
   static async get (request, response, next) {
@@ -79,7 +76,7 @@ module.exports = class UserController {
   static async getRecoveryKey (request, response, next) {
     try {
       const { email } = request.body
-      const data = await UserService.getRecoveryKey(email)
+      const data = await UserService.getRecovery(email)
       response.json(data)
     } catch (error) {
       console.log(error)
