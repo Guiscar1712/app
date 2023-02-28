@@ -17,10 +17,9 @@ module.exports = class UserService {
     return await UserRepository.list()
   }
 
-  static async sendCodeEmail (email) {
-    const user = await UserRepository.findBy({ Email: email })
-    const membership = await MembershipRepository.findBy({ UserId: user.id })
-    await EmailService.recoverPassword(email, membership.recoveryKey)
+  static async sendCodeEmail (userId, email) {
+    const recoverKey = await UserService.getRecoveryKey(userId)
+    await EmailService.recoverPassword(email, recoverKey)
   }
 
   static duplicateRegister (user, userSearch, message) {
@@ -116,7 +115,7 @@ module.exports = class UserService {
 
       await transaction.commit()
 
-      await this.sendCodeEmail(entity.email)
+      await this.sendCodeEmail(user.id, entity.email)
 
       return user
     } catch (error) {
@@ -126,22 +125,27 @@ module.exports = class UserService {
     }
   }
 
-  static async getRecoveryKey (email) {
+  static async getRecovery (email) {
     const user = await UserRepository.findBy({ Email: email })
     if (!user) {
       throw new Error('email não cadastrado!')
     }
 
+    const recoverKey = await UserService.getRecoveryKey(user.id)
+
+    return recoverKey
+  }
+
+  static async getRecoveryKey (userId) {
     const recoverKey = await getRecoverKey()
 
     const membership = await MembershipRepository.findBy({
-      UserId: user.id
+      UserId: userId
     })
 
     await MembershipRepository.update(membership.id, {
       RecoveryKey: recoverKey
     })
-
     return recoverKey
   }
 
@@ -264,7 +268,7 @@ module.exports = class UserService {
       throw new Error('cpf não cadastrado!')
     }
 
-    await this.sendCodeEmail(user.email)
+    await this.sendCodeEmail(user.id, user.email)
     return user
   }
 
