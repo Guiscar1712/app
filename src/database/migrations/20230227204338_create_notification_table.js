@@ -8,7 +8,7 @@ exports.up = function (knex) {
     table.string('NotificationId', 250)
     table.string('Title', 250).notNullable()
     table.string('Content', 4000).nullable()
-    table.date('DateRead', 20).notNullable()
+    table.datetime('DateRead').nullable()
     table.integer('UserId').unsigned().notNullable()
   })
 }
