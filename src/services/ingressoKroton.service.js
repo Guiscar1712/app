@@ -1,5 +1,6 @@
 const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../utils/config')
+const { getSubscriptionDto } = require('../dto/subscription')
 
 module.exports = class IngressoKrotonService {
   static async getToken () {
@@ -19,7 +20,7 @@ module.exports = class IngressoKrotonService {
   }
 
   static async getSubscription (cpf, token) {
-    return (
+    const res =
       await axios.get(
         'https://ingresso-api.kroton.com.br/ms/inscricaocqrs/captacao/v5/inscricao/cpf/' +
         cpf,
@@ -31,7 +32,12 @@ module.exports = class IngressoKrotonService {
           }
         }
       )
-    ).data
+
+    if (res.status === 200) {
+      return getSubscriptionDto(res.data)
+    }
+
+    throw new Error('Ops!')
   }
 
   static async createSubscription (body, token) {
