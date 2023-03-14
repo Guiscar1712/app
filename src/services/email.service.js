@@ -39,6 +39,6 @@ module.exports = class EmailService {
     '<p>Recebemos uma solicitação de acesso à sua conta. Utilize o código abaixo para confirmar:</p>' +
     '<h2>' + code + '</h2>'
 
-    return await sendGridHelper.sendMessage(email, '00vitrine - Codigo', htmlEmail)
+    return await sendGridHelper.sendMessage(email, 'App Vitrine - Código de Recuperação', htmlEmail)
   }
 }
