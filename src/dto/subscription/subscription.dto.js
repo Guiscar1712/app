@@ -1,7 +1,7 @@
 const classificationEnum = require('../../enum/Classification')
 
 function toDto (item) {
-  const { inscricao, dadosPessoais } = item
+  const { matricula, inscricao, dadosPessoais } = item
 
   const course = inscricao?.ofertas?.primeiraOpcao
   const courseName = getCourseName(course.dsCurso)
@@ -9,7 +9,11 @@ function toDto (item) {
 
   const classification = inscricao.classificacao?.descricao
 
-  const { registration, descriptionRegistration } = toClassification(classification, registrationEnem)
+  const { registration, descriptionRegistration } = getClassification(classification, registrationEnem)
+
+  const registrationPayment = (matricula.pagamento?.isento || matricula.pagamento?.pago)
+
+  const formOfEntry = getEntry(inscricao.tipoIngresso)
 
   return {
     courseTypeName: course.dsTipoCurso,
@@ -21,9 +25,24 @@ function toDto (item) {
     modality: course.dsModalidade,
     shift: course.dsTurno,
     registration,
+    registrationPayment,
     monthlyPayment: course.vlMensalidadePara,
     descriptionRegistration,
-    enem: registrationEnem
+    enem: registrationEnem,
+    formOfEntry
+  }
+}
+
+function getEntry (entry) {
+  switch (entry) {
+    case 'VESTIBULAR':
+      return 'Vestibular'
+
+    case 'ENEM':
+      return 'Enem'
+
+    default:
+      break
   }
 }
 
@@ -39,7 +58,7 @@ function getCourseName (courseName) {
   return courseNameSplit.join(' - ')
 }
 
-function toClassification (classification, registrationEnem) {
+function getClassification (classification, registrationEnem) {
   switch (classification) {
     case 'Aluno':
       return { registration: classificationEnum.SUBSCRIPTION, descriptionRegistration: 'Matriculado' }
@@ -50,11 +69,14 @@ function toClassification (classification, registrationEnem) {
     case 'Inscrito VG Online':
       return { registration: classificationEnum.ONLINEEXAM, descriptionRegistration: 'Vestibular online' }
 
+    case 'Desclassificado':
+      return { registration: classificationEnum.DISQUALIFIED, descriptionRegistration: 'Desclassificado' }
+
     case 'Inscrito':
       return exanOrEnem(registrationEnem)
 
     default:
-      break
+      return { registration: 0, descriptionRegistration: '' }
   }
 }
 
@@ -62,7 +84,7 @@ function exanOrEnem (registrationEnem) {
   if (registrationEnem) {
     return { registration: classificationEnum.ENEM, descriptionRegistration: 'Inscrito' }
   }
-  return { registration: classificationEnum.EXAM, descriptionRegistration: 'Vestibular presencial' }
+  return { registration: classificationEnum.EXAM, descriptionRegistration: 'Vestibular' }
 }
 
 module.exports = (item) => {
