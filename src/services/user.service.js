@@ -7,6 +7,7 @@ const EmailService = require('./email.service')
 const Util = require('../utils/util')
 const AzureService = require('./azure.service.js')
 const { encryptPassword, comparePassword, getRecoverKey } = require('../utils/auth')
+const FirebaseAdmin = require('../services/firebase.service')
 
 module.exports = class UserService {
   static async findById (id) {
@@ -87,6 +88,14 @@ module.exports = class UserService {
 
     await this.validateEntity(null, entity)
 
+    const user = this.createdUser(entity)
+
+    await this.sendCodeEmail(user.id, entity.email)
+
+    return user
+  }
+
+  static async createdUser (entity) {
     const transaction = await database.transaction()
     try {
       entity = this.prepare(entity)
@@ -114,8 +123,6 @@ module.exports = class UserService {
       )
 
       await transaction.commit()
-
-      await this.sendCodeEmail(user.id, entity.email)
 
       return user
     } catch (error) {
@@ -202,6 +209,24 @@ module.exports = class UserService {
       throw new Error('senha inválida!')
     }
     return jwt.sign(user, config.jwtSecret)
+  }
+
+  static async loginFirebase (token) {
+    try {
+      const decoded = await FirebaseAdmin.auth().verifyIdToken(token)
+
+      let user = await UserRepository.findBy({ Email: decoded.email })
+
+      if (!user) {
+        user = await this.createdUser({ name: decoded.name, email: decoded.email })
+      }
+
+      const fullProfile = (!!user.CPF && !!user.Phone && !!user.Gender && !!user.Birthday)
+
+      return { token: jwt.sign(user, config.jwtSecret), fullProfile }
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   static async photo (userId, base64) {

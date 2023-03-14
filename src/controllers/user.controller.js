@@ -63,6 +63,17 @@ module.exports = class UserController {
     }
   }
 
+  static async loginFirebase (request, response, next) {
+    try {
+      const { token } = request.headers
+      const data = await UserService.loginFirebase(token)
+      response.json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
   static async update (request, response, next) {
     try {
       const data = await UserService.update(request.user.id, request.body)

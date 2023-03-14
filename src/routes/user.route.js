@@ -8,6 +8,7 @@ const TrackMiddleware = require('../middlewares/trackMiddleware')
 
 router.post('/register', TrackMiddleware.tracking, UserController.register)
 router.post('/login', TrackMiddleware.tracking, UserController.login)
+router.post('/login-firebase', TrackMiddleware.tracking, UserController.loginFirebase)
 router.post('/validate', TrackMiddleware.tracking, UserController.validateCode)
 
 router.post('/changePassword', TrackMiddleware.tracking, UserController.changePassword)
