@@ -84,7 +84,7 @@ function exanOrEnem (registrationEnem) {
   if (registrationEnem) {
     return { registration: classificationEnum.ENEM, descriptionRegistration: 'Inscrito' }
   }
-  return { registration: classificationEnum.EXAM, descriptionRegistration: 'Vestibular' }
+  return { registration: classificationEnum.EXAM, descriptionRegistration: 'Vestibular online' }
 }
 
 module.exports = (item) => {
