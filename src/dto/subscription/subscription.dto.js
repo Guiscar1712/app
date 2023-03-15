@@ -36,7 +36,7 @@ function toDto (item) {
 function getEntry (entry) {
   switch (entry) {
     case 'VESTIBULAR':
-      return 'Vestibular'
+      return 'Vestibular online'
 
     case 'ENEM':
       return 'Enem'
