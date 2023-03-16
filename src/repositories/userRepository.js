@@ -1,3 +1,4 @@
+const moment = require('moment')
 const SimpleQuery = require('../database/simpleQuery')
 const table = 'User'
 
@@ -49,7 +50,7 @@ function format (row) {
     cpf: row.CPF,
     phone: row.Phone,
     gender: row.Gender,
-    birthday: row.Birthday,
+    birthday: row.BirthDay ? moment(row.BirthDay).format('DD/MM/YYYY') : null,
     photo: row.Photo,
     city: row.City,
     address: row.Address,
