@@ -271,6 +271,8 @@ module.exports = class UserService {
     add_to_update('notifyPromotions')
     add_to_update('alertWarnings')
     add_to_update('alertTeatchers')
+    add_to_update('zipCode')
+    add_to_update('state')
 
     if (entity.photo) {
       if (entity.photo.includes('/uploads/')) {

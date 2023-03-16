@@ -59,6 +59,8 @@ function format (row) {
     notifyEvents: row.NotifyEvents,
     notifyPromotions: row.NotifyPromotions,
     alertWarnings: row.AlertWarnings,
-    alertTeatchers: row.AlertTeatchers
+    alertTeatchers: row.AlertTeatchers,
+    zipcode: row.ZipCode,
+    state: row.State
   }
 }
