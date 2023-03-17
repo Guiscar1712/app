@@ -1,50 +1,46 @@
-# Node.js Express Web App to Linux on Azure
-# Build a Node.js Express app and deploy it to Azure as a Linux web app.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+# Azure Pipeline
+#   vmImageName: Versão da VM (padrão: ubuntu-latest)
+#   *webAppName: Nome do respectivo web app na Azure
+#   *environment: Respectivo ambiente do pipe 
+#   *azureSubscription: Nome da service connection com a Azure
+#    ------------------------------------------------------------
+#   *Variáveis que devem ser configuradas diretamente no pipeline
 
-trigger:
-- main
+trigger: none # Política de gatilho deve ser sobrescrita no pipeline
 
 variables:
-
-  # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: 'a501f2bc-bede-4678-893c-6f826841cca5'
-
-  # Web app name
-  webAppName: 'bluecore-kroton-vitrine-api-homolog'
-
-  # Environment name
-  environmentName: 'bluecore-kroton-vitrine-api-homolog'
-
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
-  displayName: Build stage
+  displayName: build stage
   jobs:
   - job: Build
-    displayName: Build
+    displayName: build
     pool:
       vmImage: $(vmImageName)
 
     steps:
     - task: NodeTool@0
       inputs:
-        versionSpec: '16.x'
-      displayName: 'Install Node.js'
+        versionSpec: '14.x'
+      displayName: 'install node'
 
     - script: |
-        npm install
-        npm run build --if-present
-        npm run test --if-present
-      displayName: 'npm install, build and test'
+        npm install --production
+      displayName: "npm install"
+
+    - task: DeleteFiles@1
+      displayName: 'delete dot files'
+      inputs:
+        SourceFolder: '.'
+        Contents: '.git'
+        RemoveDotFiles: true
 
     - task: ArchiveFiles@2
-      displayName: 'Archive files'
+      displayName: 'archive'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '.'
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
@@ -54,13 +50,13 @@ stages:
       artifact: drop
 
 - stage: Deploy
-  displayName: Deploy stage
+  displayName: deploy stage
   dependsOn: Build
   condition: succeeded()
   jobs:
   - deployment: Deploy
-    displayName: Deploy
-    environment: $(environmentName)
+    displayName: 'deploy to azure webapp' 
+    environment: $(environment)
     pool:
       vmImage: $(vmImageName)
     strategy:
@@ -68,11 +64,11 @@ stages:
         deploy:
           steps:
           - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy: bluecore-kroton-vitrine-api-homolog'
+            displayName: 'webapp deploy: $(webAppName)'
             inputs:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
               appName: $(webAppName)
-              runtimeStack: 'NODE|16'
+              runtimeStack: 'NODE|14-lts'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run start'
+              StartupCommand: "npm start"
