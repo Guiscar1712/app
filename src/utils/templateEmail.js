@@ -4,7 +4,7 @@ const path = require('path')
 module.exports = class TemplateEmail {
   static get (templateName, params) {
     let data = fs.readFileSync(
-      path.resolve(__dirname, '../templates/emails/' + templateName),
+      path.resolve(__dirname, '../templates/emails/' + templateName + '/index.html'),
       'utf8'
     )
     for (const item of params) {

@@ -33,12 +33,18 @@ module.exports = class EmailService {
     sendGridHelper.sendMessage(params.user.email, params.title, htmlEmail)
   }
 
-  static async recoverPassword (email, code) {
-    const htmlEmail =
-    '<h3>Seu código para autenticação em duas etapas</h3>' +
-    '<p>Recebemos uma solicitação de acesso à sua conta. Utilize o código abaixo para confirmar:</p>' +
-    '<h2>' + code + '</h2>'
-
+  static async recoverPassword (email, name, code) {
+    const templateParams = [
+      {
+        name: 'name_candidato',
+        value: name
+      },
+      {
+        name: 'code_recovery',
+        value: code
+      }
+    ]
+    const htmlEmail = templateEmail.get(process.env.RECOVERPASSWORD_TEMPLATE, templateParams)
     return await sendGridHelper.sendMessage(email, 'App Vitrine - Código de Recuperação', htmlEmail)
   }
 }
