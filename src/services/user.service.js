@@ -18,9 +18,9 @@ module.exports = class UserService {
     return await UserRepository.list()
   }
 
-  static async sendCodeEmail (userId, email) {
+  static async sendCodeEmail (userId, name, email) {
     const recoverKey = await UserService.getRecoveryKey(userId)
-    await EmailService.recoverPassword(email, recoverKey)
+    await EmailService.recoverPassword(email, name, recoverKey)
   }
 
   static duplicateRegister (user, userSearch, message) {
@@ -88,9 +88,9 @@ module.exports = class UserService {
 
     await this.validateEntity(null, entity)
 
-    const user = this.createdUser(entity)
+    const user = await this.createdUser(entity)
 
-    await this.sendCodeEmail(user.id, entity.email)
+    await this.sendCodeEmail(user.id, user.name, entity.email)
 
     return user
   }
@@ -295,7 +295,7 @@ module.exports = class UserService {
       throw new Error('cpf não cadastrado!')
     }
 
-    await this.sendCodeEmail(user.id, user.email)
+    await this.sendCodeEmail(user.id, user.name, user.email)
     return user
   }
 
