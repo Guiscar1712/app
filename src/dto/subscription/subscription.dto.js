@@ -13,7 +13,7 @@ function toDto (item) {
 
   const registrationPayment = (matricula.pagamento?.isento || matricula.pagamento?.pago)
 
-  const formOfEntry = getEntry(inscricao.tipoIngresso)
+  const formOfEntry = getEntry(inscricao.tipoIngresso, registrationEnem)
 
   return {
     courseTypeName: course.dsTipoCurso,
@@ -33,7 +33,11 @@ function toDto (item) {
   }
 }
 
-function getEntry (entry) {
+function getEntry (entry, registrationEnem) {
+  if (registrationEnem) {
+    return 'Enem'
+  }
+
   switch (entry) {
     case 'VESTIBULAR':
       return 'Vestibular online'
@@ -71,6 +75,9 @@ function getClassification (classification, registrationEnem) {
 
     case 'Desclassificado':
       return { registration: classificationEnum.DISQUALIFIED, descriptionRegistration: 'Desclassificado' }
+
+    case 'Ausente':
+      return { registration: classificationEnum.ABSENT, descriptionRegistration: 'Ausente' }
 
     case 'Inscrito':
       return exanOrEnem(registrationEnem)

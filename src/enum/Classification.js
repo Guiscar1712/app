@@ -4,5 +4,6 @@ module.exports = {
   ONLINEEXAM: 3,
   EXAM: 4,
   ENEM: 5,
-  DISQUALIFIED: 6
+  DISQUALIFIED: 6,
+  ABSENT: 7
 }
