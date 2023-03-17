@@ -249,7 +249,7 @@ module.exports = class UserService {
     let updateEntity = {}
 
     const add_to_update = field => {
-      if (entity[field]) {
+      if (entity[field] || (entity[field] === false)) {
         const new_field = {}
         new_field[field] = entity[field]
         updateEntity = { ...updateEntity, ...new_field }
