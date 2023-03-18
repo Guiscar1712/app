@@ -3,6 +3,10 @@ const classificationEnum = require('../../enum/Classification')
 function toDto (item) {
   const { matricula, inscricao, dadosPessoais } = item
 
+  if (!inscricao || !inscricao.ofertas || !inscricao.ofertas.primeiraOpcao || !inscricao.ofertas.primeiraOpcao.dsCurso) {
+    return
+  }
+
   const course = inscricao?.ofertas?.primeiraOpcao
   const courseName = getCourseName(course.dsCurso)
   const registrationEnem = inscricao.enem?.utilizar
@@ -51,6 +55,10 @@ function getEntry (entry, registrationEnem) {
 }
 
 function getCourseName (courseName) {
+  if (!courseName) {
+    return courseName
+  }
+
   const courseNameSplit = courseName.split(' - ')
 
   if (courseNameSplit.length <= 1) {
@@ -99,7 +107,10 @@ module.exports = (item) => {
     const courses = []
 
     item.forEach(element => {
-      courses.push(toDto(element))
+      const course = toDto(element)
+      if (course) {
+        courses.push(course)
+      }
     })
 
     return courses
