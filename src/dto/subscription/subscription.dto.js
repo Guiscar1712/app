@@ -50,7 +50,7 @@ function getEntry (entry, registrationEnem) {
       return 'Enem'
 
     default:
-      break
+      return 'Vestibular online'
   }
 }
 
