@@ -1,4 +1,5 @@
 const NotificationService = require('../services/notification.service')
+const NotificationFirebaseService = require('../services/notificationFirebase.service')
 
 module.exports = class NotificationPreferenceController {
   static async get (request, response, next) {
@@ -48,6 +49,54 @@ module.exports = class NotificationPreferenceController {
     try {
       const data = await NotificationService.delete(request.params.id, request.user.id)
       response.json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async sendNotificationTopic (request, response, next) {
+    try {
+      const { topic, title, body } = request.body
+
+      const res = await NotificationFirebaseService.sendFromTopic(topic, { title, body })
+      response.json(res)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async sendNotificationClient (request, response, next) {
+    try {
+      const { token, title, body } = request.body
+
+      const res = await NotificationFirebaseService.sendFromClient(token, { title, body })
+      response.json(res)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async subscribeToTopic (request, response, next) {
+    try {
+      const { token, topic } = request.body
+
+      const res = await NotificationFirebaseService.subscribeToTopic(token, topic)
+      response.json(res)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async unsubscribeFromTopic (request, response, next) {
+    try {
+      const { token, topic } = request.body
+
+      const res = await NotificationFirebaseService.unsubscribeFromTopic(token, topic)
+      response.json(res)
     } catch (error) {
       console.log(error)
       next(error)
