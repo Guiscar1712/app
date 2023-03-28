@@ -71,6 +71,7 @@ module.exports = class NotificationFirebaseService {
   static async sendFromTopic (topic, message) {
     const params = {
       data: message,
+      notification: message,
       topic
     }
 
