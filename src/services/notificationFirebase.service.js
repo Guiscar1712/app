@@ -15,11 +15,11 @@ module.exports = class NotificationFirebaseService {
     const user = await UserRepository.findById(userId)
 
     const topics = []
-    topics.push({ topic: 'notifyFreeCourses', value: user.notifyFreeCourses })
-    topics.push({ topic: 'notifyEvents', value: user.notifyEvents })
-    topics.push({ topic: 'notifyPromotions', value: user.notifyPromotions })
-    topics.push({ topic: 'alertWarnings', value: user.alertWarnings })
-    topics.push({ topic: 'alertTeatchers', value: user.alertTeatchers })
+    topics.push({ topic: 'NotifyFreeCourses', value: user.notifyFreeCourses })
+    topics.push({ topic: 'NotifyEvents', value: user.notifyEvents })
+    topics.push({ topic: 'NotifyPromotions', value: user.notifyPromotions })
+    topics.push({ topic: 'AlertWarnings', value: user.alertWarnings })
+    topics.push({ topic: 'AlertTeatchers', value: user.alertTeatchers })
 
     topics.forEach(el => {
       if (el.value) {
