@@ -1,4 +1,4 @@
-const SimpleQuery = require('../database/simpleQuery')
+const { SimpleQuery } = require('../database')
 const table = 'Membership'
 
 module.exports = class MembershipRepository {

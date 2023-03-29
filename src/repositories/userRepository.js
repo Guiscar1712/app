@@ -1,5 +1,5 @@
 const moment = require('moment')
-const SimpleQuery = require('../database/simpleQuery')
+const { SimpleQuery } = require('../database')
 const table = 'User'
 
 module.exports = class UserRepository {

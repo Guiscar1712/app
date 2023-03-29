@@ -30,6 +30,21 @@ module.exports = class Notification {
     return await NotificationRepository.update(id, UserId, { DateRead })
   }
 
+  static async notificationNotRead (id, UserId) {
+    const DateRead = null
+    return await NotificationRepository.update(id, UserId, { DateRead })
+  }
+
+  static async notificationAllRead (UserId) {
+    const query = { UserId, DateRead: null }
+    const notifications = await NotificationRepository.filterBy(query)
+
+    const notificationsIds = notifications.map(f => { return f.id })
+
+    const DateRead = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+    return await NotificationRepository.updateByIds(notificationsIds, { DateRead })
+  }
+
   static async delete (id, UserId) {
     return await NotificationRepository.deleteBy({ id, UserId })
   }

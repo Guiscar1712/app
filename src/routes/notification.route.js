@@ -10,6 +10,8 @@ router.get('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, Notifi
 router.get('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.getById)
 router.post('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.insert)
 router.put('/read/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.notificationRead)
+router.put('/all-read', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.notificationAllRead)
+router.put('/not-read/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.notificationNotRead)
 router.delete('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.delete)
 
 module.exports = router
