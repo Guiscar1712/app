@@ -1,4 +1,4 @@
-const SimpleQuery = require('../database/simpleQuery')
+const { SimpleQuery, UpdateInIds } = require('../database')
 const table = 'Notification'
 
 module.exports = class UserRepository {
@@ -34,6 +34,10 @@ module.exports = class UserRepository {
 
   static async update (id, UserId, entity, transaction) {
     return await SimpleQuery.update({ id, UserId }, entity, table, transaction)
+  }
+
+  static async updateByIds (ids, entity, transaction) {
+    return await UpdateInIds('id', ids, entity, table, transaction)
   }
 }
 

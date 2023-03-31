@@ -45,6 +45,26 @@ module.exports = class NotificationPreferenceController {
     }
   }
 
+  static async notificationAllRead (request, response, next) {
+    try {
+      const data = await NotificationService.notificationAllRead(request.user.id)
+      response.json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
+  static async notificationNotRead (request, response, next) {
+    try {
+      const data = await NotificationService.notificationNotRead(request.params.id, request.user.id)
+      response.json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
+
   static async delete (request, response, next) {
     try {
       const data = await NotificationService.delete(request.params.id, request.user.id)
