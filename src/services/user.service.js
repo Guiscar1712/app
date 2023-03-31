@@ -7,7 +7,7 @@ const EmailService = require('./email.service')
 const Util = require('../utils/util')
 const AzureService = require('./azure.service.js')
 const { encryptPassword, comparePassword, getRecoverKey } = require('../utils/auth')
-const FirebaseAdmin = require('../services/firebase.service')
+const { firebaseAdmin } = require('../services/firebase.service')
 
 module.exports = class UserService {
   static async findById (id) {
@@ -213,7 +213,7 @@ module.exports = class UserService {
 
   static async loginFirebase (token) {
     try {
-      const decoded = await FirebaseAdmin.auth().verifyIdToken(token)
+      const decoded = await firebaseAdmin.auth().verifyIdToken(token)
 
       let user = await UserRepository.findBy({ Email: decoded.email })
 
