@@ -10,6 +10,13 @@ router.get('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, Notifi
 router.get('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.getById)
 router.post('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.insert)
 router.put('/read/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.notificationRead)
+router.put('/all-read', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.notificationAllRead)
+router.put('/not-read/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.notificationNotRead)
 router.delete('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.delete)
+
+router.post('/send-to-topic', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.sendNotificationTopic)
+router.post('/send-to-client', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.sendNotificationClient)
+router.post('/subscribe-topic', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.subscribeToTopic)
+router.post('/unsubscribe-topic', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.unsubscribeFromTopic)
 
 module.exports = router
