@@ -30,8 +30,12 @@ module.exports = class CourseService {
   }
 
   static async getCourseTrending () {
+    // const params = {
+    //   highlighted: true,
+    //   limit: 10
+    // }
+
     const params = {
-      highlighted: true,
       limit: 10
     }
 
@@ -41,8 +45,12 @@ module.exports = class CourseService {
   }
 
   static async getCourseMostWanted () {
+    // const params = {
+    //   sort: 'visits',
+    //   limit: 10
+    // }
+
     const params = {
-      sort: 'visits',
       limit: 10
     }
 

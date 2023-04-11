@@ -9,15 +9,15 @@ function toDto (item) {
 
   const course = inscricao?.ofertas?.primeiraOpcao
   const courseName = getCourseName(course.dsCurso)
-  const registrationEnem = inscricao.enem?.utilizar
+  const registrationEnem = inscricao?.enem?.utilizar
 
-  const classification = inscricao.classificacao?.descricao
+  const classification = inscricao?.classificacao?.descricao
 
   const { registration, descriptionRegistration } = getClassification(classification, registrationEnem)
 
-  const registrationPayment = (matricula.pagamento?.isento || matricula.pagamento?.pago)
+  const registrationPayment = (matricula?.pagamento?.isento || matricula?.pagamento?.pago)
 
-  const formOfEntry = getEntry(inscricao.tipoIngresso, registrationEnem)
+  const formOfEntry = getEntry(inscricao?.tipoIngresso, registrationEnem)
 
   return {
     courseTypeName: course.dsTipoCurso,
