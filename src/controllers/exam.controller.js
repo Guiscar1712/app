@@ -38,4 +38,18 @@ module.exports = class NotificationPreferenceController {
       next(error)
     }
   }
+
+  static async getEssayTheme (request, response, next) {
+    try {
+      const data = await ExamService.getEssayTheme()
+
+      if (data.errors) {
+        return response.status(400).json(data.errors)
+      }
+      return response.status(200).json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
 }
