@@ -20,14 +20,14 @@ module.exports = class NotificationPreferenceController {
 
   static async eligible (request, response, next) {
     try {
-      const subscription = request.params.subscription
+      const subscriptionKey = request.params.subscriptionKey
 
-      const contract = SubscriptionValidate(subscription)
+      const contract = SubscriptionValidate(subscriptionKey)
       if (!contract.isValid()) {
         return response.status(400).send(contract.errors()).end()
       }
 
-      const data = await ExamService.eligible(subscription, request.user.id)
+      const data = await ExamService.eligible(subscriptionKey, request.user.id)
 
       if (data.errors) {
         return response.status(400).json(data.errors)

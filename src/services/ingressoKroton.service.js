@@ -62,10 +62,10 @@ module.exports = class IngressoKrotonService {
     ).data
   }
 
-  static async eligibleExam (subscribetion, token) {
+  static async eligibleExam (subscriptionKey, token) {
     try {
       const res = await axios.get(
-        `${ingresso.base_uri}/ms/inscricao/v4/captacao/prova-online/inscricao/${subscribetion}/sistema/COLABORAR`,
+        `${ingresso.base_uri}/ms/inscricao/v4/captacao/prova-online/businesskey/${subscriptionKey}`,
         {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,

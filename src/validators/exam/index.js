@@ -17,9 +17,9 @@ module.exports = {
     return contract
   },
 
-  SubscriptionValidate (subscription) {
+  SubscriptionValidate (subscriptionKey) {
     const contract = new Validator()
-    contract.isRequired(subscription, '40200', 'Inscrição é obrigatório')
+    contract.isRequired(subscriptionKey, '40200', 'Inscrição é obrigatório')
 
     return contract
   }

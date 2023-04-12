@@ -10,10 +10,10 @@ module.exports = class RegisterApp {
     }
   }
 
-  static async eligible (subscription, UserId) {
+  static async eligible (subscriptionKey, UserId) {
     try {
       const token = await IngressoKrotonService.getToken()
-      const res = await IngressoKrotonService.eligibleExam(subscription, token.access_token)
+      const res = await IngressoKrotonService.eligibleExam(subscriptionKey, token.access_token)
       if (res.errors) {
         return res
       }
