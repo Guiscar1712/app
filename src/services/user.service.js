@@ -57,6 +57,7 @@ module.exports = class UserService {
       throw new Error('email não informado!')
     }
 
+    entity.cpf = Util.getNumbers(entity.cpf)
     this.duplicateRegister(
       user,
       await UserRepository.findBy({ CPF: entity.cpf }),
@@ -71,6 +72,7 @@ module.exports = class UserService {
       )
     }
 
+    entity.phone = Util.getNumbers(entity.phone)
     if (entity.phone) {
       this.duplicateRegister(
         user,
@@ -204,6 +206,9 @@ module.exports = class UserService {
     }
     const membership = await MembershipRepository.findBy({ UserId: user.id })
 
+    if (!membership.password) {
+      throw new Error('senha inválida!')
+    }
     const passwordIsValid = comparePassword(password, membership.password)
     if (!passwordIsValid) {
       throw new Error('senha inválida!')
