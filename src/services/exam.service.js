@@ -68,4 +68,39 @@ module.exports = class RegisterApp {
       }
     ]
   }
+
+  static async getInstructions () {
+    return [
+      {
+        id: 1,
+        icon: 'language',
+        descricao: 'A prova consiste em uma redação em língua Portuguesa.'
+      },
+      {
+        id: 2,
+        icon: 'volume-slash',
+        descricao: 'Para que você tenha um melhor desempenho, realize a prova em um local tranquilo, sem ruídos ou distrações.'
+      },
+      {
+        id: 3,
+        icon: 'brake-warning',
+        descricao: 'Evite de sair do aplicativo ou mudar de tela. Cada vez que mudar de tela, você receberá um aviso.'
+      },
+      {
+        id: 4,
+        icon: 'pen-nib-slash',
+        descricao: 'Ao finalizar e enviar a redação, ela não poderá mais ser editada.'
+      },
+      {
+        id: 5,
+        icon: 'square-xmark',
+        descricao: 'Não feche o App durante a redação. Caso isso aconteça, você terá que recomeçar.'
+      },
+      {
+        id: 6,
+        icon: 'memo-circle-check',
+        descricao: 'Você tem 10 tentativas para concluir sua redação.'
+      }
+    ]
+  }
 }

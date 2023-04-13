@@ -52,4 +52,18 @@ module.exports = class NotificationPreferenceController {
       next(error)
     }
   }
+
+  static async getInstructions (request, response, next) {
+    try {
+      const data = await ExamService.getInstructions()
+
+      if (data.errors) {
+        return response.status(400).json(data.errors)
+      }
+      return response.status(200).json(data)
+    } catch (error) {
+      console.log(error)
+      next(error)
+    }
+  }
 }
