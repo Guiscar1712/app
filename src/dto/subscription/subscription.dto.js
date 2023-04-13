@@ -20,6 +20,7 @@ function toDto (item) {
   const formOfEntry = getEntry(inscricao?.tipoIngresso, registrationEnem)
 
   return {
+    subscriptionKey: inscricao?.businessKey,
     courseTypeName: course.dsTipoCurso,
     courseName,
     studentCode: dadosPessoais.ra,
