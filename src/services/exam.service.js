@@ -1,6 +1,6 @@
-const examEnum = require('../enum/Exam')
 const IngressoKrotonService = require('../services/ingressoKroton.service')
-
+const instructionsRepository = require('../repositories/ExamInstructionsRepository')
+const statusRepository = require('../repositories/ExamStatusRepository')
 module.exports = class RegisterApp {
   static async apply (model, UserId) {
     try {
@@ -30,42 +30,24 @@ module.exports = class RegisterApp {
     }
   }
 
-  // [
-  //     {
-  //       id: 1528,
-  //       descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
-  //     },
-  //     {
-  //       id: 1532,
-  //       descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
-  //     },
-  //     {
-  //       id: 1533,
-  //       descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua faculdade?'
-  //     },
-  //     {
-  //       id: 1534,
-  //       descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
-  //     },
-  //     {
-  //       id: 1535,
-  //       descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua faculdade?'
-  //     },
-  //     {
-  //       id: 1536,
-  //       descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
-  //     }
-  //   ]
   static async getEssayTheme () {
     return [
       {
         id: 1534,
-        descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
+        description: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
       },
       {
         id: 1535,
-        descricao: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua faculdade?'
+        description: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua faculdade?'
       }
     ]
+  }
+
+  static async getInstructions () {
+    return await instructionsRepository.filterBy({})
+  }
+
+  static async getStatus (subscriptionKey, UserId) {
+    return await statusRepository.findBy({ SubscriptionKey: subscriptionKey, UserId })
   }
 }
