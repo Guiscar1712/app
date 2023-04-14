@@ -1,5 +1,5 @@
 const { SimpleQuery } = require('../database')
-const table = 'ExamInstructions'
+const table = 'ExamStatus'
 
 module.exports = class RegisterAppRepository {
   static async findBy (query, transaction) {
@@ -35,7 +35,12 @@ function format (row) {
   }
   return {
     id: row.Id,
-    icon: row.Icon,
-    description: row.Description
+    subscriptionKey: row.SubscriptionKey,
+    attempts: row.Attempts,
+    characters: row.Characters,
+    duration: row.Duration,
+    themeId: row.ThemeId,
+    theme: row.Theme
+
   }
 }

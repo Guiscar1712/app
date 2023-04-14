@@ -1,5 +1,6 @@
 const IngressoKrotonService = require('../services/ingressoKroton.service')
 const instructionsRepository = require('../repositories/ExamInstructionsRepository')
+const statusRepository = require('../repositories/ExamStatusRepository')
 module.exports = class RegisterApp {
   static async apply (model, UserId) {
     try {
@@ -46,12 +47,7 @@ module.exports = class RegisterApp {
     return await instructionsRepository.filterBy({})
   }
 
-  static async getStatus () {
-    return {
-      duration: 30,
-      characters: 3412,
-      attempts: 2,
-      theme: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua faculdade?'
-    }
+  static async getStatus (subscriptionKey, UserId) {
+    return await statusRepository.findBy({ SubscriptionKey: subscriptionKey, UserId })
   }
 }

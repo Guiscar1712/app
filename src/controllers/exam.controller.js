@@ -69,11 +69,24 @@ module.exports = class NotificationPreferenceController {
 
   static async getStatus (request, response, next) {
     try {
-      const data = await ExamService.getStatus()
+      const subscriptionKey = request.params.subscriptionKey
+      const UserId = request.user.id
+
+      const contract = SubscriptionValidate(subscriptionKey)
+      if (!contract.isValid()) {
+        return response.status(400).send(contract.errors()).end()
+      }
+
+      const data = await ExamService.getStatus(subscriptionKey, UserId)
+
+      if (data === null) {
+        return response.status(404).json([{ code: '40404', message: 'Registro não encontrado' }])
+      }
 
       if (data.errors) {
         return response.status(400).json(data.errors)
       }
+
       return response.status(200).json(data)
     } catch (error) {
       console.log(error)
