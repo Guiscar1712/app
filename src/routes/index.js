@@ -8,5 +8,6 @@ router.use('/api/course', require('./course.route'))
 router.use('/api/notification-preference', require('./notificationPreference.route'))
 router.use('/api/notification', require('./notification.route'))
 router.use('/api/register-app', require('./registerApp.route'))
+router.use('/api/exam', require('./exam.route'))
 
 module.exports = router
