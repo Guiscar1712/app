@@ -31,7 +31,7 @@ module.exports = class RegisterAppRepository {
 
   static async update (id, entity, transaction) {
     delete entity.Id
-    return await SimpleQuery.update({ id }, entity, table, transaction)
+    return format(await SimpleQuery.update({ id }, entity, table, transaction))
   }
 }
 
@@ -46,7 +46,10 @@ function format (row) {
     characters: row.Characters,
     duration: row.Duration,
     themeId: row.ThemeId,
-    theme: row.Theme
+    theme: row.Theme,
+    startDate: row.StartDate,
+    endDate: row.EndDate,
+    status: row.Status
   }
 }
 
