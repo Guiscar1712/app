@@ -51,7 +51,7 @@ module.exports = class RegisterApp {
   }
 
   static async setStatus (model, UserId) {
-    const status = await statusRepository.findInternalBy({ SubscriptionKey: model.subscription, UserId })
+    let status = await statusRepository.findInternalBy({ SubscriptionKey: model.subscription, UserId })
 
     const characters = model.text.length
     const startDate = moment(model.startDate, 'YYYY-MM-DD HH:mm:ss')
@@ -64,6 +64,7 @@ module.exports = class RegisterApp {
       return res
     }
 
+    status = status || {}
     status.SubscriptionKey = model.subscription
     status.Status = model.status
     status.StartDate = model.startDate
