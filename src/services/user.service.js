@@ -223,7 +223,8 @@ module.exports = class UserService {
       let user = await UserRepository.findBy({ Email: decoded.email })
 
       if (!user) {
-        user = await this.createdUser({ name: decoded.name, email: decoded.email })
+        const name = decoded.name || ''
+        user = await this.createdUser({ name, email: decoded.email })
       }
 
       const fullProfile = (!!user.CPF && !!user.Phone && !!user.Gender && !!user.Birthday)
