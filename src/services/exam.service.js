@@ -54,9 +54,15 @@ module.exports = class RegisterApp {
     let status = await statusRepository.findInternalBy({ SubscriptionKey: model.subscription, UserId })
 
     const characters = model.text.length
-    const startDate = moment(model.startDate, 'YYYY-MM-DD HH:mm:ss')
-    const endDate = moment(model.endDate, 'YYYY-MM-DD HH:mm:ss')
-    const duration = moment.duration(endDate.diff(startDate)).asMinutes()
+    let startDate = null
+    let endDate = null
+    let duration = 0
+
+    if (model.status === 'FINISHED') {
+      startDate = moment(model.startDate, 'YYYY-MM-DD HH:mm:ss')
+      endDate = moment(model.endDate, 'YYYY-MM-DD HH:mm:ss')
+      duration = moment.duration(endDate.diff(startDate)).asMinutes()
+    }
 
     if (status && status.Id && status.Attempts > model.attempts) {
       const res = { errors: [{ code: '40500', message: 'Valor de tentativas inválida!' }] }
