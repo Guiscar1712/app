@@ -5,7 +5,6 @@ module.exports = {
     const contract = new Validator()
     contract.isRequired(model.subscription, '40100', 'subscription é obrigatório')
     contract.isRequired(model.themeId, '40102', 'themeId é obrigatório')
-    contract.isRequired(model.theme, '40102', 'theme é obrigatório')
 
     contract.isRequired(model.attempts, '40301', 'attempts Tentativa é obrigatório')
 

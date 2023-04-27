@@ -79,7 +79,6 @@ module.exports = class RegisterApp {
     status.Characters = characters
     status.Duration = duration
     status.ThemeId = model.themeId
-    status.Theme = model.theme
     status.UserId = UserId
 
     if (status?.Id) {
