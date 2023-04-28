@@ -2,6 +2,11 @@ const { SimpleQuery } = require('../database')
 const table = 'ExamStatus'
 
 module.exports = class RegisterAppRepository {
+  static async findInternalBy (query, transaction) {
+    const row = await SimpleQuery.findBy(query, table, transaction)
+    return row
+  }
+
   static async findBy (query, transaction) {
     const row = await SimpleQuery.findBy(query, table, transaction)
     return format(row)
@@ -25,7 +30,8 @@ module.exports = class RegisterAppRepository {
   }
 
   static async update (id, entity, transaction) {
-    return await SimpleQuery.update({ id }, entity, table, transaction)
+    delete entity.Id
+    return format(await SimpleQuery.update({ id }, entity, table, transaction))
   }
 }
 
@@ -40,7 +46,24 @@ function format (row) {
     characters: row.Characters,
     duration: row.Duration,
     themeId: row.ThemeId,
-    theme: row.Theme
+    theme: row.Theme,
+    startDate: row.StartDate,
+    endDate: row.EndDate,
+    status: row.Status
+  }
+}
 
+function formatInternal (row) {
+  if (!row) {
+    return null
+  }
+  return {
+    Id: row.Id,
+    SubscriptionKey: row.SubscriptionKey,
+    Attempts: row.Attempts,
+    Characters: row.Characters,
+    Duration: row.Duration,
+    ThemeId: row.ThemeId,
+    Theme: row.Theme
   }
 }
