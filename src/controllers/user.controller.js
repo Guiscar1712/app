@@ -130,7 +130,7 @@ module.exports = class UserController {
 
   static async delete (request, response, next) {
     try {
-      const data = await UserService.delete(request.params.id)
+      const data = await UserService.delete(request.user.id)
       response.json(data)
     } catch (error) {
       console.log(error)

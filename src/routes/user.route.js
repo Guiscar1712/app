@@ -23,6 +23,6 @@ router.get('/me', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, User
 router.get('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.get)
 router.get('/', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, UserController.list)
 
-router.delete('/:id', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, UserController.delete)
+router.delete('/', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, UserController.delete)
 
 module.exports = router
