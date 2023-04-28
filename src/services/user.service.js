@@ -1,5 +1,6 @@
 const database = require('../database/config.database')
 const UserRepository = require('../repositories/userRepository')
+const UserFirebaseRepository = require('../repositories/UserFirebaseRepository')
 const MembershipRepository = require('../repositories/membershipRepository')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
@@ -227,11 +228,25 @@ module.exports = class UserService {
         user = await this.createdUser({ name, email: decoded.email })
       }
 
+      await UserService.createdUserFirebase(decoded, user)
+
       const fullProfile = (!!user.CPF && !!user.Phone && !!user.Gender && !!user.Birthday)
 
       return { token: jwt.sign(user, config.jwtSecret), fullProfile }
     } catch (error) {
       throw new Error(error.message)
+    }
+  }
+
+  static async createdUserFirebase (decoded, user) {
+    const userFirebase = await UserFirebaseRepository.findByUid(decoded.uid)
+
+    if (!userFirebase) {
+      await UserFirebaseRepository.insert({
+        UserId: user.id,
+        Uid: decoded.uid,
+        SignInProvider: decoded.firebase?.sign_in_provider
+      })
     }
   }
 
@@ -307,6 +322,7 @@ module.exports = class UserService {
 
   static async delete (id) {
     const transaction = await database.transaction()
+
     try {
       await MembershipRepository.deleteBy({ UserId: id }, transaction)
       await UserRepository.deleteBy({ Id: id }, transaction)
@@ -315,6 +331,16 @@ module.exports = class UserService {
       console.log(error)
       await transaction.rollback()
       throw new Error('Internal error')
+    }
+
+    await UserService.deleteUsersFirebase(id)
+  }
+
+  static async deleteUsersFirebase (id) {
+    const uIds = await UserFirebaseRepository.listUIdsByUserId(id)
+    if (uIds.length > 0) {
+      await UserFirebaseRepository.deleteBy({ UserId: id })
+      await firebaseAdmin.auth().deleteUsers(uIds)
     }
   }
 }
