@@ -57,7 +57,6 @@ module.exports = {
     contract.isRequired(model.characters, '40302', 'characters é obrigatório')
     contract.isRequired(model.Duration, '40303', 'Duration é obrigatório')
     contract.isRequired(model.themeId, '40304', 'themeId é obrigatório')
-    contract.isRequired(model.theme, '40305', 'theme é obrigatório')
     contract.isRequired(model.StartDate, '40306', 'StartDate é obrigatório')
     contract.hasMaxLen(model.StartDate, model.EndDate, '40307', 'StartDate inválida')
     contract.isRequired(model.EndDate, '40308', 'EndDate é obrigatório')
