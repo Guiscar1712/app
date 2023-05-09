@@ -37,11 +37,11 @@ module.exports = class RegisterApp {
     return [
       {
         id: 1534,
-        description: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua carreira?'
+        description: 'O que você espera da sua carreira?'
       },
       {
         id: 1535,
-        description: 'A partir das suas experiências individuais, tanto profissionais quanto pessoais, redija um relato de experiência para a questão a seguir em norma-padrão escrita da língua portuguesa.Tema: O que você espera da sua faculdade?'
+        description: 'O que você espera da sua faculdade?'
       }
     ]
   }
