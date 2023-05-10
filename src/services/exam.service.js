@@ -2,6 +2,7 @@ const moment = require('moment')
 const IngressoKrotonService = require('../services/ingressoKroton.service')
 const instructionsRepository = require('../repositories/ExamInstructionsRepository')
 const statusRepository = require('../repositories/ExamStatusRepository')
+const themeRepository = require('../repositories/ExamThemeRepository')
 module.exports = class RegisterApp {
   static async apply (model, UserId) {
     try {
@@ -33,17 +34,8 @@ module.exports = class RegisterApp {
     }
   }
 
-  static async getEssayTheme () {
-    return [
-      {
-        id: 1534,
-        description: 'O que você espera da sua carreira?'
-      },
-      {
-        id: 1535,
-        description: 'O que você espera da sua faculdade?'
-      }
-    ]
+  static async getEssayTheme (isActive = true) {
+    return await themeRepository.filterBy({ IsActive: isActive })
   }
 
   static async getInstructions () {
