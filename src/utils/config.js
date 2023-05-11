@@ -11,10 +11,16 @@ module.exports = {
   azureBlobsConnection: process.env.AZUREBLOBS_CONNECTION,
   kroton: {
     ingresso: {
+      grant_type: process.env.KROTON_INGRESSO_GRANT_TYPE,
       url: process.env.KROTON_INGRESSO_URL,
       client_id: process.env.KROTON_INGRESSO_CLIENT_ID,
       client_secret: process.env.KROTON_INGRESSO_CLIENT_SECRET,
       OcpApimSubscriptionKey: process.env.KROTON_INGRESSO_SUBSCRIPTION_KEY
+    },
+    ci360: {
+      url: process.env.KROTON_CI369_URI,
+      token: process.env.KROTON_CI369_TOKEN,
+      event: process.env.KROTON_CI369_EVENT
     }
   }
 }

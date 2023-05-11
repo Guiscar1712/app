@@ -4,7 +4,7 @@ const UserFirebaseRepository = require('../repositories/UserFirebaseRepository')
 const MembershipRepository = require('../repositories/membershipRepository')
 const jwt = require('jsonwebtoken')
 const config = require('../utils/config')
-const EmailService = require('./email.service')
+const Ci360Kroton = require('./ci360Kroton.service')
 const Util = require('../utils/util')
 const AzureService = require('./azure.service.js')
 const { encryptPassword, comparePassword, getRecoverKey } = require('../utils/auth')
@@ -21,7 +21,7 @@ module.exports = class UserService {
 
   static async sendCodeEmail (userId, name, email) {
     const recoverKey = await UserService.getRecoveryKey(userId)
-    await EmailService.recoverPassword(email, name, recoverKey)
+    return await Ci360Kroton.sendCodeEmail(name, email, recoverKey)
   }
 
   static duplicateRegister (user, userSearch, message) {
