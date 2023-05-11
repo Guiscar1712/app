@@ -84,11 +84,15 @@ module.exports = class CourseService {
       search: query.search,
       area: query.area,
       modality: query.modality,
-      // sort: query.sort || 'visits',
+      sort: query.sort || 'visits',
       limit: query.limit || 10
     }
 
     // Remover apos ajuste do Strapi
+    if (params.sort === 'visits') {
+      delete params.sort
+    }
+
     let filter = true
     if ((params.search === undefined || params.search === null) &&
     (params.area === undefined || params.area === null) &&
