@@ -88,7 +88,21 @@ module.exports = class CourseService {
       limit: query.limit || 10
     }
 
+    // Remover apos ajuste do Strapi
+    let filter = true
+    if ((params.search === undefined || params.search === null) &&
+    (params.area === undefined || params.area === null) &&
+    (params.modality === undefined || params.modality === null)) {
+      filter = false
+      params.limit = 20
+    }
+    // Remover apos ajuste do Strapi
+
     const courses = await this.getCourseFilter(params)
+
+    if (!filter) {
+      return courses.slice(10, 20)
+    }
     return courses
   }
 
