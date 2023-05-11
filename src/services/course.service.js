@@ -49,13 +49,11 @@ module.exports = class CourseService {
     //   sort: 'visits',
     //   limit: 10
     // }
-
     const params = {
       limit: 10
     }
 
     const courses = await this.getCourseFilter(params)
-
     return courses
   }
 
@@ -86,12 +84,11 @@ module.exports = class CourseService {
       search: query.search,
       area: query.area,
       modality: query.modality,
-      sort: query.sort || 'visits',
+      // sort: query.sort || 'visits',
       limit: query.limit || 10
     }
 
     const courses = await this.getCourseFilter(params)
-
     return courses
   }
 
