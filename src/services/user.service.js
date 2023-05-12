@@ -49,6 +49,18 @@ module.exports = class UserService {
     return entity
   }
 
+  static getModel (entity) {
+    const keys = Object.keys(entity)
+
+    const model = {}
+    keys.forEach(key => {
+      if (entity[key]) {
+        model[key] = entity[key]
+      }
+    })
+    return model
+  }
+
   static async validateEntity (user, entity) {
     if (!entity.cpf) {
       throw new Error('cpf não informado!')
@@ -102,15 +114,11 @@ module.exports = class UserService {
     const transaction = await database.transaction()
     try {
       entity = this.prepare(entity)
+
+      const model = this.getModel(entity)
+
       const user = await UserRepository.insert(
-        {
-          Name: entity.name,
-          CPF: entity.cpf,
-          Email: entity.email,
-          Phone: entity.phone,
-          Gender: entity.gender,
-          Birthday: entity.birthday
-        },
+        model,
         transaction
       )
 
@@ -267,33 +275,7 @@ module.exports = class UserService {
 
     await this.validateEntity(user, entity)
 
-    let updateEntity = {}
-
-    const add_to_update = field => {
-      if (entity[field] || (entity[field] === false)) {
-        const new_field = {}
-        new_field[field] = entity[field]
-        updateEntity = { ...updateEntity, ...new_field }
-      }
-    }
-
-    add_to_update('name')
-    add_to_update('cpf')
-    add_to_update('email')
-    add_to_update('phone')
-    add_to_update('gender')
-    add_to_update('birthday')
-    add_to_update('city')
-    add_to_update('address')
-    add_to_update('number')
-    add_to_update('complement')
-    add_to_update('notifyFreeCourses')
-    add_to_update('notifyEvents')
-    add_to_update('notifyPromotions')
-    add_to_update('alertWarnings')
-    add_to_update('alertTeatchers')
-    add_to_update('zipCode')
-    add_to_update('state')
+    let updateEntity = this.getModel(entity)
 
     if (entity.photo) {
       if (entity.photo.includes('/uploads/')) {
