@@ -283,7 +283,10 @@ module.exports = class UserService {
         entity.photo = await AzureService.move('uploads', 'photos', fileName)
       }
 
-      updateEntity = { ...updateEntity, Photo: entity.photo }
+      delete updateEntity.photo
+      delete updateEntity.Photo
+
+      updateEntity = { ...updateEntity, photo: entity.photo }
     }
 
     updateEntity = this.prepare(updateEntity)
