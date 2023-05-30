@@ -3,26 +3,14 @@ const Validator = require('../validator')
 module.exports = {
   ApplyValidate (model) {
     const contract = new Validator()
-    contract.isRequired(model.subscription, '40100', 'subscription é obrigatório')
-    contract.isRequired(model.themeId, '40102', 'themeId é obrigatório')
 
-    contract.isRequired(model.attempts, '40301', 'attempts Tentativa é obrigatório')
+    contract.isRequired(model.title, '40103', 'title é obrigatório, minimo de 5 caracteres')
+    contract.hasMinLen(model.title, 10, '40103', 'title é obrigatório')
+    contract.hasMaxLen(model.title, 250, '40104', 'title excedeu o limite máximo de 250')
 
-    if (model.status === 'FINISHED') {
-      contract.isRequired(model.title, '40103', 'title é obrigatório, minimo de 5 caracteres')
-      contract.hasMinLen(model.title, 5, '40103', 'title é obrigatório')
-      contract.hasMaxLen(model.title, 250, '40104', 'title excedeu o limite máximo de 250')
-
-      contract.isRequired(model.text, '40105', 'text é obrigatória, minimo de 450 caracteres')
-      contract.hasMinLen(model.text, 450, '40105', 'text é obrigatória, minimo de 450 caracteres')
-      contract.hasMaxLen(model.text, 5000, '40106', 'text excedeu o limite máximo de 5000')
-
-      contract.isRequired(model.startDate, '40306', 'startDateé obrigatório')
-      contract.hasMaxLen(model.startDate, model.EndDate, '40307', 'startDate inválida')
-
-      contract.isRequired(model.endDate, '40308', 'endDate é obrigatório')
-      contract.hasMinLen(model.endDate, model.StartDate, '40309', 'endDate inválida')
-    }
+    contract.isRequired(model.text, '40105', 'text é obrigatória, minimo de 450 caracteres')
+    contract.hasMinLen(model.text, 450, '40105', 'text é obrigatória, minimo de 450 caracteres')
+    contract.hasMaxLen(model.text, 5000, '40106', 'text excedeu o limite máximo de 5000')
 
     return contract
   },

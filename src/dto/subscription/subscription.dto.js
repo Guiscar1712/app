@@ -74,33 +74,37 @@ function getCourseName (courseName) {
 function getClassification (classification, registrationEnem) {
   switch (classification) {
     case 'Aluno':
-      return { registration: classificationEnum.SUBSCRIPTION, descriptionRegistration: 'Matriculado' }
+      return setClassification(classificationEnum.SUBSCRIPTION, 'Matriculado')
 
     case 'Convocado':
-      return { registration: classificationEnum.APPROVED, descriptionRegistration: 'Aprovado' }
+      return setClassification(classificationEnum.APPROVED, 'Aprovado')
 
     case 'Inscrito VG Online':
-      return { registration: classificationEnum.ONLINEEXAM, descriptionRegistration: 'Vestibular online' }
+      return setClassification(classificationEnum.ONLINEEXAM, 'Vestibular online')
 
     case 'Desclassificado':
-      return { registration: classificationEnum.DISQUALIFIED, descriptionRegistration: 'Desclassificado' }
+      return setClassification(classificationEnum.DISQUALIFIED, 'Desclassificado')
 
     case 'Ausente':
-      return { registration: classificationEnum.ABSENT, descriptionRegistration: 'Ausente' }
+      return setClassification(classificationEnum.ABSENT, 'Ausente')
 
     case 'Inscrito':
       return exanOrEnem(registrationEnem)
 
     default:
-      return { registration: 0, descriptionRegistration: '' }
+      return setClassification(0, '')
   }
+}
+
+function setClassification (registration, description) {
+  return { registration, descriptionRegistration: description }
 }
 
 function exanOrEnem (registrationEnem) {
   if (registrationEnem) {
-    return { registration: classificationEnum.ENEM, descriptionRegistration: 'Inscrito' }
+    return setClassification(classificationEnum.ENEM, 'Inscrito')
   }
-  return { registration: classificationEnum.EXAM, descriptionRegistration: 'Vestibular online' }
+  return setClassification(classificationEnum.EXAM, 'Vestibular online')
 }
 
 module.exports = (item) => {
