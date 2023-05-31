@@ -37,8 +37,10 @@ function getDuration (prova, data) {
 }
 
 function getEligible (prova) {
-  if (prova.provaOnlineFinalizada || prova.quantidadeMaximaTentativas === prova.quantidadeTentativas) {
+  if (prova.provaOnlineFinalizada) {
     return 'DONE'
+  } else if (prova.quantidadeMaximaTentativas === prova.quantidadeTentativas) {
+    return 'EXCEED_ATTEMPTS'
   } else if (prova.elegivelProvaOnline) {
     return 'ELIGIBLE'
   } else if (!prova.elegivelProvaOnline) {
