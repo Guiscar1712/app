@@ -167,7 +167,7 @@ module.exports = class IngressoKrotonService {
       })
 
       if (res.status === 204) {
-        return
+        return res.status
       }
 
       if (res.status === 400) {

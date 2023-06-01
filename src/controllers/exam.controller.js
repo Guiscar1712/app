@@ -70,10 +70,17 @@ module.exports = class NotificationPreferenceController {
 
       const data = await ExamService.finalizeExam(subscriptionKey, request.body)
 
-      if (data.errors) {
+      if (data?.errors) {
         return response.status(400).json(data.errors)
       }
-      response.status(204)
+
+      const eligibleData = await ExamService.eligible(subscriptionKey, request.user.id)
+
+      if (eligibleData.errors) {
+        return response.status(400).json(eligibleData.errors)
+      }
+
+      return response.status(200).json(eligibleData)
     } catch (error) {
       console.log(error)
       next(error)
