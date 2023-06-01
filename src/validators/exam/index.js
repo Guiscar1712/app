@@ -4,13 +4,13 @@ module.exports = {
   ApplyValidate (model) {
     const contract = new Validator()
 
-    contract.isRequired(model.title, '40103', 'title é obrigatório, minimo de 5 caracteres')
-    contract.hasMinLen(model.title, 10, '40103', 'title é obrigatório')
-    contract.hasMaxLen(model.title, 250, '40104', 'title excedeu o limite máximo de 250')
+    contract.isRequired(model.title, '40103', 'title é obrigatório, mínimo de 10 caracteres, máximo 250')
+    contract.hasMinLen(model.title, 10, '40103', 'title deve conter no mínimo 10 caracteres e no máximo 250')
+    contract.hasMaxLen(model.title, 250, '40104', 'title deve conter no mínimo 10 caracteres e no máximo 250')
 
-    contract.isRequired(model.text, '40105', 'text é obrigatória, minimo de 450 caracteres')
-    contract.hasMinLen(model.text, 450, '40105', 'text é obrigatória, minimo de 450 caracteres')
-    contract.hasMaxLen(model.text, 5000, '40106', 'text excedeu o limite máximo de 5000')
+    contract.isRequired(model.text, '40105', 'text é obrigatório, mínimo de 250 caracteres, máximo 3750')
+    contract.hasMinLen(model.text, 250, '40105', 'text deve conter no mínimo 250 caracteres e no máximo 3750')
+    contract.hasMaxLen(model.text, 5000, '40106', 'text deve conter no mínimo 250 caracteres e no máximo 3750')
 
     return contract
   },
