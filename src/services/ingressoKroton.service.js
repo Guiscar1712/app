@@ -1,7 +1,7 @@
 const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../utils/config')
 const { getSubscriptionDto } = require('../dto/subscription')
-const { response } = require('express')
+const { getExamInfo, getTheme } = require('../dto/exam')
 
 const ingresso = {
   grant_type: 'client_credentials',
@@ -55,6 +55,7 @@ module.exports = class IngressoKrotonService {
         {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
+            'Content-Type': 'application/json',
             Authorization: token
           }
         }
@@ -79,6 +80,96 @@ module.exports = class IngressoKrotonService {
       if (res.status === 200) {
         return res.data
       }
+      if (res.status === 400) {
+        return { errors: [{ code: 40201, message: 'Número de inscrição inválido' }] }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static async fetchExam (subscriptionKey, token) {
+    const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
+    try {
+      const res = await axios.get(
+        `${ingresso.base_uri}/captacao/consultas/captacao/v1/consulta-provaonline/inscricao/${subscriptionKeyEncode}`,
+        {
+          headers: {
+            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
+            Authorization: token
+          }
+        }
+      ).catch(function (error) {
+        return error.response
+      })
+
+      if (res.status === 200) {
+        return getExamInfo(res.data)
+      }
+      if (res.status === 400) {
+        return { errors: [{ code: 40201, message: 'Número de inscrição inválido' }] }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static async startExam (subscriptionKey, token) {
+    const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
+
+    try {
+      const res = await axios.post(
+        `${ingresso.base_uri}/captacao/salva/captacao/v1/salva-provaonline/iniciarProva/${subscriptionKeyEncode}`,
+        null,
+        {
+          headers: {
+            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
+            Authorization: 'Bearer ' + token
+          }
+        }
+      ).catch(function (error) {
+        return error.response
+      })
+
+      if (res.status === 200) {
+        return getTheme(res.data)
+      }
+
+      if (res.status === 400) {
+        return { errors: [{ code: 40201, message: 'Número de inscrição inválido' }] }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static async submitExam (subscriptionKey, data, token) {
+    const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
+
+    try {
+      const body = {
+        titulo: data.title,
+        texto: data.text
+      }
+
+      const res = await axios.post(
+        `${ingresso.base_uri}/captacao/salva/captacao/v1/salva-provaonline/finalizarProva/${subscriptionKeyEncode}`,
+        body,
+        {
+          headers: {
+            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          }
+        }
+      ).catch(function (error) {
+        return error.response
+      })
+
+      if (res.status === 204) {
+        return res.status
+      }
+
       if (res.status === 400) {
         return { errors: [{ code: 40201, message: 'Número de inscrição inválido' }] }
       }
