@@ -71,4 +71,4 @@ stages:
               appName: $(webAppName)
               runtimeStack: 'NODE|16-lts'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              StartupCommand: "npm start"
+              StartupCommand: ${{ if eq(worker, 'true') }} npm run worker ${{ else }} npm install ${{ endif }}                            
