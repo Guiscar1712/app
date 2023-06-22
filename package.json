@@ -5,6 +5,7 @@
     "main": "server.js",
     "scripts": {
         "start": "node src/server.js",
+        "worker-receiver": "node src/worker-receiver.js",
         "dev": "npm run develop",
         "develop": "nodemon src/server.js",
         "lint": "npx eslint ./src",
@@ -16,6 +17,7 @@
     "author": "Bluecore",
     "license": "ISC",
     "dependencies": {
+        "@azure/service-bus": "^7.9.0",
         "@azure/storage-blob": "^12.12.0",
         "@sendgrid/mail": "^7.7.0",
         "azure-storage": "^2.10.7",
