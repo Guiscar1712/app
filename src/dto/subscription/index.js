@@ -1,3 +1,4 @@
 const getSubscriptionDto = require('./subscription.dto')
+const getSubscriptionPayDto = require('./subscriptionPay.dto')
 
-module.exports = { getSubscriptionDto }
+module.exports = { getSubscriptionDto, getSubscriptionPayDto }

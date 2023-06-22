@@ -21,6 +21,21 @@ module.exports = {
       url: process.env.KROTON_CI369_URI,
       token: process.env.KROTON_CI369_TOKEN,
       event: process.env.KROTON_CI369_EVENT
+    },
+    cognapay: {
+      url: process.env.COGNAPAY_BASE_URL,
+      colaborar: {
+        username: process.env.COGNAPAY_AUTH_USERNAME_COLABORADOR,
+        password: process.env.COGNAPAY_AUTH_PASSWORD_COLABORADOR
+      },
+      olimpo: {
+        username: process.env.COGNAPAY_AUTH_USERNAME_OLIMPO,
+        password: process.env.COGNAPAY_AUTH_PASSWORD_OLIMPO
+      },
+      sap: {
+        username: process.env.COGNAPAY_AUTH_USERNAME_SAP,
+        password: process.env.COGNAPAY_AUTH_PASSWORD_SAP
+      }
     }
   }
 }
