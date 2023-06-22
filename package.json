@@ -5,7 +5,7 @@
     "main": "server.js",
     "scripts": {
         "start": "node src/server.js",
-        "worker": "node src/worker.js",
+        "worker-receiver": "node src/worker-receiver.js",
         "dev": "npm run develop",
         "develop": "nodemon src/server.js",
         "lint": "npx eslint ./src",
