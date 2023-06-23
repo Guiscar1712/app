@@ -4,12 +4,12 @@ const { SubscriptionValidate } = require('../validators/exam')
 module.exports = class NotificationPreferenceController {
   static async paymentPix (request, response, next) {
     try {
-      const subscriptionKey = request.params.subscriptionKey
-      const contract = SubscriptionValidate(subscriptionKey)
+      const originId = request.params.originId
+      const contract = SubscriptionValidate(originId)
       if (!contract.isValid()) {
         return response.status(400).send(contract.errors()).end()
       }
-      const data = await paymentService.pix(subscriptionKey)
+      const data = await paymentService.pix(originId, request.user.id)
 
       if (data.error) {
         return response.status(400).json(data)

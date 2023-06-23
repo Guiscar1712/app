@@ -54,16 +54,29 @@ module.exports = class NotificationFirebaseService {
     }
   }
 
-  static async sendFromClient (tokenClient, message) {
-    const payload = {
-      token: tokenClient,
-      notification: message,
-      data: message
-    }
+  static async sendFromClient (tokenClients, message, data) {
+    // const payload = [
+    //   {
+    //     token: 'fRBWQ8lERfiLbZA3oXglUn:APA91bHcPzGrvuz96-Yaee3EhD3tN4rgC49exIJpXaiMqaKe9ycBGZmOiTvBi2K5Wsi5qhfSd80jWWJQ1i-dk-636HeH4Bh0fkLWPLe_aQa3VAojkyf8nH6Vt7N8RWL8rLQCYW1XQG30',
+    //     notification: { title: 'Confirmação de pagamento' body: '' }
+    //   }
+    // ]
+
+    const payload = []
+    // notification: { title: message, body, imageUrl }
+    tokenClients.forEach(token => {
+      payload.push(
+        {
+          token,
+          notification: { title: message, body: data }
+        }
+      )
+    })
 
     try {
-      return await firebaseMessaging.send(payload)
+      return await firebaseMessaging.sendAll(payload)
     } catch (error) {
+      console.log(error)
       return error
     }
   }

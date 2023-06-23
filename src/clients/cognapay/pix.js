@@ -9,7 +9,7 @@ class paymentPix {
   static async get (body, token) {
     try {
       if (!token) {
-        token = await getToken.get(body.origin)
+        token = await getToken.get(body.Origin)
       }
 
       const res = await axios.post(
@@ -29,24 +29,25 @@ class paymentPix {
         throw res
       }
     } catch (error) {
-
-      let errorLog =  {}
+      let errorLog = {}
 
       if (error.status >= 400 && error.status <= 499) {
-        errorLog = { 
-          code: 400, 
+        errorLog = {
+          code: 400,
           message: 'Client Error',
-          data: error.data}
+          data: error.data
+        }
       } else {
-        errorLog ={ 
+        errorLog = {
           code: 500,
           message: 'Server Error',
-          data: error}
+          data: error
+        }
       }
 
       logger.error(errorLog)
 
-      return {error: errorLog}
+      return { error: errorLog }
     }
   }
 }

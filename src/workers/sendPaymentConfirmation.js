@@ -13,13 +13,8 @@ async function send (message, workerLog) {
   const sender = sbClient.createSender(topicName, subscriptionName)
 
   try {
-    const msg = {
-      body: {
-        msg: message,
-        resubmitting: true
-      }
-    }
-    await sender.sendMessages(msg)
+    const payload = { body: message.Datafalse }
+    await sender.sendMessages(payload)
     await sender.close()
   } catch (error) {
     logger.error({ message: `${workerLog} - Error sending message to processing queue`, error })

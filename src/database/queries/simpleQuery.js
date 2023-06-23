@@ -3,10 +3,13 @@ const database = require('../config.database')
 module.exports = class SimpleQuery {
   static async findBy (query, from, transaction) {
     try {
-      return await (transaction || database)
+      const result = await (transaction || database)
         .from(from)
         .where(query)
         .first()
+
+      const data = result !== undefined ? result : null
+      return data
     } catch (error) {
       console.log(error)
       return error.code + ':' + error.message
@@ -28,9 +31,12 @@ module.exports = class SimpleQuery {
 
   static async filterBy (query, from, transaction) {
     try {
-      return await (transaction || database)
+      const result = await (transaction || database)
         .from(from)
         .where(query)
+
+      const data = result !== undefined ? result : []
+      return data
     } catch (error) {
       console.log(error)
       return error.code + ':' + error.message
