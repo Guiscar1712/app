@@ -13,7 +13,7 @@ async function send (message, workerLog) {
   const sender = sbClient.createSender(topicName, subscriptionName)
 
   try {
-    const payload = { body: message.Datafalse }
+    const payload = { body: message.Data }
     await sender.sendMessages(payload)
     await sender.close()
   } catch (error) {
