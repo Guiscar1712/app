@@ -59,11 +59,11 @@ function toDto (item) {
     }
 
     const data = {
-      origin: item.sistema.toUpperCase(),
+      Origin: item.sistema.toUpperCase(),
       OriginalDueDate: item.inscricao.ofertas.primeiraOpcao.dtTerminoInscricao,
       DueDate: item.inscricao.ofertas.primeiraOpcao.dtTerminoInscricao,
       RedirectUrl: item.inscricao.contrato.link,
-      OrderReference: 'RA-2023' + item.matricula.ra,
+      OrderReference: 'RA-' + item.matricula.ra,
       InvoiceType: 'Matricula'
     }
 
