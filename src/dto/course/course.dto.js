@@ -19,10 +19,18 @@ module.exports = (item) => {
     const courses = []
 
     item.forEach(element => {
-      courses.push(toDto(element))
+      // Remover esta condição apos implementasção no StrApi
+      if (element.Price) {
+        courses.push(toDto(element))
+      }
     })
 
     return courses
+  }
+
+  // Remover esta condição apos implementasção no StrApi
+  if (!item.Price) {
+    return null
   }
   return toDto(item)
 }
