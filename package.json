@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node src/server.js",
         "worker-receiver": "node src/worker-receiver.js",
-        "worker-receiver": "node src/worker-notification.js",
+        "worker-notification": "node src/worker-notification.js",
         "dev": "npm run develop",
         "develop": "nodemon src/server.js",
         "lint": "npx eslint ./src",
