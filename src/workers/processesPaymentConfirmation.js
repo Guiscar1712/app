@@ -3,6 +3,8 @@ const logger = require('./../utils/logger.util')
 const { delay, isServiceBusError, ServiceBusClient } = require('@azure/service-bus')
 const paymentService = require('./../services/payment.service')
 
+const workerLog = 'Worker Notification'
+
 const connectionString = process.env.COGNA_PAYMENT_CONNECTION_STRING
 const topicName = process.env.COGNA_PAYMENT_TOPIC
 const subscriptionName = process.env.COGNA_PAYMENT_SUBSCRIPTION
@@ -20,6 +22,8 @@ async function main () {
         const message = brokeredMessage.body
         console.log(message)
         await paymentService.notification(message)
+        logger.info(`${workerLog} - Completing message - messageId: ${brokeredMessage.messageId}`)
+        await receiver.completeMessage(brokeredMessage)
       },
       processError: async (args) => {
         logger.error(`Error from source ${args.errorSource} occurred: `, args.error)
