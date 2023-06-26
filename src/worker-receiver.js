@@ -1,10 +1,23 @@
+const logger = require('./utils/logger.util')
+
 const workerColaborar = require('./workers/receivePaymentConfirmationColaborar')
 const workerOlimpo = require('./workers/receivePaymentConfirmationOlimpo')
 const workerSap = require('./workers/receivePaymentConfirmationSap')
 
-workerColaborar()
-workerOlimpo()
-workerSap()
+workerColaborar().catch((err) => {
+  logger.error({ message: 'Worker Receiver Colaborar - ReceiveMessagesStreaming - Error occurred:', error: err })
+  process.exit(1)
+})
+
+workerOlimpo().catch((err) => {
+  logger.error({ message: 'Worker Receiver Olimpo - ReceiveMessagesStreaming - Error occurred:', error: err })
+  process.exit(1)
+})
+
+workerSap().catch((err) => {
+  logger.error({ message: 'Worker Receiver Sap - ReceiveMessagesStreaming - Error occurred:', error: err })
+  process.exit(1)
+})
 
 const express = require('express')
 const app = express()

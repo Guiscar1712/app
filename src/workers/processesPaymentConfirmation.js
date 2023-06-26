@@ -49,9 +49,4 @@ async function main () {
   }
 }
 
-main().catch((err) => {
-  logger.error('ReceiveMessagesStreaming - Error occurred: ', err)
-  process.exit(1)
-})
-
 module.exports = main

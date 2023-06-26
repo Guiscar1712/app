@@ -57,9 +57,4 @@ async function main () {
   }
 }
 
-main().catch((err) => {
-  logger.error({ message: `${workerLog} - ReceiveMessagesStreaming - Error occurred:`, error: err })
-  process.exit(1)
-})
-
 module.exports = main
