@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { ingressoClient, cognaPay } = require('../clients')
 const { getSubscriptionPayDto } = require('../dto/subscription')
 const paymentRepository = require('../repositories/PaymentRepository')
@@ -50,9 +51,9 @@ module.exports = class PaymentService {
       return
     }
 
-    paymentData.paymentId = payment.PaymentId
-    paymentData.paymentStatus = payment.Status
-    await paymentRepository.update(paymentData.id, paymentData)
+    const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+
+    await paymentRepository.update({ id: paymentData.id }, { paymentId: payment.PaymentId, paymentStatus: payment.Status, updatedAt })
 
     const deviceRegisters = await RegisterAppRepository.filterBy({ UserId: paymentData.userId })
 
