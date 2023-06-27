@@ -1,11 +1,12 @@
 const Validator = require('../validator')
+const Util = require('../../utils/util')
 
 module.exports = {
   ApplyValidate (model) {
     const contract = new Validator()
 
-    contract.isRequired(model.cpf, '40001', 'CPF é Obrigatório')
-    contract.isFixedLen(model.cpf, 11, '40002', 'CPF inválido')
+    contract.isRequired(Util.getNumbers(model.cpf), '40001', 'CPF é Obrigatório')
+    contract.isFixedLen(Util.getNumbers(model.cpf), 11, '40002', 'CPF inválido')
     contract.isRequired(model.name, '40003', 'Nome é Obrigatório')
     contract.isEmail(model.email, '40004', 'E-mail inválido')
 
