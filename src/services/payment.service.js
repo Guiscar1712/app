@@ -53,7 +53,9 @@ module.exports = class PaymentService {
 
     const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
 
-    await paymentRepository.update({ id: paymentData.id }, { paymentId: payment.PaymentId, paymentStatus: payment.Status, updatedAt })
+    const data = await paymentRepository.update(paymentData.id, { paymentId: payment.PaymentId, paymentStatus: payment.Status, updatedAt })
+
+    console.log(data)
 
     const deviceRegisters = await RegisterAppRepository.filterBy({ UserId: paymentData.userId })
 
