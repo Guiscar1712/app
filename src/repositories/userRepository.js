@@ -1,4 +1,5 @@
 const moment = require('moment')
+const database = require('../database/config.database')
 const { SimpleQuery } = require('../database')
 const table = 'User'
 
@@ -35,6 +36,20 @@ module.exports = class UserRepository {
 
   static async update (id, entity, transaction) {
     return await SimpleQuery.update({ id }, entity, table, transaction)
+  }
+
+  static async findByOr (cpf, email, phone, transaction) {
+    const result = await (transaction || database)(table)
+      .where(cpf)
+      .orWhere(email)
+      .orWhere(phone)
+
+    const items = []
+    for (const row of result) {
+      items.push(format(row))
+    }
+
+    return items
   }
 }
 
