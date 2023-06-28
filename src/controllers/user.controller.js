@@ -45,7 +45,7 @@ module.exports = class UserController {
         return response.status(400).json(data)
       }
 
-      return response.status(201).json(data)
+      return response.status(200).json(data)
     } catch (error) {
       if (error) {
         if (
