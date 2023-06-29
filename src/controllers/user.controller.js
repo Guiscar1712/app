@@ -1,4 +1,5 @@
 const UserService = require('../services/user.service')
+const { ApplyValidate } = require('../validators/user')
 
 module.exports = class UserController {
   static async get (request, response, next) {
@@ -33,8 +34,18 @@ module.exports = class UserController {
 
   static async register (request, response, next) {
     try {
+      const contract = ApplyValidate(request.body)
+      if (!contract.isValid()) {
+        return response.status(400).json({ errors: contract.errors() })
+      }
+
       const data = await UserService.register(request.body)
-      response.json(data)
+
+      if (data.errors) {
+        return response.status(400).json(data)
+      }
+
+      return response.status(200).json(data)
     } catch (error) {
       if (error) {
         if (
@@ -76,8 +87,18 @@ module.exports = class UserController {
 
   static async update (request, response, next) {
     try {
+      const contract = ApplyValidate(request.body)
+      if (!contract.isValid()) {
+        return response.status(400).json({ errors: contract.errors() })
+      }
+
       const data = await UserService.update(request.user.id, request.body)
-      response.json(data)
+
+      if (data.errors) {
+        return response.status(400).json(data)
+      }
+
+      return response.json(data)
     } catch (error) {
       console.log(error)
       next(error)
