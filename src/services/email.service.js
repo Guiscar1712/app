@@ -19,7 +19,7 @@ module.exports = class EmailService {
             'Message:' + message
 
     // addLog(config.support, "Fale Conosco", htmlEmail);
-    sendGridHelper.sendMessage(config.support, 'Kroton - Vitrine', htmlEmail)
+    sendGridHelper.sendMessage(config.support, 'Graduação Anhanguera - Código de Verificação', htmlEmail)
   }
 
   static async byTemplate (params) {
@@ -45,6 +45,6 @@ module.exports = class EmailService {
       }
     ]
     const htmlEmail = templateEmail.get(process.env.RECOVERPASSWORD_TEMPLATE, templateParams)
-    return await sendGridHelper.sendMessage(email, 'App Vitrine - Código de Recuperação', htmlEmail)
+    return await sendGridHelper.sendMessage(email, process.env.RECOVERPASSWORD_TITLE, htmlEmail)
   }
 }
