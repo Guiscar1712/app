@@ -75,12 +75,18 @@ class EnrollmentEnemDto {
 class StudentEnrollmentDto {
   constructor (matricula, dadosPessoais, contrato) {
     this.studentCode = matricula?.ra
-    this.payment = matricula?.pagamento?.pago
+
     this.contract = contrato?.status
     this.studentName = dadosPessoais?.nome
     this.studentEmail = dadosPessoais?.email
     this.studentDocument = dadosPessoais?.cpf
+
+    this.setPayment(matricula)
     this.setActiveEnrollment()
+  }
+
+  setPayment (matricula) {
+    this.payment = !!matricula?.pagamento?.pago
   }
 
   setActiveEnrollment () {
