@@ -12,6 +12,18 @@ module.exports = class RegisterApp {
     }
   }
 
+  static async eligibleToken (subscriptionKey, token) {
+    try {
+      if (!token) {
+        token = await IngressoKrotonService.getToken()
+      }
+
+      return await IngressoKrotonService.fetchExam(subscriptionKey, token.access_token)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
   static async getInstructions () {
     return await instructionsRepository.filterBy({})
   }
