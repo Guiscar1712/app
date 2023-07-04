@@ -29,14 +29,17 @@ class EnrollmentDto {
 
   setClassification (classificacao) {
     const enrollment = ['Aluno']
-    const registered = ['Inscrito', 'Inscrito VG Online', 'Convocado', 'Desclassificado', 'Desclassificado por nota - Novo']
+    const registered = ['Inscrito', 'Inscrito VG Online', 'Convocado']
+    const disqualified = ['Desclassificado', 'Desclassificado por nota']
 
     if (enrollment.includes(classificacao.descricao)) {
       this.classification = 'STUDENT'
     } else if (registered.includes(classificacao.descricao)) {
       this.classification = 'ENROLLMENT'
-    } else {
+    } else if (disqualified.includes(classificacao.descricao)) {
       this.classification = 'DISQUALIFIED'
+    } else {
+      this.classification = 'ABSENT'
     }
   }
 
@@ -64,7 +67,8 @@ class EnrollmentEnemDto {
   }
 
   setApprovedEnem (classificacao) {
-    if (this.active && (classificacao.descricao === 'Convocado' || classificacao.descricao === 'Aluno')) {
+    const approved = ['Convocado', 'Aluno']
+    if (this.active && approved.includes(classificacao.descricao)) {
       this.approved = true
     } else {
       this.approved = false
