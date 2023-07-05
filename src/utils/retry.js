@@ -1,7 +1,11 @@
+require('dotenv').config()
+const config = require('./config')
 const ClientServerAuthError = require('./errors/ClientServerAuthError')
+const ClientServerError = require('./errors/ClientServerError')
+const maxRetries = config.kroton.ingresso.retries
+const delayRetries = config.kroton.ingresso.delay
 
 async function retry (fn, params) {
-  const maxRetries = 3
   let retryCount = 0
 
   while (retryCount < maxRetries) {
@@ -10,9 +14,9 @@ async function retry (fn, params) {
       return response
     } catch (error) {
       if (error instanceof ClientServerAuthError) {
-        delete process.env.TOKEN_INGRESSO
+        delete process.env.KROTON_INGRESSO_TOKEN
         retryCount++
-        await new Promise(resolve => setTimeout(resolve, 100))
+        await new Promise(resolve => setTimeout(resolve, delayRetries))
       } else {
         throw error
       }
@@ -20,7 +24,7 @@ async function retry (fn, params) {
   }
 
   if (retryCount === maxRetries) {
-    throw new Error(`Falha após ${maxRetries} tentativas.`)
+    throw new ClientServerError(`Request failed in ${maxRetries} attempts.`, { function: fn, quantityTried: maxRetries })
   }
 }
 

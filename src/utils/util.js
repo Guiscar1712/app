@@ -28,6 +28,13 @@ module.exports = class Util {
     return r
   }
 
+  static toNumber (value) {
+    if (!isNaN(value)) {
+      return parseInt(value)
+    }
+    return null
+  }
+
   static formatCpf (cpf) {
     const cnpjCpf = cpf.replace(/\D/g, '')
 

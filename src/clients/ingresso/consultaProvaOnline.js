@@ -12,14 +12,15 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
 }
 
-const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao/`
+const url = `${ingresso.base_uri}/captacao/consultas/captacao/v1/consulta-provaonline/inscricao`
 
-async function main (idOrigin) {
+async function main (subscriptionKey) {
   try {
     const token = await getToken()
 
+    const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
     const res = await axios.get(
-        `${url}/${idOrigin}`,
+        `${url}/${subscriptionKeyEncode}`,
         {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,

@@ -1,7 +1,6 @@
-const { inscricaoPorIdOrigin } = require('../../clients/ingresso/')
+const { inscricaoPorIdOrigin, consultaProvaOnline } = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
-const { EnrollmentsDto } = require('../../dto/enrollment')
-const ExamService = require('../exam.service')
+const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 
 async function enrollmentDetails (idOrigin) {
   const data = await retry(inscricaoPorIdOrigin, idOrigin)
@@ -16,8 +15,9 @@ async function enrollmentDetails (idOrigin) {
     return enrollmentsDto
   }
 
-  const exam = await ExamService.eligibleToken(enrollmentsDto.businessKey)
-  enrollmentsDto.admissionsTest = exam
+  const exam = await retry(consultaProvaOnline, enrollmentsDto.businessKey)
+
+  enrollmentsDto.admissionsTest = new AdmissionsTest(exam)
 
   return enrollmentsDto
 }
