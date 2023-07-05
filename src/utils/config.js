@@ -5,7 +5,11 @@ module.exports = {
   support: process.env.SUPPORT,
   sendGrid: {
     key: process.env.SENDGRID_KEY,
-    sender: process.env.SENDGRID_SENDER
+    sender:
+    {
+      email: process.env.SENDGRID_SENDER_EMAIL,
+      name: process.env.SENDGRID_SENDER_NAME
+    }
     // bcc:process.env.SENDGRID_BCC
   },
   azureBlobsConnection: process.env.AZUREBLOBS_CONNECTION,
