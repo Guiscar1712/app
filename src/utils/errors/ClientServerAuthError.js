@@ -1,8 +1,8 @@
 const CustomError = require('./CustomError')
 
-class ClientServerError extends CustomError {
+class ClientServerAuthError extends CustomError {
   errorCode = 500
-  errorType = 'CLIENT-SERVER_ERROR'
+  errorType = 'CLIENT-SERVER-AUTH_ERROR'
   errors
 
   constructor (message, errors) {
@@ -15,4 +15,4 @@ class ClientServerError extends CustomError {
   }
 }
 
-module.exports = ClientServerError
+module.exports = ClientServerAuthError

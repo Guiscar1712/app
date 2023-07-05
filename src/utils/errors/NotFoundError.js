@@ -2,7 +2,7 @@ const CustomError = require('./CustomError')
 
 class NotFoundError extends CustomError {
   errorCode = 404
-  errorType = 'NOTFOUND_ERROR'
+  errorType = 'NOT-FOUND_ERROR'
   errors
 
   constructor (message, errors) {

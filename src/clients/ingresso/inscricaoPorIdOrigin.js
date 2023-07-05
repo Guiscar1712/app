@@ -1,5 +1,6 @@
 const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../../utils/config')
+const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
 const getToken = require('./token')
 
@@ -13,18 +14,16 @@ const ingresso = {
 
 const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao/`
 
-async function main (idOrigin, token) {
+async function main (idOrigin) {
   try {
-    if (!token) {
-      token = await getToken()
-    }
+    const token = await getToken()
 
     const res = await axios.get(
         `${url}/${idOrigin}`,
         {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token.access_token
+            Authorization: 'Bearer ' + token
           }
         }
     ).catch(function (error) {
@@ -33,12 +32,18 @@ async function main (idOrigin, token) {
 
     if (res.status === 200) {
       return res.data
-    } else if (res.status === 401) {
-      // retry
     }
 
     throw res
   } catch (error) {
+    if (error instanceof ClientServerError) {
+      throw error
+    }
+
+    if (error.status === 401) {
+      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+    }
+
     throw new ClientServerError('Something went wrong', { client: url })
   }
 }

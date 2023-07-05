@@ -1,12 +1,10 @@
 const { inscricaoPorIdOrigin } = require('../../clients/ingresso/')
+const retry = require('../../utils/retry')
 const { EnrollmentsDto } = require('../../dto/enrollment')
-const Util = require('../../utils/util')
 const ExamService = require('../exam.service')
 
-async function enrollmentDetals (document) {
-  document = Util.formatCpf(document)
-
-  const data = await inscricaoPorIdOrigin(document)
+async function enrollmentDetails (idOrigin) {
+  const data = await retry(inscricaoPorIdOrigin, idOrigin)
 
   if (data?.inscricao === undefined) {
     return null
@@ -24,4 +22,4 @@ async function enrollmentDetals (document) {
   return enrollmentsDto
 }
 
-module.exports = enrollmentDetals
+module.exports = enrollmentDetails
