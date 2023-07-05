@@ -1,14 +1,11 @@
-const { inscricoes } = require('../../clients/ingresso/')
+const { inscricoesPorCpf } = require('../../clients/ingresso/')
 const { EnrollmentsDto } = require('../../dto/enrollment')
 const Util = require('../../utils/util')
-const ExamService = require('../exam.service')
-
-const IngressoKrotonService = require('../ingressoKroton.service')
 
 async function searchForEnrollments (document) {
   document = Util.formatCpf(document)
 
-  const data = await inscricoes(document)
+  const data = await inscricoesPorCpf(document)
 
   if (!data || data.length === 0) {
     return null
@@ -21,17 +18,6 @@ async function searchForEnrollments (document) {
       enrollments.push(enrollmentsDto)
     }
   })
-
-  const token = await IngressoKrotonService.getToken()
-
-  for (let index = 0; index < enrollments.length; index++) {
-    const element = enrollments[index]
-
-    if (!element.enem.active) {
-      const exam = await ExamService.eligibleToken(element.businessKey, token)
-      element.admissionsTest = exam
-    }
-  }
 
   return enrollments
 }

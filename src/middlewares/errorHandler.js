@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../utils/errors')
+const { NotFoundError, ClientServerError } = require('../utils/errors')
 const ValidationError = require('../utils/errors/ValidationError')
 const logger = require('../utils/logger.util')
 
@@ -15,6 +15,15 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error instanceof NotFoundError) {
+    return res.status(error.errorCode).json({
+      type: error.errorType,
+      errorCode: error.errorCode,
+      message: error.message,
+      errors: error.serializeErrors()
+    })
+  }
+
+  if (error instanceof ClientServerError) {
     return res.status(error.errorCode).json({
       type: error.errorType,
       errorCode: error.errorCode,

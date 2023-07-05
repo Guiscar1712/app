@@ -1,6 +1,6 @@
 const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../../utils/config')
-const logger = require('../../utils/logger.util')
+const ClientServerError = require('../../utils/errors/ClientServerError')
 const getToken = require('./token')
 
 const ingresso = {
@@ -11,14 +11,16 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
 }
 
-async function main (cpf, token) {
+const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao/`
+
+async function main (idOrigin, token) {
   try {
     if (!token) {
       token = await getToken()
     }
 
     const res = await axios.get(
-        `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao/cpf/${cpf}`,
+        `${url}/${idOrigin}`,
         {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
@@ -31,11 +33,13 @@ async function main (cpf, token) {
 
     if (res.status === 200) {
       return res.data
-    } else {
-      throw res
+    } else if (res.status === 401) {
+      // retry
     }
+
+    throw res
   } catch (error) {
-    logger.error(error)
+    throw new ClientServerError('Something went wrong', { client: url })
   }
 }
 

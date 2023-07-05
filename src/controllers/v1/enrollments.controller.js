@@ -1,13 +1,13 @@
 const { ValidationError, NotFoundError } = require('../../utils/errors')
-const { ApplyValidate } = require('../../validators/subscription')
-const { searchForEnrollments } = require('../../services/enrollments')
+const { CpfValidate, IdOriginValidate } = require('../../validators/subscription')
+const { searchForEnrollments, enrollmentDetails } = require('../../services/enrollments')
 
 module.exports = class EnrollmentsController {
   static async get (request, response, next) {
     try {
       const document = request.params.document
 
-      const contract = ApplyValidate(document)
+      const contract = CpfValidate(document)
       if (!contract.isValid()) {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
@@ -16,6 +16,27 @@ module.exports = class EnrollmentsController {
 
       if (!data || data.length === 0) {
         throw new NotFoundError('Nenhum registro encontrado', { document })
+      }
+
+      response.json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async getDetails (request, response, next) {
+    try {
+      const idOrigin = request.params.idOrigin
+
+      const contract = IdOriginValidate(idOrigin)
+      if (!contract.isValid()) {
+        throw new ValidationError('Parâmetros inválidos', contract.errors())
+      }
+
+      const data = await enrollmentDetails(idOrigin)
+
+      if (!data) {
+        throw new NotFoundError('Nenhum registro encontrado', { idOrigin })
       }
 
       response.json(data)
