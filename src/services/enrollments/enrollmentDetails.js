@@ -13,8 +13,12 @@ async function enrollmentDetals (document) {
   }
 
   const enrollmentsDto = new EnrollmentsDto(data)
-  const exam = await ExamService.eligibleToken(enrollmentsDto.businessKey)
 
+  if (enrollmentsDto.enem.active) {
+    return enrollmentsDto
+  }
+
+  const exam = await ExamService.eligibleToken(enrollmentsDto.businessKey)
   enrollmentsDto.admissionsTest = exam
 
   return enrollmentsDto
