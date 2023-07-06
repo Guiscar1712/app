@@ -1,7 +1,7 @@
-const token = require('./token')
-const pix = require('./pix')
+const getToken = require('./token')
+const payForPix = require('./pix')
 
 module.exports = {
-  token,
-  pix
+  getToken,
+  payForPix
 }

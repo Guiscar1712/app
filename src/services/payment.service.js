@@ -7,11 +7,11 @@ const NotificationFirebase = require('./notificationFirebase.service')
 module.exports = class PaymentService {
   static async pix (originId, userId) {
     try {
-      const subscription = await ingressoClient.inscricao.get(originId)
+      const subscription = await ingressoClient.inscricaoPorIdOrigin(originId)
 
       const payDto = getSubscriptionPayDto(subscription)
 
-      const data = await cognaPay.pix.get(payDto)
+      const data = await cognaPay.payForPix(payDto)
 
       if (!data.error) {
         await PaymentService.save(payDto, userId, subscription)

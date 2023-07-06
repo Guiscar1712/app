@@ -5,50 +5,46 @@ const getToken = require('./token')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
-class paymentPix {
-  static async get (body, token) {
-    try {
-      if (!token) {
-        token = await getToken.get(body.Origin)
-      }
+async function main (body) {
+  try {
+    const token = await getToken(body.Origin)
 
-      const res = await axios.post(
+    const res = await axios.post(
         `${cognaPayConfig.url}/api/v2.5/Checkout`, body,
         {
           headers: {
             Authorization: 'Bearer ' + token
           }
         }
-      ).catch(function (error) {
-        return error.response
-      })
+    ).catch(function (error) {
+      return error.response
+    })
 
-      if (res.status === 201) {
-        return res.data
-      } else {
-        throw res
-      }
-    } catch (error) {
-      let errorLog = {}
-
-      if (error.status >= 400 && error.status <= 499) {
-        errorLog = {
-          code: 400,
-          message: 'Client Error',
-          data: error.data
-        }
-      } else {
-        errorLog = {
-          code: 500,
-          message: 'Server Error',
-          data: error
-        }
-      }
-
-      logger.error(errorLog)
-
-      return { error: errorLog }
+    if (res.status === 201) {
+      return res.data
+    } else {
+      throw res
     }
+  } catch (error) {
+    let errorLog = {}
+
+    if (error.status >= 400 && error.status <= 499) {
+      errorLog = {
+        code: 400,
+        message: 'Client Error',
+        data: error.data
+      }
+    } else {
+      errorLog = {
+        code: 500,
+        message: 'Server Error',
+        data: error
+      }
+    }
+
+    logger.error(errorLog)
+
+    return { error: errorLog }
   }
 }
 
@@ -56,4 +52,4 @@ class paymentPix {
 // paymentPix.get('OLIMPO')
 // paymentPix.get('SAP')
 
-module.exports = paymentPix
+module.exports = main
