@@ -27,4 +27,17 @@ module.exports = class Util {
     }
     return r
   }
+
+  static toNumber (value) {
+    if (!isNaN(value)) {
+      return parseInt(value)
+    }
+    return null
+  }
+
+  static formatCpf (cpf) {
+    const cnpjCpf = cpf.replace(/\D/g, '')
+
+    return cnpjCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '\$1.\$2.\$3-\$4')
+  }
 }
