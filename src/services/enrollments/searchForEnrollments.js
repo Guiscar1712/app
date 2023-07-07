@@ -9,7 +9,7 @@ async function searchForEnrollments (document) {
   const data = await retry(inscricoesPorCpf, document)
 
   if (!data || data.length === 0) {
-    return null
+    return []
   }
 
   const enrollments = []
