@@ -17,6 +17,7 @@ class EnrollmentDto {
 
     this.idOrigin = inscricao.idOrigem
     this.businessKey = inscricao.businessKey
+    this.enrollmentDate = inscricao.dataInscricao
 
     this.enem = new EnrollmentEnemDto(enem, classificacao)
 

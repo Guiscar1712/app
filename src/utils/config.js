@@ -23,7 +23,8 @@ module.exports = {
       OcpApimSubscriptionKey: process.env.KROTON_INGRESSO_SUBSCRIPTION_KEY,
       tokenTolerance: Util.toNumber(process.env.KROTON_INGRESSO_TOKEN_TOLERANCE) || 5,
       retries: Util.toNumber(process.env.KROTON_INGRESSO_MAX_RETRY_REQUEST) || 1,
-      delay: Util.toNumber(process.env.KROTON_INGRESSO_DELAY_RETRIES) || 100
+      delay: Util.toNumber(process.env.KROTON_INGRESSO_DELAY_RETRIES) || 100,
+      enrollments_search_months_ago: Util.toNumber(process.env.KROTON_INGRESSO_SEARCH_MONTHS_AGO) || 12
     },
     ci360: {
       url: process.env.KROTON_CI369_URI,

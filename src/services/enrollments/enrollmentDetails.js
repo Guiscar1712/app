@@ -8,7 +8,7 @@ async function enrollmentDetails (idOrigin) {
 
   const enrollmentsDto = new EnrollmentsDto(data)
 
-  if (enrollmentsDto.status === 'ERROR') {
+  if (!enrollmentsDto || !enrollmentsDto.businessKey || enrollmentsDto.status === 'ERROR') {
     throw new ClientServerError('Unexpected Content', { method: 'EnrollmentsDto', data })
   }
 
@@ -16,13 +16,14 @@ async function enrollmentDetails (idOrigin) {
     return enrollmentsDto
   }
 
-  if (!enrollmentsDto || !enrollmentsDto.businessKey) {
-    return enrollmentsDto
-  }
-
   const exam = await retry(consultaProvaOnline, enrollmentsDto.businessKey)
 
   enrollmentsDto.admissionsTest = new AdmissionsTest(exam)
+
+  // Revisa tratamento de erro quando inscrição não tem dados de elegibiliade
+  if (!enrollmentsDto.admissionsTest || enrollmentsDto.admissionsTest.status === 'ERROR') {
+    throw new ClientServerError('Unexpected Content', { method: 'AdmissionsTest', data })
+  }
 
   return enrollmentsDto
 }
