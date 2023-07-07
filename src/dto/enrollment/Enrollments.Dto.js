@@ -11,7 +11,7 @@ class EnrollmentDto {
 
     const course = ofertas.primeiraOpcao
     if (!course) {
-      this.status = 'ERROR ' + inscricao.idOrigem
+      this.status = 'ERROR'
       return
     }
 
