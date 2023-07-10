@@ -4,8 +4,9 @@ const Util = require('../../utils/util')
 function toDto (item) {
   try {
     const teste = moment().valueOf()
+
     const student = {
-      StudentReference: teste,
+      StudentReference: teste, // item.matricula.ra,
       RA: teste, // item.matricula.ra,
       CPF: Util.getNumbers(item.dadosPessoais.cpf).toString(),
       Name: item.dadosPessoais.nome,
@@ -61,12 +62,13 @@ function toDto (item) {
     }
 
     const redirectUrl = 'https://anhanguera.com.br/'
+
     const data = {
       Origin: item.sistema.toUpperCase(),
       OriginalDueDate: item.inscricao.ofertas.primeiraOpcao.dtTerminoInscricao,
       DueDate: item.inscricao.ofertas.primeiraOpcao.dtTerminoInscricao,
       RedirectUrl: redirectUrl, // item.inscricao.contrato.link,
-      OrderReference: 'RA-' + item.matricula.ra,
+      OrderReference: teste, // 'RA-' + item.matricula.ra,
       InvoiceType: 'Matricula'
     }
 
