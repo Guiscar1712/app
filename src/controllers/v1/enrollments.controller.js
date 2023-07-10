@@ -1,4 +1,4 @@
-const { ValidationError, NotFoundError } = require('../../utils/errors')
+const { ValidationError, NotFoundError, ClientServerError } = require('../../utils/errors')
 const { CpfValidate, IdOriginValidate } = require('../../validators/subscription')
 const { searchForEnrollments, enrollmentDetails } = require('../../services/enrollments')
 
@@ -13,10 +13,6 @@ module.exports = class EnrollmentsController {
       }
 
       const data = await searchForEnrollments(document)
-
-      if (!data || data.length === 0) {
-        throw new NotFoundError('Nenhum registro encontrado', { document })
-      }
 
       response.json(data)
     } catch (error) {
@@ -34,10 +30,6 @@ module.exports = class EnrollmentsController {
       }
 
       const data = await enrollmentDetails(idOrigin)
-
-      if (!data) {
-        throw new NotFoundError('Nenhum registro encontrado', { idOrigin })
-      }
 
       response.json(data)
     } catch (error) {

@@ -7,14 +7,20 @@ class EnrollmentDto {
       return
     }
 
+    const { enem, classificacao, ofertas, contrato } = inscricao
+
+    const course = ofertas.primeiraOpcao
+    if (!course) {
+      this.status = 'ERROR'
+      return
+    }
+
     this.idOrigin = inscricao.idOrigem
     this.businessKey = inscricao.businessKey
-
-    const { enem, classificacao, ofertas, contrato } = inscricao
+    this.enrollmentDate = inscricao.dataInscricao
 
     this.enem = new EnrollmentEnemDto(enem, classificacao)
 
-    const course = ofertas.primeiraOpcao
     this.courseTypeName = course.dsTipoCurso
     this.unit = course.dsUnidade
     this.modality = course.dsModalidade

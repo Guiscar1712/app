@@ -1,6 +1,11 @@
 const moment = require('moment')
 class AdmissionsTest {
   constructor (data) {
+    if (!data || !data.prova) {
+      this.status = 'ERROR'
+      return
+    }
+
     this.status = data.prova.provastatus
     this.maxAttempts = data.prova.quantidadeMaximaTentativas
     this.numberAttempts = data.prova.quantidadeTentativas
