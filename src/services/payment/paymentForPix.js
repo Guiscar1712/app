@@ -12,7 +12,6 @@ async function paymentForPix (originId, userId) {
 
     const enrollment = await ingressoClient.inscricaoPorIdOrigin(originId)
     const order = await ingressoClient.consultaDadosPagamento(enrollment.inscricao.businessKey)
-    // console.log(order)
 
     // const payDto = new PaymentPixRequest(getMok())
     const payDto = new PaymentPixRequest(order)

@@ -2,13 +2,13 @@ class PaymentPixResponse {
   qrCode
   qrCodeUrl
   expiresIn
-  totalPrice
+  totalAmount
 
-  constructor (qrCode, qrCodeUrl, expiresIn, totalPrice) {
+  constructor (qrCode, qrCodeUrl, expiresIn, totalAmount) {
     this.qrCode = qrCode
     this.qrCodeUrl = qrCodeUrl
     this.expiresIn = expiresIn
-    this.totalPrice = totalPrice
+    this.totalAmount = totalAmount
   }
 }
 
