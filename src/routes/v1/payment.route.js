@@ -7,5 +7,6 @@ const AuthMiddleware = require('../../middlewares/authMiddleware')
 const TrackMiddleware = require('../../middlewares/trackMiddleware')
 
 router.get('/pix/:originId', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, PaymentController.paymentPix)
+router.get('/status/:originId', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, PaymentController.paymentStatus)
 
 module.exports = router

@@ -1,5 +1,5 @@
 const { ValidationError } = require('../../utils/errors')
-const { paymentForPix } = require('../../services/payment')
+const { paymentForPix, paymentStatus } = require('../../services/payment')
 const { ApplyValidate } = require('../../validators/payment')
 
 module.exports = class PaymentController {
@@ -18,6 +18,26 @@ module.exports = class PaymentController {
       }
 
       return response.status(201).json(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async paymentStatus (request, response, next) {
+    try {
+      const originId = request.params.originId
+      const contract = ApplyValidate(originId)
+      if (!contract.isValid()) {
+        throw new ValidationError('Parâmetros inválidos', contract.errors())
+      }
+
+      const data = await paymentStatus(originId, request.user.id)
+
+      if (data.error) {
+        return response.status(400).json(data)
+      }
+
+      return response.status(200).json(data)
     } catch (error) {
       next(error)
     }
