@@ -62,6 +62,19 @@ module.exports = class NotificationFirebaseService {
     //   }
     // ]
 
+    // const t =
+    // {
+    //   title: 'Confirmação de Pagamento',
+    //   body: {
+    //     notificationType: 'PAYMENT',
+    //     paymentType: 'PIX',
+    //     statusPayment: 'PAID',
+    //     idOrigin: '13542165'
+    //   }
+    // }
+
+    // console.log(t)
+
     const payload = []
     // notification: { title: message, body, imageUrl }
     tokenClients.forEach(token => {

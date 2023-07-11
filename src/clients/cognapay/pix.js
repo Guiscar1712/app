@@ -5,9 +5,9 @@ const getToken = require('./token')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
-async function main (body) {
+async function main (body, origin) {
   try {
-    const token = await getToken(body.Origin)
+    const token = await getToken(origin)
 
     const res = await axios.post(
         `${cognaPayConfig.url}/api/v2.5/Checkout`, body,

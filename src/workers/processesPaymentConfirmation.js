@@ -1,7 +1,7 @@
 require('dotenv').config()
 const logger = require('./../utils/logger.util')
 const { delay, isServiceBusError, ServiceBusClient } = require('@azure/service-bus')
-const paymentService = require('./../services/payment.service')
+const { paymentNotification } = require('./../services/payment')
 
 const workerLog = 'Worker Notification'
 
@@ -21,7 +21,7 @@ async function main () {
         logger.debug('Received message:')
         const message = brokeredMessage.body
         console.log(message)
-        await paymentService.notification(message)
+        await paymentNotification(message)
         logger.info(`${workerLog} - Completing message - messageId: ${brokeredMessage.messageId}`)
         await receiver.completeMessage(brokeredMessage)
       },
