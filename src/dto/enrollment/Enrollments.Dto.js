@@ -125,7 +125,8 @@ class EnrollmentStudentDto {
 
   // quando false consultar status pagamento
   setPayment (matricula) {
-    this.paid = !!matricula?.pagamento?.pago
+    this.payment = !!matricula?.pagamento?.pago
+    // payment to this.paid = !!matricula?.pagamento?.pago
   }
 
   setActiveEnrollment () {
