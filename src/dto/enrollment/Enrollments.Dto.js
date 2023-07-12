@@ -92,19 +92,19 @@ class EnrollmentContractDto {
 
   setContract (contrato) {
     // Redirecionar para pagamento? Pagamento Pendente/
-    if (!contrato) {
+    if (!contrato || contrato.status === 'NAO_GERADO') {
       this.available = false
       this.accepted = false
     }
 
     // Redirecionar para Contratos Pendentes
-    if (contrato === 'AGUARDANDO_ACEITE') {
+    if (contrato.status === 'AGUARDANDO_ACEITE') {
       this.available = true
       this.accepted = false
     }
 
     // Redirecionar para pagamento? Pagamento Pendente/
-    if (contrato === 'ACEITO') {
+    if (contrato.status === 'ACEITO') {
       this.available = true
       this.accepted = true
     }
@@ -125,8 +125,7 @@ class EnrollmentStudentDto {
 
   // quando false consultar status pagamento
   setPayment (matricula) {
-    this.payment = !!matricula?.pagamento?.pago
-    // payment to this.paid = !!matricula?.pagamento?.pago
+    this.paid = !!matricula?.pagamento?.pago
   }
 
   setActiveEnrollment () {
