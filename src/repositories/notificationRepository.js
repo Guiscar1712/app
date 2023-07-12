@@ -50,6 +50,8 @@ function format (row) {
     createdAt: row.CreatedAt,
     Title: row.Title,
     Content: row.Content,
+    Data: row.Data,
+    NotificationType: row.NotificationType,
     DateRead: row.DateRead,
     UserId: row.UserId
   }

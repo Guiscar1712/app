@@ -61,7 +61,8 @@ module.exports = class NotificationFirebaseService {
       payload.push(
         {
           token,
-          notification: { title: message.title, body: message.body, data: message.data }
+          notification: { title: message.title, body: message.body },
+          data: message.data
         }
       )
     })

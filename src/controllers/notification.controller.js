@@ -88,9 +88,9 @@ module.exports = class NotificationPreferenceController {
 
   static async sendNotificationClient (request, response, next) {
     try {
-      const { token, title, body } = request.body
+      const { token, title, body, data } = request.body
 
-      const res = await NotificationFirebaseService.sendFromClient([token], { title, body })
+      const res = await NotificationFirebaseService.sendFromClient([token], { title, body, data })
       response.status(200).json(res)
     } catch (error) {
       console.log(error)
