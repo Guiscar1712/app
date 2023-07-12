@@ -1,16 +1,18 @@
 const axios = require('axios').create({ timeout: 6000000 })
 const config = require('../../utils/config')
-const logger = require('../../utils/logger.util')
+const { ClientServerError, ClientServerAuthError } = require('../../utils/errors')
 const getToken = require('./token')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
+
+const url = `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=`
 
 async function main (orderReference, system) {
   try {
     const token = await getToken(system)
 
     const res = await axios.get(
-        `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=${orderReference}`,
+        `${url}${orderReference}`,
         {
           headers: {
             Authorization: 'Bearer ' + token
@@ -26,30 +28,16 @@ async function main (orderReference, system) {
       throw res
     }
   } catch (error) {
-    let errorLog = {}
-
-    if (error.status >= 400 && error.status <= 499) {
-      errorLog = {
-        code: 400,
-        message: 'Client Error',
-        data: error.data
-      }
-    } else {
-      errorLog = {
-        code: 500,
-        message: 'Server Error',
-        data: error
-      }
+    if (error instanceof ClientServerError) {
+      throw error
     }
 
-    logger.error(errorLog)
+    if (error.status === 401) {
+      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+    }
 
-    return { error: errorLog }
+    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
   }
 }
-
-// paymentPix.get('COLABORAR')
-// paymentPix.get('OLIMPO')
-// paymentPix.get('SAP')
 
 module.exports = main

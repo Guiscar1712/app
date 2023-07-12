@@ -1,4 +1,4 @@
-const { ValidationError } = require('../../utils/errors')
+const { ValidationError, NotFoundError } = require('../../utils/errors')
 const { paymentForPix, paymentStatus } = require('../../services/payment')
 const { ApplyValidate } = require('../../validators/payment')
 
@@ -32,6 +32,10 @@ module.exports = class PaymentController {
       }
 
       const data = await paymentStatus(originId, request.user.id)
+
+      if (!data) {
+        throw new NotFoundError('Registro não encontrato', [{ originId }])
+      }
 
       if (data.error) {
         return response.status(400).json(data)

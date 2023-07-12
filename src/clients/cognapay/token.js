@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const moment = require('moment')
 const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../../utils/config')
-const logger = require('../../utils/logger.util')
+const { ClientServerError, ClientServerAuthError } = require('../../utils/errors')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
@@ -19,21 +19,15 @@ async function main (system) {
 
     return tokenCognapay
   } catch (error) {
-    const errorLog = {
-      function: 'clients.cognapay.token.get()'
+    if (error instanceof ClientServerError) {
+      throw error
     }
 
-    if (error.status >= 400 && error.status <= 499) {
-      errorLog.code = 400100
-      errorLog.message = ''
-      errorLog.clientError = error.data
-    } else {
-      errorLog.code = 500100
-      errorLog.message = ''
-      errorLog.serverError = error
+    if (error.status === 401) {
+      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
     }
 
-    logger.error(errorLog)
+    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
   }
 }
 

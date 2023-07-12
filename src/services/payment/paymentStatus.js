@@ -2,32 +2,27 @@ const moment = require('moment')
 const paymentPixUpdateStatus = require('./paymentPixUpdateStatus')
 const paymentRepository = require('../../repositories/PaymentRepository')
 const { getPaymentStatus } = require('../../clients/cognapay')
-// const { NotFoundError } = require('../../utils/errors')
 
 async function paymentStatus (originId, userId) {
-  try {
-    const paymentData = await paymentRepository.findBy({ originId })
-    if (paymentData && paymentData.paymentStatus === 'PAID') {
-      return setStatus(paymentData.invoiceType, paymentData.paymentStatus, paymentData.totalAmount, paymentData.paymentDate, paymentData.paymentType)
-    }
-
-    if (paymentData && paymentData.paymentStatus !== 'PAID') {
-      const orders = await getStatus(paymentData.orderReference, paymentData.system)
-
-      if (!orders || orders.length <= 0) {
-        return null
-      }
-
-      const order = orders[0]
-      const type = getPaymentType(order)
-      return setStatus(order.invoiceType, order.status.toUpperCase(), order.totalAmount, order.paymentDate, type)
-    }
-
-    return null
-    // return getMok()
-  } catch (error) {
-
+  const paymentData = await paymentRepository.findBy({ originId })
+  if (paymentData && paymentData.paymentStatus === 'PAID') {
+    return setStatus(paymentData.invoiceType, paymentData.paymentStatus, paymentData.totalAmount, paymentData.paymentDate, paymentData.paymentType)
   }
+
+  if (paymentData && paymentData.paymentStatus !== 'PAID') {
+    const orders = await getStatus(paymentData.orderReference, paymentData.system)
+
+    if (!orders || orders.length <= 0) {
+      return null
+    }
+
+    const order = orders[0]
+    const type = getPaymentType(order)
+    return setStatus(order.invoiceType, order.status.toUpperCase(), order.totalAmount, order.paymentDate, type)
+  }
+
+  return null
+  // return getMok()
 }
 
 async function getStatus (orderReference, system) {

@@ -6,32 +6,28 @@ const PaymentPixRequest = require('../../dto/payment/PaymentPixRequest.Dto')
 const paymentStatus = require('./paymentStatus')
 
 async function paymentForPix (originId, userId) {
-  try {
-    const status = await paymentStatus(originId)
-    if (status?.status === 'PAID') {
-      return null
-    }
+  const status = await paymentStatus(originId)
+  if (status?.status === 'PAID') {
+    return null
+  }
 
-    const enrollment = await ingressoClient.inscricaoPorIdOrigin(originId)
-    const businessKey = enrollment.inscricao.businessKey
-    if (!businessKey) {
-      return null
-    }
-    // Mockado
-    // const payDto = new PaymentPixRequest(getMok())
+  const enrollment = await ingressoClient.inscricaoPorIdOrigin(originId)
+  const businessKey = enrollment.inscricao.businessKey
+  if (!businessKey) {
+    return null
+  }
+  // Mockado
+  // const payDto = new PaymentPixRequest(getMok())
 
-    const order = await ingressoClient.consultaDadosPagamento(businessKey)
-    const payDto = new PaymentPixRequest(order)
+  const order = await ingressoClient.consultaDadosPagamento(businessKey)
+  const payDto = new PaymentPixRequest(order)
 
-    const system = enrollment.sistema.toUpperCase()
-    const data = await cognaPay.payForPix(payDto, system)
+  const system = enrollment.sistema.toUpperCase()
+  const data = await cognaPay.payForPix(payDto, system)
 
-    if (!data.error) {
-      await paymentPixSave(userId, originId, businessKey, system, payDto)
-      return new PaymentPixResponse(data.qrCode, data.qrCodeUrl, payDto.preDefinedOptions.Pix.ExpireAtDateTime, payDto.totalAmount)
-    }
-  } catch (error) {
-    throw new Error(error)
+  if (!data.error) {
+    await paymentPixSave(userId, originId, businessKey, system, payDto)
+    return new PaymentPixResponse(data.qrCode, data.qrCodeUrl, payDto.preDefinedOptions.Pix.ExpireAtDateTime, payDto.totalAmount)
   }
 }
 
