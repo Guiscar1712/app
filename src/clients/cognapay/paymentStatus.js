@@ -5,9 +5,9 @@ const getToken = require('./token')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
-async function main (orderReference, origin) {
+async function main (orderReference, system) {
   try {
-    const token = await getToken(origin)
+    const token = await getToken(system)
 
     const res = await axios.get(
         `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=${orderReference}`,

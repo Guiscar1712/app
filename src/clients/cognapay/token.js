@@ -9,12 +9,12 @@ const cognaPayConfig = { ...config.kroton.cognapay }
 
 const url = `${cognaPayConfig.url}/api/authentication/GenerateToken`
 
-async function main (origin) {
+async function main (system) {
   try {
-    const tokenCognapay = getTokenEnv(origin)
+    const tokenCognapay = getTokenEnv(system)
 
     if (tokenCognapay === null) {
-      return await getToken(origin)
+      return await getToken(system)
     }
 
     return tokenCognapay
@@ -37,8 +37,8 @@ async function main (origin) {
   }
 }
 
-async function getToken (origin) {
-  const auth = await getParams(origin)
+async function getToken (system) {
+  const auth = await getParams(system)
 
   const res = await axios.get(url, {
     auth
@@ -46,21 +46,21 @@ async function getToken (origin) {
     return error.response
   })
   if (res.status === 200) {
-    setTokenEnv(res.data, origin)
+    setTokenEnv(res.data, system)
     return res.data
   } else {
     throw res
   }
 }
 
-function getTokenEnv (origin) {
+function getTokenEnv (system) {
   let tokenEnv
 
-  if (origin === 'COLABORAR') {
+  if (system === 'COLABORAR') {
     tokenEnv = process.env.COGNAPAY_TOKEN_COLABORAR
-  } else if (origin === 'OLIMPO') {
+  } else if (system === 'OLIMPO') {
     tokenEnv = process.env.COGNAPAY_TOKEN_OLIMPO
-  } else if (origin === 'SAP') {
+  } else if (system === 'SAP') {
     tokenEnv = process.env.COGNAPAY_TOKEN_SAP
   }
 
@@ -80,7 +80,7 @@ function getTokenEnv (origin) {
   return token.accessToken
 }
 
-function setTokenEnv (accessToken, origin) {
+function setTokenEnv (accessToken, system) {
   const decodedToken = jwt.decode(accessToken)
   const expirationDateToken = moment(decodedToken.exp * 1000)
   const expirationDate = expirationDateToken.subtract(cognaPayConfig.tokenTolerance, 'minute')
@@ -92,21 +92,21 @@ function setTokenEnv (accessToken, origin) {
 
   const tokenStr = JSON.stringify(token)
 
-  if (origin === 'COLABORAR') {
+  if (system === 'COLABORAR') {
     process.env.COGNAPAY_TOKEN_COLABORAR = tokenStr
-  } else if (origin === 'OLIMPO') {
+  } else if (system === 'OLIMPO') {
     process.env.COGNAPAY_TOKEN_OLIMPO = tokenStr
-  } else if (origin === 'SAP') {
+  } else if (system === 'SAP') {
     process.env.COGNAPAY_TOKEN_SAP = tokenStr
   }
 }
 
-function getParams (origin) {
-  if (origin === 'COLABORAR') {
+function getParams (system) {
+  if (system === 'COLABORAR') {
     return { ...cognaPayConfig.colaborar }
-  } else if (origin === 'OLIMPO') {
+  } else if (system === 'OLIMPO') {
     return { ...cognaPayConfig.olimpo }
-  } else if (origin === 'SAP') {
+  } else if (system === 'SAP') {
     return { ...cognaPayConfig.sap }
   }
 }

@@ -6,8 +6,7 @@ const expiresInMinutes = process.env.KROTON_INGRESSO_PAYMENT_PIX_EXPIRESDATE || 
 class PaymentPixRequest extends PaymentRequest {
   constructor (data) {
     super(data)
-    this.preDefinedOptions = this.setPreDefinedOptions(data)
-    this.fundingOptions = this.setPreDefinedOptions(data)
+    this.preDefinedOptions = this.fundingOptions = this.setPreDefinedOptions(data)
   }
 
   setPreDefinedOptions () {
