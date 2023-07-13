@@ -8,7 +8,12 @@ module.exports = class UserRepository {
   }
 
   static async deleteBy (query, transaction) {
-    return await SimpleQuery.deleteBy(query, table, transaction)
+    const rows = await SimpleQuery.deleteBy(query, table, transaction)
+    const items = []
+    for (const row of rows) {
+      items.push(format(row))
+    }
+    return items
   }
 
   static async filterBy (query, transaction) {
@@ -33,11 +38,11 @@ module.exports = class UserRepository {
   }
 
   static async update (id, UserId, entity, transaction) {
-    return await SimpleQuery.update({ id, UserId }, entity, table, transaction)
+    return format(await SimpleQuery.update({ id, UserId }, entity, table, transaction))
   }
 
   static async updateByIds (ids, entity, transaction) {
-    return await UpdateInIds('id', ids, entity, table, transaction)
+    return format(await UpdateInIds('id', ids, entity, table, transaction))
   }
 }
 
