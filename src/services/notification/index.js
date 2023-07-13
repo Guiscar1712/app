@@ -1,5 +1,9 @@
-const notificationSave = require('./save')
+const notificationSave = require('./notificationSave')
+const notificationList = require('./notificationlist')
+const notificationById = require('./notificationById')
 
 module.exports = {
-  notificationSave
+  notificationSave,
+  notificationList,
+  notificationById
 }

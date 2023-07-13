@@ -1,4 +1,4 @@
-const notificationRepository = require('../../repositories/notificationRepository')
+const notificationRepository = require('../../repositories/v1/notificationRepository')
 
 async function Save (title, content, notificationId, data, userId) {
   const paymentData = {

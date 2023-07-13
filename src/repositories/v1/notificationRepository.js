@@ -1,4 +1,4 @@
-const { SimpleQuery, UpdateInIds } = require('../database')
+const { SimpleQuery, UpdateInIds } = require('../../database')
 const table = 'Notification'
 
 module.exports = class UserRepository {
@@ -48,9 +48,11 @@ function format (row) {
   return {
     id: row.Id,
     createdAt: row.CreatedAt,
-    Title: row.Title,
-    Content: row.Content,
-    DateRead: row.DateRead,
-    UserId: row.UserId
+    title: row.Title,
+    content: row.Content,
+    data: row.Data,
+    notificationType: row.NotificationType,
+    dateRead: row.DateRead,
+    userId: row.UserId
   }
 }
