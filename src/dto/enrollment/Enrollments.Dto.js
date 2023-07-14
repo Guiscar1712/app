@@ -113,6 +113,7 @@ class EnrollmentContractDto {
 
 class EnrollmentStudentDto {
   constructor (matricula, dadosPessoais) {
+    this.enrollmentId = matricula?.id
     this.studentCode = matricula?.ra
 
     this.studentName = dadosPessoais?.nome
