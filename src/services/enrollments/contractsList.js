@@ -14,6 +14,9 @@ async function contracts (idOrigin) {
 
   if (enrollment.sistema === 'COLABORAR') {
     const enrollmentId = enrollmentsDto.studentEnrollment.enrollmentId
+    if (!enrollmentId) {
+      return []
+    }
     data = await retry(contratoPorMatricula, enrollmentId)
   } else if (enrollment.sistema === 'ATHENAS') {
     throw new Error('Não para sistema ATHENAS')
