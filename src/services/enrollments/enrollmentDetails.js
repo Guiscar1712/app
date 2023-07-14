@@ -2,6 +2,7 @@ const { inscricaoPorIdOrigin, consultaProvaOnline } = require('../../clients/ing
 const retry = require('../../utils/retry')
 const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 const { ClientServerError } = require('../../utils/errors')
+const { paymentStatus } = require('./../payment')
 
 async function enrollmentDetails (idOrigin) {
   const data = await retry(inscricaoPorIdOrigin, idOrigin)
@@ -16,16 +17,30 @@ async function enrollmentDetails (idOrigin) {
     return enrollmentsDto
   }
 
-  const exam = await retry(consultaProvaOnline, enrollmentsDto.businessKey)
+  await getAdmissionsTest(enrollmentsDto, data)
 
+  await getPaymentStatus(idOrigin, enrollmentsDto)
+
+  return enrollmentsDto
+}
+
+async function getAdmissionsTest (enrollmentsDto, data) {
+  const exam = await retry(consultaProvaOnline, enrollmentsDto.businessKey)
   enrollmentsDto.admissionsTest = new AdmissionsTest(exam)
 
   // Revisa tratamento de erro quando inscrição não tem dados de elegibiliade
   if (!enrollmentsDto.admissionsTest || enrollmentsDto.admissionsTest.status === 'ERROR') {
     throw new ClientServerError('Unexpected Content', { method: 'AdmissionsTest', data })
   }
+}
 
-  return enrollmentsDto
+async function getPaymentStatus (idOrigin, enrollmentsDto) {
+  const status = await paymentStatus(idOrigin)
+
+  if (status) {
+    const paymentStatus = status.status === 'PAID' ?? false
+    enrollmentsDto.studentEnrollment.payment = paymentStatus
+  }
 }
 
 module.exports = enrollmentDetails

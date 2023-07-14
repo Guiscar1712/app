@@ -31,7 +31,7 @@ module.exports = class PaymentController {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
 
-      const data = await paymentStatus(originId, request.user.id)
+      const data = await paymentStatus(originId)
 
       if (!data) {
         throw new NotFoundError('Registro não encontrato', [{ originId }])
