@@ -7,7 +7,7 @@ const workerLog = 'Worker Notification'
 
 const connectionString = process.env.COGNA_PAYMENT_CONNECTION_STRING
 const topicName = process.env.COGNA_PAYMENT_TOPIC
-const subscriptionName = process.env.COGNA_PAYMENT_SUBSCRIPTION
+const subscriptionName = process.env.COGNA_PAYMENT_SUBSCRIPTION || {}
 
 async function main () {
   const sbClient = new ServiceBusClient(connectionString)
