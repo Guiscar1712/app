@@ -54,7 +54,7 @@ function getTokenEnv (system) {
     tokenEnv = process.env.COGNAPAY_TOKEN_COLABORAR
   } else if (system === 'OLIMPO') {
     tokenEnv = process.env.COGNAPAY_TOKEN_OLIMPO
-  } else if (system === 'SAP') {
+  } else if (system === 'SAP' || system === 'ATHENAS') {
     tokenEnv = process.env.COGNAPAY_TOKEN_SAP
   }
 
@@ -90,7 +90,7 @@ function setTokenEnv (accessToken, system) {
     process.env.COGNAPAY_TOKEN_COLABORAR = tokenStr
   } else if (system === 'OLIMPO') {
     process.env.COGNAPAY_TOKEN_OLIMPO = tokenStr
-  } else if (system === 'SAP') {
+  } else if (system === 'SAP' || system === 'ATHENAS') {
     process.env.COGNAPAY_TOKEN_SAP = tokenStr
   }
 }
@@ -100,7 +100,7 @@ function getParams (system) {
     return { ...cognaPayConfig.colaborar }
   } else if (system === 'OLIMPO') {
     return { ...cognaPayConfig.olimpo }
-  } else if (system === 'SAP') {
+  } else if (system === 'SAP' || system === 'ATHENAS') {
     return { ...cognaPayConfig.sap }
   }
 }

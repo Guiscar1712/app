@@ -95,12 +95,14 @@ class EnrollmentContractDto {
     if (!contrato || contrato.status === 'NAO_GERADO') {
       this.available = false
       this.accepted = false
+      return
     }
 
     // Redirecionar para Contratos Pendentes
     if (contrato.status === 'AGUARDANDO_ACEITE') {
       this.available = true
       this.accepted = false
+      return
     }
 
     // Redirecionar para pagamento? Pagamento Pendente/
