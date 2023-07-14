@@ -1,4 +1,4 @@
-const { contratoPorMatricula, inscricaoPorIdOrigin } = require('../../clients/ingresso/')
+const { contratosPorMatricula, inscricaoPorIdOrigin, contratosPorBusinessKey } = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
 
@@ -17,9 +17,13 @@ async function contracts (idOrigin) {
     if (!enrollmentId) {
       return []
     }
-    data = await retry(contratoPorMatricula, enrollmentId)
+    data = await retry(contratosPorMatricula, enrollmentId)
   } else if (enrollment.sistema === 'ATHENAS') {
-    throw new Error('Não para sistema ATHENAS')
+    const businessKey = enrollmentsDto.businessKey
+    if (!businessKey) {
+      return []
+    }
+    data = await retry(contratosPorBusinessKey, businessKey)
   }
 
   if (!data || data.length <= 0) {

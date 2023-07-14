@@ -3,13 +3,17 @@ const { ClientServerError } = require('../../utils/errors')
 const { contratoAceite } = require('./../../clients/ingresso/')
 const { ContractDto } = require('../../dto/enrollment')
 
-async function enrollmentDetails (contractId) {
-  // const res = await retry(contratoAceite, contractId)
-  // if (!res || !res.arquivo) {
-  //   throw new ClientServerError('Não foi possivel obter o contrato para aceite', [{ contractId }])
+async function enrollmentDetails (contractId, clientIp) {
+  // const body = { opcao: 1, ip: clientIp }
+  // const res = await retry(contratoAceite, { contractId, body })
+  // if (!res || !res.dadosAceite) {
+  //   throw new ClientServerError('Something went wrong', [{ contractId, body }])
   // }
   // const contract = new ContractDto(res)
 
+  // if (contract.status === 'ERROR') {
+  //   throw new ClientServerError('Something went wrong', [{ contractId, body }])
+  // }
   // mock
   const contract = new ContractDto(mock(contractId))
 

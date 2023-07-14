@@ -14,11 +14,11 @@ const ingresso = {
 
 const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato/`
 
-async function main (contratoId, body) {
+async function main ({ contractId, body }) {
   try {
     const token = await getToken()
     const res = await axios.put(
-        `${url}/${contratoId}`,
+        `${url}/${contractId}`,
         body,
         {
           headers: {

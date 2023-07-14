@@ -3,9 +3,10 @@ const inscricoesPorCpf = require('./inscricoesPorCpf')
 const inscricaoPorIdOrigin = require('./inscricaoPorIdOrigin')
 const consultaProvaOnline = require('./consultaProvaOnline')
 const consultaDadosPagamento = require('./consultaDadosPagamento')
-const contratoAceite = require('./contractoAceite')
-const contratoPorMatricula = require('./contractosPorMatricula')
-const contratoPorId = require('./contractoPorContratoId')
+const contratoAceite = require('./contratoAceite')
+const contratosPorMatricula = require('./contratosPorMatricula')
+const contratoPorId = require('./contratoPorContratoId')
+const contratosPorBusinessKey = require('./contratosPorBusinessKey')
 
 module.exports = {
   getToken,
@@ -15,5 +16,6 @@ module.exports = {
   consultaDadosPagamento,
   contratoAceite,
   contratoPorId,
-  contratoPorMatricula
+  contratosPorMatricula,
+  contratosPorBusinessKey
 }
