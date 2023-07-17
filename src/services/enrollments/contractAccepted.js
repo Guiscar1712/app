@@ -3,19 +3,19 @@ const { ClientServerError } = require('../../utils/errors')
 const { contratoAceite } = require('./../../clients/ingresso/')
 const { ContractDto } = require('../../dto/enrollment')
 
-async function enrollmentDetails (contractId, clientIp) {
-  // const body = { opcao: 1, ip: clientIp }
-  // const res = await retry(contratoAceite, { contractId, body })
-  // if (!res || !res.dadosAceite) {
-  //   throw new ClientServerError('Something went wrong', [{ contractId, body }])
-  // }
-  // const contract = new ContractDto(res)
+async function contractAccepted (contractId, clientIp) {
+  const body = { opcao: 1, ip: clientIp }
+  const res = await retry(contratoAceite, { contractId, body })
+  if (!res || !res.dadosAceite) {
+    throw new ClientServerError('Something went wrong', [{ contractId, body }])
+  }
+  const contract = new ContractDto(res)
 
-  // if (contract.status === 'ERROR') {
-  //   throw new ClientServerError('Something went wrong', [{ contractId, body }])
-  // }
+  if (contract.status === 'ERROR') {
+    throw new ClientServerError('Something went wrong', [{ contractId, body }])
+  }
   // mock
-  const contract = new ContractDto(mock(contractId))
+  // const contract = new ContractDto(mock(contractId))
 
   return contract
 }
@@ -65,4 +65,4 @@ function mock (contractId) {
   }
 }
 
-module.exports = enrollmentDetails
+module.exports = contractAccepted
