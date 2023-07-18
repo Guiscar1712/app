@@ -32,9 +32,9 @@ module.exports = class NotificationController {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
 
-      const { ip } = request.body
+      const { ipAddress } = request.body
 
-      const data = await contractAccepted(request.params.contractId, ip)
+      const data = await contractAccepted(request.params.contractId, ipAddress)
       return response.status(200).json(data)
     } catch (error) {
       next(error)
