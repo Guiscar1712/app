@@ -13,7 +13,7 @@ module.exports = class PaymentController {
 
       const data = await paymentForPix(originId, request.user.id)
 
-      if (data.error) {
+      if (!data || data.error) {
         return response.status(400).json(data)
       }
 

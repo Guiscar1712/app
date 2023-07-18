@@ -9,6 +9,12 @@ async function paymentStatus (originId) {
     return setStatus(paymentData.invoiceType, paymentData.paymentStatus, paymentData.totalAmount, paymentData.paymentDate, paymentData.paymentType)
   }
 
+  // mock
+  // paymentData = {}
+  // paymentData.paymentStatus = 'GENERATED'
+  // paymentData.orderReference = 'U-1184IFCXLK8B9P1EK4YZA'
+  // paymentData.system = 'ATHENAS'
+
   if (paymentData && paymentData.paymentStatus !== 'PAID') {
     const order = await getStatus(paymentData.orderReference, paymentData.system)
 

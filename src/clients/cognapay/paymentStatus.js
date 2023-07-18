@@ -24,6 +24,8 @@ async function main (orderReference, system) {
 
     if (res.status === 200) {
       return res.data
+    } else if (res.status === 404) {
+      return null
     } else {
       throw res
     }

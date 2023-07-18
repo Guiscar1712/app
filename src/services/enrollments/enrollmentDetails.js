@@ -13,11 +13,9 @@ async function enrollmentDetails (idOrigin) {
     throw new ClientServerError('Unexpected Content', { method: 'EnrollmentsDto', data })
   }
 
-  if (enrollmentsDto.enem.active) {
-    return enrollmentsDto
+  if (!enrollmentsDto.enem.active) {
+    await getAdmissionsTest(enrollmentsDto, data)
   }
-
-  await getAdmissionsTest(enrollmentsDto, data)
 
   await getPaymentStatus(idOrigin, enrollmentsDto)
 
