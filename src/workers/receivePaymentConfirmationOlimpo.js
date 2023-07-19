@@ -18,13 +18,13 @@ async function main () {
     const subscription = receiver.subscribe({
       processMessage: async (brokeredMessage) => {
         const message = brokeredMessage.body
-        logger.info(`${workerLog} - Received message -  OrderReference: ${message.OrderReference}`)
+        logger.info(`${workerLog} - Received message -  OrderReference: ${message.Data.OrderReference}`)
         const res = await sendMessages(message, workerLog)
         if (res instanceof Error) {
-          logger.error(`${workerLog} - Error processing message - OrderReference: ${message.OrderReference}`)
+          logger.error(`${workerLog} - Error processing message - OrderReference: ${message.Data.OrderReference}`)
           return
         }
-        logger.info(`${workerLog} - Completing message - OrderReference: ${message.OrderReference}`)
+        logger.info(`${workerLog} - Completing message - OrderReference: ${message.Data.OrderReference}`)
         await receiver.completeMessage(brokeredMessage)
       },
       processError: async (args) => {
