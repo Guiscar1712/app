@@ -7,8 +7,12 @@ class PaymentPixResponse {
   constructor (qrCode, qrCodeUrl, expiresIn, totalAmount) {
     this.qrCode = qrCode
     this.qrCodeUrl = qrCodeUrl
-    this.expiresIn = expiresIn
     this.totalAmount = totalAmount
+    this.setExpiresIn(expiresIn)
+  }
+
+  setExpiresIn (expiresIn) {
+    this.expiresIn = expiresIn.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
   }
 }
 

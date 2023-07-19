@@ -7,9 +7,9 @@ const cognaPayConfig = { ...config.kroton.cognapay }
 
 const url = `${cognaPayConfig.url}/api/v2.5/Checkout`
 
-async function main (body, origin) {
+async function main ({ body, system }) {
   try {
-    const token = await getToken(origin)
+    const token = await getToken(system)
 
     const res = await axios.post(
         `${url}`, body,
@@ -33,10 +33,10 @@ async function main (body, origin) {
     }
 
     if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+      throw new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
     }
 
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
+    throw new ClientServerError('Something went wrong', { client: url, errors: error.data })
   }
 }
 

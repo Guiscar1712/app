@@ -11,7 +11,7 @@ class PaymentPixRequest extends PaymentRequest {
 
   setPreDefinedOptions () {
     const dateNow = moment()
-    const expiresDate = dateNow.add(expiresInMinutes, 'minutes').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const expiresDate = dateNow.add(expiresInMinutes, 'minutes')
     return {
       Pix: {
         DirectPix: true,

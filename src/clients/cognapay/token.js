@@ -24,10 +24,10 @@ async function main (system) {
     }
 
     if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+      throw new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
     }
 
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
+    throw new ClientServerError('Something went wrong', { client: url, errors: error.data })
   }
 }
 

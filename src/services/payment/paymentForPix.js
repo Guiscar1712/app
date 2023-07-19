@@ -4,6 +4,7 @@ const paymentPixSave = require('./paymentPixSave')
 const PaymentPixResponse = require('../../dto/payment/PaymentPixResponse.Dto')
 const PaymentPixRequest = require('../../dto/payment/PaymentPixRequest.Dto')
 const paymentStatus = require('./paymentStatus')
+const retry = require('../../utils/retry')
 
 async function paymentForPix (originId, userId) {
   const status = await paymentStatus(originId)
@@ -11,7 +12,7 @@ async function paymentForPix (originId, userId) {
     return null
   }
 
-  const enrollment = await ingressoClient.inscricaoPorIdOrigin(originId)
+  const enrollment = await retry(ingressoClient.inscricaoPorIdOrigin, originId)
   const businessKey = enrollment.inscricao.businessKey
   if (!businessKey) {
     return null
@@ -19,11 +20,12 @@ async function paymentForPix (originId, userId) {
   // Mockado
   // const payDto = new PaymentPixRequest(getMok())
 
-  const order = await ingressoClient.consultaDadosPagamento(businessKey)
+  const order = await retry(ingressoClient.consultaDadosPagamento, businessKey)
   const payDto = new PaymentPixRequest(order)
 
   const system = enrollment.sistema.toUpperCase()
-  const data = await cognaPay.payForPix(payDto, system)
+
+  const data = await retry(cognaPay.payForPix, { body: payDto, system })
 
   if (!data.error) {
     await paymentPixSave(userId, originId, businessKey, system, payDto)
