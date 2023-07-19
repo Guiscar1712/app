@@ -6,6 +6,10 @@ const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 dotenv.config()
 
+const moment = require('moment-timezone')
+const fusoHorarioGlobal = 'America/Sao_Paulo'
+moment.tz.setDefault(fusoHorarioGlobal)
+
 const app = express()
 
 app.use(morgan)
