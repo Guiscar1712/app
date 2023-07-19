@@ -18,11 +18,10 @@ async function main () {
     logger.info('Start Worker')
     const subscription = receiver.subscribe({
       processMessage: async (brokeredMessage) => {
-        logger.debug('Received message:')
         const message = brokeredMessage.body
-        console.log(message)
+        logger.info(`Received message -  OrderReference: ${message.OrderReference}`)
         await paymentNotification(message)
-        logger.info(`${workerLog} - Completing message - messageId: ${brokeredMessage.messageId}`)
+        logger.info(`${workerLog} - Completing message - OrderReference: ${message.OrderReference}`)
         await receiver.completeMessage(brokeredMessage)
       },
       processError: async (args) => {
