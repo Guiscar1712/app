@@ -16,7 +16,7 @@ async function paymentNotification (payment) {
   const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
   const statusPayment = payment.Status.toUpperCase()
 
-  await paymentRepository.update(paymentData.id, { statusPayment, updatedAt })
+  await paymentRepository.update(paymentData.id, { paymentStatus: statusPayment, updatedAt })
   logger.info(`Process message - Update OrderReference: ${payment.OrderReference}`)
 
   if (statusPayment !== 'PAID') {
