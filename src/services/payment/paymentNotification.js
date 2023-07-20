@@ -3,6 +3,8 @@ const paymentRepository = require('../../repositories/PaymentRepository')
 const RegisterAppRepository = require('./../../repositories/RegisterAppRepository')
 const NotificationFirebase = require('./../notificationFirebase.service')
 const logger = require('../../utils/logger.util')
+const PaymentNotification = require('../../dto/payment/PaymentNotification')
+const { toCamelCaseKeys } = require('../../extensions')
 
 async function paymentNotification (payment) {
   const paymentData = await paymentRepository.findBy({ orderReference: payment.OrderReference })
@@ -12,13 +14,13 @@ async function paymentNotification (payment) {
   }
 
   const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
-  const paymentStatus = payment.Status.toUpperCase()
+  const statusPayment = payment.Status.toUpperCase()
 
-  await paymentRepository.update(paymentData.id, { paymentStatus, updatedAt })
+  await paymentRepository.update(paymentData.id, { statusPayment, updatedAt })
   logger.info(`Process message - Update OrderReference: ${payment.OrderReference}`)
 
-  if (paymentStatus !== 'PAID') {
-    logger.info(`Process message - OrderReference: ${payment.OrderReference} - Status: ${paymentStatus} - does not send notification`)
+  if (statusPayment !== 'PAID') {
+    logger.info(`Process message - OrderReference: ${payment.OrderReference} - Status: ${statusPayment} - does not send notification`)
     return
   }
 
@@ -26,19 +28,8 @@ async function paymentNotification (payment) {
 
   if (deviceRegisters.length > 0) {
     const tokens = deviceRegisters.map(m => m.token)
-    const message = {
-      title: `Notificação de Pagamento de ${paymentData.invoiceType}`,
-      body: `Confirmação de pagamento via ${paymentData.paymentType}`,
-      data: {
-        invoiceType: paymentData.invoiceType,
-        notificationType: 'PAYMENT',
-        paymentType: paymentData.paymentType,
-        statusPayment: paymentStatus,
-        idOrigin: paymentData.originId,
-        totalAmount: payment.TotalAmount,
-        paymentDate: payment.PaymentDate
-      }
-    }
+    const data = toCamelCaseKeys({ ...paymentData, ...payment, statusPayment })
+    const message = new PaymentNotification(data)
 
     await NotificationFirebase.sendFromClient(tokens, message)
     logger.info(`Process message - OrderReference: ${payment.OrderReference} - Notification sent!`)
