@@ -22,12 +22,51 @@ module.exports = class UserService {
     return await UserRepository.list()
   }
 
-  static async sendCodeEmail (userId, name, email) {
+  static async sendVerificationCode (userId, name, email) {
     const recoverKey = await UserService.getRecoveryKey(userId)
 
     const sendBySendgrid = process.env.SEND_BY_SENDGRID
     if (sendBySendgrid === 'true') {
-      return await EmailService.recoverPassword(email, name, recoverKey)
+      const templateName = process.env.SENDGRID_TEMPLATE_VERIFICATIONCODE
+      const templateTitle = process.env.SENDGRID_TEMPLATE_VERIFICATIONCODE_TITLE
+
+      const templateData = [
+        {
+          name: 'name_candidato',
+          value: name
+        },
+        {
+          name: 'code_recovery',
+          value: recoverKey
+        }
+      ]
+
+      return await EmailService.send(email, templateData, templateName, templateTitle)
+    }
+
+    return await Ci360Kroton.sendCodeEmail(name, email, recoverKey)
+  }
+
+  static async sendRecoverCode (userId, name, email) {
+    const recoverKey = await UserService.getRecoveryKey(userId)
+
+    const sendBySendgrid = process.env.SEND_BY_SENDGRID
+    if (sendBySendgrid === 'true') {
+      const templateName = process.env.SENDGRID_TEMPLATE_RECOVERPASSWORD
+      const templateTitle = process.env.SENDGRID_TEMPLATE_RECOVERPASSWORD_TITLE
+
+      const templateData = [
+        {
+          name: 'name_candidato',
+          value: name
+        },
+        {
+          name: 'code_recovery',
+          value: recoverKey
+        }
+      ]
+
+      return await EmailService.send(email, templateData, templateName, templateTitle)
     }
 
     return await Ci360Kroton.sendCodeEmail(name, email, recoverKey)
@@ -82,7 +121,7 @@ module.exports = class UserService {
 
     const user = await this.createdUser(entity)
 
-    await this.sendCodeEmail(user.id, user.name, entity.email)
+    await this.sendVerificationCode(user.id, user.name, entity.email)
 
     return user
   }
@@ -309,7 +348,7 @@ module.exports = class UserService {
       throw new Error('cpf não cadastrado!')
     }
 
-    await this.sendCodeEmail(user.id, user.name, user.email)
+    await this.sendRecoverCode(user.id, user.name, user.email)
     return user
   }
 

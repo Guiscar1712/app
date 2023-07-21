@@ -47,4 +47,9 @@ module.exports = class EmailService {
     const htmlEmail = templateEmail.get(process.env.RECOVERPASSWORD_TEMPLATE, templateParams)
     return await sendGridHelper.sendMessage(email, process.env.RECOVERPASSWORD_TITLE, htmlEmail)
   }
+
+  static async send (email, templateData, templateName, templateTitle) {
+    const htmlEmail = templateEmail.get(templateName, templateData)
+    return await sendGridHelper.sendMessage(email, templateTitle, htmlEmail)
+  }
 }
