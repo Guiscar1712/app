@@ -33,7 +33,7 @@ async function paymentForPix (originId, userId) {
 
   if (!data.error) {
     await paymentPixSave(userId, originId, businessKey, system, payDto)
-    return new PaymentPixResponse(data.qrCode, data.qrCodeUrl, payDto.preDefinedOptions.Pix.ExpireAtDateTime, payDto.totalAmount)
+    return new PaymentPixResponse(data.qrCode, data.qrCodeUrl, payDto.preDefinedOptions.pix.expireAtDateTime, payDto.totalAmount)
   }
 }
 

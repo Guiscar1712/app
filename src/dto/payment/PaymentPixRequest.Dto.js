@@ -15,7 +15,7 @@ class PaymentPixRequest extends PaymentRequest {
     return {
       pix: {
         directPix: true,
-        expiresInMinutes: expiresDate
+        expireAtDateTime: expiresDate
       },
       usePaymentTypes: ['Pix']
     }
