@@ -35,15 +35,17 @@ class EnrollmentDto {
   }
 
   setClassification (classificacao) {
-    const enrollment = ['Aluno']
-    const registered = ['Inscrito', 'Inscrito VG Online', 'Convocado']
-    const disqualified = ['Desclassificado', 'Desclassificado por nota']
+    const enrollment = ['ALUNO']
+    const registered = ['INSCRITO', 'INSCRITO VG ONLINE', 'CONVOCADO']
+    const disqualified = ['DESCLASSIFICADO', 'DESCLASSIFICADO POR NOTA']
 
-    if (enrollment.includes(classificacao.descricao)) {
+    const classification = classificacao.descricao?.toUpperCase()
+
+    if (enrollment.includes(classification)) {
       this.classification = 'STUDENT'
-    } else if (registered.includes(classificacao.descricao)) {
+    } else if (registered.includes(classification)) {
       this.classification = 'ENROLLMENT'
-    } else if (disqualified.includes(classificacao.descricao)) {
+    } else if (disqualified.includes(classification)) {
       this.classification = 'DISQUALIFIED'
     } else {
       this.classification = 'ABSENT'
