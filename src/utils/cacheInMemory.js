@@ -1,6 +1,7 @@
 require('dotenv').config()
 const NodeCache = require('node-cache')
-const cache = new NodeCache({ stdTTL: 30 }) // 3600
+const ttl = process.env.CACHE_IN_MEMORY_TTL_SECONDS || 60
+const cache = new NodeCache({ stdTTL: ttl })
 
 async function cacheInMemory (fn, params) {
   const name = fn.name.toUpperCase()
