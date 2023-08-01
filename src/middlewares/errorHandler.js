@@ -6,7 +6,7 @@ const errorHandler = (error, req, res, next) => {
   logger.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
 
   if (error instanceof ValidationError) {
-    return res.status(error.errorCode).json({
+    res.status(error.errorCode).json({
       type: error.errorType,
       errorCode: error.errorCode,
       message: error.message,
@@ -15,7 +15,7 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error instanceof NotFoundError) {
-    return res.status(error.errorCode).json({
+    res.status(error.errorCode).json({
       type: error.errorType,
       errorCode: error.errorCode,
       message: error.message,
@@ -24,7 +24,7 @@ const errorHandler = (error, req, res, next) => {
   }
 
   if (error instanceof ClientServerError) {
-    return res.status(error.errorCode).json({
+    res.status(error.errorCode).json({
       type: error.errorType,
       errorCode: error.errorCode,
       message: error.message,
@@ -32,7 +32,9 @@ const errorHandler = (error, req, res, next) => {
     })
   }
 
-  return res.status(500).send('Something went wrong')
+  res.status(500).send('Something went wrong')
+
+  return res
 }
 
 module.exports = errorHandler
