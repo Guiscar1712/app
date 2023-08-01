@@ -1,7 +1,6 @@
 const { v4: uuidv4 } = require('uuid')
 
 class Message {
-  _steps
   constructor (data) {
     this.id = uuidv4()
     this._indexs = data._indexs

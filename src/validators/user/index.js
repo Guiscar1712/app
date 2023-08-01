@@ -13,6 +13,15 @@ module.exports = {
     return contract
   },
 
+  LoginValidate (model) {
+    const contract = new Validator()
+
+    contract.isRequired(model.password, '40001', 'Senha é Obrigatório')
+    contract.isEmail(model.email, '40004', 'E-mail inválido')
+
+    return contract
+  },
+
   DuplicateRegister (model) {
     const contract = new Validator()
     contract.duplicateRegister(model.cpf, '40005', 'CPF já cadastrado!')

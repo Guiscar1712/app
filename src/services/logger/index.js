@@ -1,4 +1,5 @@
 require('dotenv').config()
+const obscureSensitiveData = require('./../../extensions/obscureSensitiveData')
 const Log = require('../../model/logger/Log')
 const Message = require('../../model/logger/Message')
 const Step = require('../../model/logger/Step')
@@ -21,7 +22,8 @@ module.exports = class LoggerService {
   }
 
   SetResponse (data) {
-    this.Log.message.AddResponse(data)
+    data = obscureSensitiveData(data)
+    this.Log.message.AddResponse(JSON.stringify(data))
   }
 
   SetError = (step, error) => {

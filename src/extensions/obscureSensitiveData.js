@@ -1,5 +1,7 @@
+require('dotenv').config()
+
 module.exports = function obscureSensitiveData (obj) {
-  const sensitiveFields = ['cpf', 'phone', 'birthday', 'number']
+  const sensitiveFields = process.env.OBSCURE_DATA_SENSITIVE || []
 
   function obscureFields (obj) {
     if (typeof obj === 'object' && obj !== null) {

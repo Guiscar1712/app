@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('./middlewares/morgan.middleware')
-const errorHandler = require('./middlewares/errorHandler')
+// const errorHandler = require('./middlewares/errorHandler')
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 dotenv.config()
@@ -18,6 +18,6 @@ app.use(cookieParser())
 app.use(require('./routes'))
 app.use('/api/v1', require('./routes/v1'))
 
-app.use(errorHandler)
+// app.use(errorHandler)
 
 module.exports = app
