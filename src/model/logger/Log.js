@@ -5,27 +5,22 @@ class Log {
     this.entryDate = moment().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
     this.service = data.service
     this.thread = data.thread
+    this.SetLevelINFO()
   }
 
-  message (data) {
+  Message (data) {
     this.message = new Message(data)
   }
 
-  setLevelINFO () {
+  SetLevelINFO () {
     this.level = 'INFO'
   }
 
-  setLevelERROR () {
+  SetLevelERROR () {
     this.level = 'ERROR'
   }
 
-  finalize (data) {
-    const steps = Object.keys(this.message.steps)
-
-    steps.forEach(element => {
-      this.message.steps[element] = JSON.stringify(this.message.steps[element])
-    })
-
+  Finalize (data) {
     const endDate = moment()
     this.duration = moment.duration(endDate.diff(this.entryDate)).asMilliseconds()
   }

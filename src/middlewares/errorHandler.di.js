@@ -8,8 +8,6 @@ module.exports = class ErrorMiddleware {
   }
 
   Handler = (error, req, res, next) => {
-    logger.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
-
     let send = {}
 
     if (error instanceof ValidationError) {
@@ -44,7 +42,7 @@ module.exports = class ErrorMiddleware {
     this.LoggerService.SetResponse({
       statusCode: res.statusCode,
       statusMessage: res.statusMessage,
-      send: JSON.stringify(send)
+      send
     })
 
     return res

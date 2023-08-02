@@ -1,5 +1,5 @@
 require('dotenv').config()
-const obscureSensitiveData = require('./../../extensions/obscureSensitiveData')
+const logger = require('../../utils/logger.util')
 const Log = require('../../model/logger/Log')
 const Message = require('../../model/logger/Message')
 const Step = require('../../model/logger/Step')
@@ -7,7 +7,7 @@ const Step = require('../../model/logger/Step')
 module.exports = class LoggerService {
   Start = (data) => {
     const threadId = Math.floor(10000 + Math.random() * 90000)
-    this.Log = new Log({ level: 'INFO', service: process.env.SERVICE_NAME, thread: threadId })
+    this.Log = new Log({ service: process.env.SERVICE_NAME, thread: threadId })
     this.Log.message = new Message(data)
     return this.Log
   }
@@ -22,16 +22,21 @@ module.exports = class LoggerService {
   }
 
   SetResponse (data) {
-    data = obscureSensitiveData(data)
-    this.Log.message.AddResponse(JSON.stringify(data))
+    this.Log.message.AddResponse(data)
   }
 
   SetError = (step, error) => {
-    this.Log.setLevelERROR()
+    this.Log.SetLevelERROR()
   }
 
   finalize = () => {
-    this.Log.finalize()
-    console.log(this.Log)
+    this.Log.Finalize()
+
+    if (this.Log.level === 'INFO') {
+      logger.info(this.Log)
+      return
+    }
+
+    logger.error(this.Log)
   }
 }
