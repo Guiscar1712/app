@@ -1,5 +1,5 @@
 require('dotenv').config()
-const logger = require('../../utils/logger.util')
+const logger = require('../../utils/logger.util.datadog')
 const Log = require('../../model/logger/Log')
 const Message = require('../../model/logger/Message')
 const Step = require('../../model/logger/Step')
