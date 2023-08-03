@@ -15,7 +15,7 @@ module.exports = class UserController {
       },
       request,
       endpoint: request.originalUrl,
-      type: request.method
+      type: 'USER_LOGIN'
     })
 
     const stepLoginValidate = this.LoggerService.AddStep('LoginValidate')

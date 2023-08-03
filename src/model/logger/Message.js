@@ -1,6 +1,7 @@
 const { v4: uuidv4 } = require('uuid')
 const obscureSensitiveData = require('./../../extensions/obscureSensitiveData')
 const MessageResponse = require('../../dto/logger/MessageResponse')
+const MessageResquest = require('../../dto/logger/MessageRequest')
 class Message {
   constructor (data) {
     this.id = uuidv4()
@@ -16,12 +17,16 @@ class Message {
   }
 
   AddRequest (request) {
-    let data = new MessageResponse(request)
-    data = obscureSensitiveData(data)
-    this.request = data
+    const data = new MessageResquest(request)
+    this.request = obscureSensitiveData(data)
   }
 
-  AddResponse (data) {
+  SetUserIdIndex (userId) {
+    this._indexs.userId = userId
+  }
+
+  AddResponse (response) {
+    const data = new MessageResponse(response)
     this.response = obscureSensitiveData(data)
   }
 }

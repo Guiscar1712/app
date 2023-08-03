@@ -54,6 +54,7 @@ module.exports = class UserService {
       stepComparePassword.finalize({ passwordIsValid, error: { stack: error.stack, message: error.message } })
       throw error
     }
+    this.LoggerService.SetUserId(membership.userId)
     stepComparePassword.finalize({ passwordIsValid })
   }
 }

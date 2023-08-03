@@ -26,11 +26,6 @@ const colors = {
 
 winston.addColors(colors)
 
-const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.json()
-)
-
 const APPLICATION_NAME = process.env.APPLICATION_NAME
 const DATADOG_API_KEY = process.env.DATADOG_API_KEY
 
@@ -39,6 +34,11 @@ const dataDog = new winston.transports.Http({
   path: `/api/v2/logs?dd-api-key=${DATADOG_API_KEY}&ddsource=nodejs&service=${APPLICATION_NAME}`,
   ssl: true
 })
+
+const format = winston.format.combine(
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
+  winston.format.json()
+)
 
 const transports = [
   new winston.transports.Console({

@@ -7,7 +7,7 @@ const Step = require('../../model/logger/Step')
 module.exports = class LoggerService {
   Start = (data) => {
     const threadId = Math.floor(10000 + Math.random() * 90000)
-    this.Log = new Log({ service: process.env.SERVICE_NAME, thread: threadId })
+    this.Log = new Log({ service: process.env.SERVICE_NAME, thread: threadId, host: data.request.host })
     this.Log.message = new Message(data)
     return this.Log
   }
@@ -21,6 +21,10 @@ module.exports = class LoggerService {
     return this.Log.message.steps[key]
   }
 
+  SetUserId (userId) {
+    this.Log.message.SetUserIdIndex(userId)
+  }
+
   SetResponse (data) {
     this.Log.message.AddResponse(data)
   }
@@ -31,6 +35,9 @@ module.exports = class LoggerService {
 
   finalize = () => {
     this.Log.Finalize()
+
+    const dataMessage = JSON.stringify(this.Log.message)
+    this.Log.message = dataMessage
 
     if (this.Log.level === 'INFO') {
       logger.info(this.Log)
