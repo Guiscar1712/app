@@ -101,7 +101,8 @@ class EnrollmentContractDto {
     }
 
     // Redirecionar para Contratos Pendentes
-    if (contrato.status === 'AGUARDANDO_ACEITE') {
+    const aguardandoAceite = ['AGUARDANDO_ACEITE', 'CADASTRO_INCOMPLETO']
+    if (aguardandoAceite.includes(contrato.status)) {
       this.available = true
       this.accepted = false
       return
