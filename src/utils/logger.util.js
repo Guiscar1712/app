@@ -1,3 +1,4 @@
+require('dotenv').config()
 const winston = require('winston')
 require('winston-daily-rotate-file')
 
@@ -27,10 +28,17 @@ winston.addColors(colors)
 
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  winston.format.printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.message}`
-  )
+  winston.format.json()
+  // winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
 )
+const APPLICATION_NAME = process.env.APPLICATION_NAME
+const DATADOG_API_KEY = process.env.DATADOG_API_KEY
+
+const dataDog = new winston.transports.Http({
+  host: 'http-intake.logs.us5.datadoghq.com',
+  path: `/api/v2/logs?dd-api-key=${DATADOG_API_KEY}&ddsource=nodejs&service=${APPLICATION_NAME}`,
+  ssl: true
+})
 
 const transports = [
   new winston.transports.Console({
@@ -50,7 +58,8 @@ const transports = [
     zippedArchive: true,
     maxSize: '20m',
     maxFiles: '7d'
-  })
+  }),
+  dataDog
 ]
 
 const Logger = winston.createLogger({
