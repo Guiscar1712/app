@@ -95,14 +95,28 @@ class EnrollmentContractDto {
   setContract (contrato) {
     // Redirecionar para pagamento? Pagamento Pendente/
     if (!contrato || contrato.status === 'NAO_GERADO') {
+      this.incomplete = null
+      this.incompleteLink = null
       this.available = false
       this.accepted = false
       return
     }
 
+    // Redirecionar para Contratos Incompleto
+    const cadastroImcompleto = ['CADASTRO_INCOMPLETO']
+    if (cadastroImcompleto.includes(contrato.status)) {
+      this.incomplete = true
+      this.incompleteLink = contrato.link
+      this.available = null
+      this.accepted = null
+      return
+    }
+
     // Redirecionar para Contratos Pendentes
-    const aguardandoAceite = ['AGUARDANDO_ACEITE', 'CADASTRO_INCOMPLETO']
+    const aguardandoAceite = ['AGUARDANDO_ACEITE']
     if (aguardandoAceite.includes(contrato.status)) {
+      this.incomplete = null
+      this.incompleteLink = null
       this.available = true
       this.accepted = false
       return
@@ -110,6 +124,8 @@ class EnrollmentContractDto {
 
     // Redirecionar para pagamento? Pagamento Pendente/
     if (contrato.status === 'ACEITO') {
+      this.incomplete = null
+      this.incompleteLink = null
       this.available = true
       this.accepted = true
     }
