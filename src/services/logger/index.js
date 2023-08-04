@@ -7,26 +7,26 @@ const Step = require('../../model/logger/Step')
 module.exports = class LoggerService {
   Start = (data) => {
     const threadId = Math.floor(10000 + Math.random() * 90000)
-    this.Log = new Log({ service: process.env.SERVICE_NAME, thread: threadId, host: data.request.host })
-    this.Log.message = new Message(data)
+    this.Log = new Log({ service: process.env.SERVICE_NAME, thread: threadId, host: data.request.hostname })
+    this.Log.content = new Message(data)
     return this.Log
   }
 
   AddStep = (name) => {
     const step = new Step()
-    const index = String(Object.keys(this.Log.message.steps).length + 1).padStart(2, '0')
+    const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
     const keyName = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
     const key = `${index}-${keyName}`
-    this.Log.message.AddStep(key, step)
-    return this.Log.message.steps[key]
+    this.Log.content.AddStep(key, step)
+    return this.Log.content.steps[key]
   }
 
   SetUserId (userId) {
-    this.Log.message.SetUserIdIndex(userId)
+    this.Log.content.SetUserIdIndex(userId)
   }
 
   SetResponse (data) {
-    this.Log.message.AddResponse(data)
+    this.Log.content.AddResponse(data)
   }
 
   SetError = (step, error) => {
@@ -35,9 +35,6 @@ module.exports = class LoggerService {
 
   finalize = () => {
     this.Log.Finalize()
-
-    const dataMessage = JSON.stringify(this.Log.message)
-    this.Log.message = dataMessage
 
     if (this.Log.level === 'INFO') {
       logger.info(this.Log)

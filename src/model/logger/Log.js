@@ -1,5 +1,6 @@
 const moment = require('moment')
-const Message = require('./Message')
+// const Message = require('./Message')
+const Content = require('./Content')
 const processId = process.pid
 class Log {
   constructor (data) {
@@ -12,7 +13,7 @@ class Log {
   }
 
   Message (data) {
-    this.message = new Message(data)
+    this.content = new Content(data)
   }
 
   SetLevelINFO () {
