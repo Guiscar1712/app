@@ -1,7 +1,6 @@
 const { asClass } = require('awilix')
-
-const ErrorMiddleware = require('../../../middlewares/errorHandler.di')
+const ResponseMiddleware = require('../../../middlewares/ResponseHandler')
 
 module.exports = {
-  ErrorMiddleware: asClass(ErrorMiddleware).scoped()
+  ResponseMiddleware: asClass(ResponseMiddleware).scoped()
 }

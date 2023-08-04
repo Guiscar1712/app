@@ -36,7 +36,6 @@ const dataDog = new winston.transports.Http({
 })
 
 const format = winston.format.combine(
-  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
   winston.format.json()
 )
 

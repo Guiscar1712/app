@@ -30,13 +30,7 @@ module.exports = class UserController {
 
       const data = await this.UserService.login(email, password)
       stepUserControllerLogin.finalize(data)
-      const res = response.json(data)
-      this.LoggerService.SetResponse({
-        statusCode: res.statusCode,
-        statusMessage: res.statusMessage,
-        send: data
-      })
-      return res
+      next(data)
     } catch (error) {
       stepUserControllerLogin.finalize({ error })
       this.LoggerService.SetError()
