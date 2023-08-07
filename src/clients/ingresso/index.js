@@ -1,7 +1,11 @@
-const token = require('./getToken')
-const inscricao = require('./getInscricao')
+const getToken = require('./token')
+const inscricoesPorCpf = require('./inscricoesPorCpf')
+const inscricaoPorIdOrigin = require('./inscricaoPorIdOrigin')
+const consultaProvaOnline = require('./consultaProvaOnline')
 
 module.exports = {
-  token,
-  inscricao
+  getToken,
+  inscricoesPorCpf,
+  inscricaoPorIdOrigin,
+  consultaProvaOnline
 }

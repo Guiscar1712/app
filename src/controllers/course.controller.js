@@ -1,4 +1,6 @@
 const CourseService = require('../services/course.service')
+const cacheInMemory = require('../utils/cacheInMemory')
+const { courseAreas } = require('../services/courses')
 
 module.exports = class CourseController {
   static async courses (request, response, next) {
@@ -110,8 +112,8 @@ module.exports = class CourseController {
 
   static async getCourseAreas (request, response, next) {
     try {
-      const courses = await CourseService.getCourseAreas()
-      response.json(courses)
+      const data = await cacheInMemory(courseAreas, null)
+      response.json(data)
     } catch (error) {
       if (error.response) {
         console.log(error.response.data)

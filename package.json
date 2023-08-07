@@ -38,6 +38,7 @@
         "morgan": "^1.10.0",
         "mssql": "^9.0.1",
         "multer": "^1.4.5-lts.1",
+        "node-cache": "^5.1.2",
         "on-finished": "^2.4.1",
         "uuid": "^9.0.0",
         "winston": "^3.8.2",

@@ -1,12 +1,23 @@
 const moment = require('moment')
 const IngressoKrotonService = require('../services/ingressoKroton.service')
+const { getToken } = require('../clients/ingresso/')
 const instructionsRepository = require('../repositories/ExamInstructionsRepository')
 const statusRepository = require('../repositories/ExamStatusRepository')
 module.exports = class RegisterApp {
-  static async eligible (subscriptionKey, UserId) {
+  static async eligible (subscriptionKey) {
     try {
-      const token = await IngressoKrotonService.getToken()
-      return await IngressoKrotonService.fetchExam(subscriptionKey, token.access_token)
+      const token = await getToken()
+      return await IngressoKrotonService.fetchExam(subscriptionKey, token)
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  static async eligibleToken (subscriptionKey) {
+    try {
+      const token = await getToken()
+
+      return await IngressoKrotonService.fetchExam(subscriptionKey, token)
     } catch (error) {
       throw new Error(error)
     }
@@ -18,8 +29,8 @@ module.exports = class RegisterApp {
 
   static async startExam (subscriptionKey) {
     try {
-      const token = await IngressoKrotonService.getToken()
-      return await IngressoKrotonService.startExam(subscriptionKey, token.access_token)
+      const token = await getToken()
+      return await IngressoKrotonService.startExam(subscriptionKey, token)
     } catch (error) {
       throw new Error(error)
     }
@@ -27,16 +38,16 @@ module.exports = class RegisterApp {
 
   static async finalizeExam (subscriptionKey, model) {
     try {
-      const token = await IngressoKrotonService.getToken()
-      return await IngressoKrotonService.submitExam(subscriptionKey, model, token.access_token)
+      const token = await getToken()
+      return await IngressoKrotonService.submitExam(subscriptionKey, model, token)
     } catch (error) {
       throw new Error(error)
     }
   }
 
   static async getEssayTheme (subscriptionKey) {
-    const token = await IngressoKrotonService.getToken()
-    const res = await IngressoKrotonService.startExam(subscriptionKey, token.access_token)
+    const token = await getToken()
+    const res = await IngressoKrotonService.startExam(subscriptionKey, token)
     return [res]
   }
 
@@ -83,8 +94,8 @@ module.exports = class RegisterApp {
     let status = await statusRepository.findBy({ SubscriptionKey: subscriptionKey, UserId })
 
     if (!status) {
-      const token = await IngressoKrotonService.getToken()
-      const res = await IngressoKrotonService.fetchExam(subscriptionKey, token.access_token)
+      const token = await getToken()
+      const res = await IngressoKrotonService.fetchExam(subscriptionKey, token)
       if (res.errors) {
         return res
       }
