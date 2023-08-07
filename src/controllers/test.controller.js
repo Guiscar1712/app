@@ -3,11 +3,7 @@ const IngressoKrotonService = require('../services/ingressoKroton.service')
 module.exports = class TestController {
   static async run (request, response, next) {
     try {
-      const token = await IngressoKrotonService.getToken()
-      const inscricao = await IngressoKrotonService.getSubscription(
-        '30525091874',
-        token.access_token
-      )
+      const inscricao = await IngressoKrotonService.getSubscription('30525091874')
       response.json(inscricao)
     } catch (error) {
       if (error.response) {
