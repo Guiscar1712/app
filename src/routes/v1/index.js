@@ -5,5 +5,6 @@ const errorHandler = require('../../middlewares/errorHandler')
 
 router.use('/enrollment', require('./enrollment.route'), errorHandler)
 router.use('/user', require('./user.route')(cradle))
+router.use('/course', require('./course.route'))
 
 module.exports = router
