@@ -6,8 +6,7 @@ const Step = require('../../model/logger/Step')
 
 module.exports = class LoggerService {
   Start = (data) => {
-    const threadId = Math.floor(10000 + Math.random() * 90000)
-    this.Log = new Log({ service: process.env.SERVICE_NAME, thread: threadId, host: data.request.hostname })
+    this.Log = new Log({ service: process.env.SERVICE_NAME, host: data.request.hostname })
     this.Log.content = new Message(data)
     return this.Log
   }

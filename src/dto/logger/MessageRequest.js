@@ -1,4 +1,4 @@
-class MessageResquest {
+class MessageRequest {
   constructor (data) {
     this.url = data.originalUrl
     this.type = data.method
@@ -9,4 +9,4 @@ class MessageResquest {
   }
 }
 
-module.exports = MessageResquest
+module.exports = MessageRequest

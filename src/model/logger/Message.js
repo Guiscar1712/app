@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid')
 const obscureSensitiveData = require('./../../extensions/obscureSensitiveData')
 const MessageResponse = require('../../dto/logger/MessageResponse')
-const MessageResquest = require('../../dto/logger/MessageRequest')
+const MessageRequest = require('../../dto/logger/MessageRequest')
 class Message {
   constructor (data) {
     this.id = uuidv4()
@@ -17,7 +17,7 @@ class Message {
   }
 
   AddRequest (request) {
-    const data = new MessageResquest(request)
+    const data = new MessageRequest(request)
     this.request = obscureSensitiveData(data)
   }
 
