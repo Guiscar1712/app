@@ -17,18 +17,14 @@ async function main () {
   try {
     const subscription = receiver.subscribe({
       processMessage: async (brokeredMessage) => {
-        console.log(brokeredMessage)
-        logger.info(`${workerLog} - Receiving message - messageId: ${brokeredMessage.messageId}`)
         const message = brokeredMessage.body
-        logger.debug({ message: `${workerLog} - Debug`, data: message })
+        logger.info(`${workerLog} - Received message -  OrderReference: ${message.Data.OrderReference}`)
         const res = await sendMessages(message, workerLog)
-
         if (res instanceof Error) {
-          logger.info(`${workerLog} - Error processing message - messageId: ${brokeredMessage.messageId}`)
+          logger.error(`${workerLog} - Error processing message - OrderReference: ${message.Data.OrderReference}`)
           return
         }
-
-        logger.info(`${workerLog} - Completing message - messageId: ${brokeredMessage.messageId}`)
+        logger.info(`${workerLog} - Completing message - OrderReference: ${message.Data.OrderReference}`)
         await receiver.completeMessage(brokeredMessage)
       },
       processError: async (args) => {
@@ -56,10 +52,5 @@ async function main () {
     logger.info(`${workerLog} - Started!`)
   }
 }
-
-main().catch((err) => {
-  logger.error({ message: `${workerLog} - ReceiveMessagesStreaming - Error occurred:`, error: err })
-  process.exit(1)
-})
 
 module.exports = main

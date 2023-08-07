@@ -3,6 +3,6 @@ module.exports = {
   EVENTS: 2,
   PROMOTIONS: 3,
   NOTICE: 4,
-  TEACHERS: 5
-
+  TEACHERS: 5,
+  PAYMENT: 6
 }

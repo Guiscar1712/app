@@ -1,11 +1,13 @@
 require('dotenv').config()
 const logger = require('./../utils/logger.util')
 const { delay, isServiceBusError, ServiceBusClient } = require('@azure/service-bus')
-const paymentService = require('./../services/payment.service')
+const { paymentNotification } = require('./../services/payment')
+
+const workerLog = 'Worker Notification'
 
 const connectionString = process.env.COGNA_PAYMENT_CONNECTION_STRING
 const topicName = process.env.COGNA_PAYMENT_TOPIC
-const subscriptionName = process.env.COGNA_PAYMENT_SUBSCRIPTION
+const subscriptionName = process.env.COGNA_PAYMENT_SUBSCRIPTION || {}
 
 async function main () {
   const sbClient = new ServiceBusClient(connectionString)
@@ -16,10 +18,11 @@ async function main () {
     logger.info('Start Worker')
     const subscription = receiver.subscribe({
       processMessage: async (brokeredMessage) => {
-        logger.debug('Received message:')
         const message = brokeredMessage.body
-        console.log(message)
-        await paymentService.notification(message)
+        logger.info(`Received message -  OrderReference: ${message.OrderReference}`)
+        await paymentNotification(message)
+        logger.info(`${workerLog} - Completing message - OrderReference: ${message.OrderReference}`)
+        await receiver.completeMessage(brokeredMessage)
       },
       processError: async (args) => {
         logger.error(`Error from source ${args.errorSource} occurred: `, args.error)
@@ -48,10 +51,5 @@ async function main () {
     logger.info('Started Finally')
   }
 }
-
-main().catch((err) => {
-  logger.error('ReceiveMessagesStreaming - Error occurred: ', err)
-  process.exit(1)
-})
 
 module.exports = main

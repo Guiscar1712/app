@@ -1,6 +1,10 @@
+const logger = require('./utils/logger.util')
 const workerNotification = require('./workers/processesPaymentConfirmation')
 
-workerNotification()
+workerNotification().catch((err) => {
+  logger.error({ message: 'Worker Notification - ReceiveMessagesStreaming - Error occurred:', error: err })
+  process.exit(1)
+})
 
 const express = require('express')
 const app = express()

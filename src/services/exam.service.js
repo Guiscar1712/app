@@ -1,13 +1,15 @@
 const moment = require('moment')
 const IngressoKrotonService = require('../services/ingressoKroton.service')
-const { getToken } = require('../clients/ingresso/')
 const instructionsRepository = require('../repositories/ExamInstructionsRepository')
 const statusRepository = require('../repositories/ExamStatusRepository')
 module.exports = class RegisterApp {
   static async eligible (subscriptionKey) {
     try {
-      const token = await getToken()
-      return await IngressoKrotonService.fetchExam(subscriptionKey, token)
+      // Validar essa implementação
+      // Foi necessario implementar a chamada do endpoint de elebilidade
+      // ms/inscricao/v4/captacao/prova-online/businesskey/ antes de realizar a outra consulta mais detalhada
+      await IngressoKrotonService.eligibleExam(subscriptionKey)
+      return await IngressoKrotonService.fetchExam(subscriptionKey)
     } catch (error) {
       throw new Error(error)
     }
@@ -15,9 +17,7 @@ module.exports = class RegisterApp {
 
   static async eligibleToken (subscriptionKey) {
     try {
-      const token = await getToken()
-
-      return await IngressoKrotonService.fetchExam(subscriptionKey, token)
+      return await IngressoKrotonService.fetchExam(subscriptionKey)
     } catch (error) {
       throw new Error(error)
     }
@@ -29,8 +29,7 @@ module.exports = class RegisterApp {
 
   static async startExam (subscriptionKey) {
     try {
-      const token = await getToken()
-      return await IngressoKrotonService.startExam(subscriptionKey, token)
+      return await IngressoKrotonService.startExam(subscriptionKey)
     } catch (error) {
       throw new Error(error)
     }
@@ -38,16 +37,14 @@ module.exports = class RegisterApp {
 
   static async finalizeExam (subscriptionKey, model) {
     try {
-      const token = await getToken()
-      return await IngressoKrotonService.submitExam(subscriptionKey, model, token)
+      return await IngressoKrotonService.submitExam(subscriptionKey, model)
     } catch (error) {
       throw new Error(error)
     }
   }
 
   static async getEssayTheme (subscriptionKey) {
-    const token = await getToken()
-    const res = await IngressoKrotonService.startExam(subscriptionKey, token)
+    const res = await IngressoKrotonService.startExam(subscriptionKey)
     return [res]
   }
 
@@ -94,8 +91,7 @@ module.exports = class RegisterApp {
     let status = await statusRepository.findBy({ SubscriptionKey: subscriptionKey, UserId })
 
     if (!status) {
-      const token = await getToken()
-      const res = await IngressoKrotonService.fetchExam(subscriptionKey, token)
+      const res = await IngressoKrotonService.fetchExam(subscriptionKey)
       if (res.errors) {
         return res
       }

@@ -33,6 +33,7 @@ module.exports = {
     },
     cognapay: {
       url: process.env.COGNAPAY_BASE_URL,
+      tokenTolerance: Util.toNumber(process.env.COGNAPAY_TOKEN_TOLERANCE) || 1,
       colaborar: {
         username: process.env.COGNAPAY_AUTH_USERNAME_COLABORADOR,
         password: process.env.COGNAPAY_AUTH_PASSWORD_COLABORADOR

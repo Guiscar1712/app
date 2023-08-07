@@ -1,4 +1,4 @@
-const { ValidationError, NotFoundError, ClientServerError } = require('../../utils/errors')
+const { ValidationError } = require('../../utils/errors')
 const { CpfValidate, IdOriginValidate } = require('../../validators/subscription')
 const { searchForEnrollments, enrollmentDetails } = require('../../services/enrollments')
 

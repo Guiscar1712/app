@@ -5,9 +5,8 @@ module.exports = class NotificationPreferenceController {
   static async get (request, response, next) {
     try {
       const data = await NotificationService.list(request.user.id)
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -15,9 +14,8 @@ module.exports = class NotificationPreferenceController {
   static async getById (request, response, next) {
     try {
       const data = await NotificationService.getById(request.params.id, request.user.id)
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -28,9 +26,8 @@ module.exports = class NotificationPreferenceController {
 
       const data = await NotificationService.insert(Title, Content, NotificationId, request.user.id)
 
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -38,9 +35,8 @@ module.exports = class NotificationPreferenceController {
   static async notificationRead (request, response, next) {
     try {
       const data = await NotificationService.notificationRead(request.params.id, request.user.id)
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -48,9 +44,8 @@ module.exports = class NotificationPreferenceController {
   static async notificationAllRead (request, response, next) {
     try {
       const data = await NotificationService.notificationAllRead(request.user.id)
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -58,9 +53,8 @@ module.exports = class NotificationPreferenceController {
   static async notificationNotRead (request, response, next) {
     try {
       const data = await NotificationService.notificationNotRead(request.params.id, request.user.id)
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -68,9 +62,8 @@ module.exports = class NotificationPreferenceController {
   static async delete (request, response, next) {
     try {
       const data = await NotificationService.delete(request.params.id, request.user.id)
-      response.json(data)
+      return response.status(200).json(data)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -80,21 +73,19 @@ module.exports = class NotificationPreferenceController {
       const { topic, title, body } = request.body
 
       const res = await NotificationFirebaseService.sendFromTopic(topic, { title, body })
-      response.json(res)
+      return response.status(200).json(res)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
 
   static async sendNotificationClient (request, response, next) {
     try {
-      const { token, title, body } = request.body
+      const { token, title, body, data } = request.body
 
-      const res = await NotificationFirebaseService.sendFromClient(token, { title, body })
-      response.json(res)
+      const res = await NotificationFirebaseService.sendFromClient([token], { title, body, data })
+      return response.status(200).json(res)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -104,9 +95,8 @@ module.exports = class NotificationPreferenceController {
       const { token, topic } = request.body
 
       const res = await NotificationFirebaseService.subscribeToTopic(token, topic)
-      response.json(res)
+      return response.status(200).json(res)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }
@@ -116,9 +106,8 @@ module.exports = class NotificationPreferenceController {
       const { token, topic } = request.body
 
       const res = await NotificationFirebaseService.unsubscribeFromTopic(token, topic)
-      response.json(res)
+      return response.status(200).json(res)
     } catch (error) {
-      console.log(error)
       next(error)
     }
   }

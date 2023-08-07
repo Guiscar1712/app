@@ -38,15 +38,15 @@ function format (row) {
     createdAt: row.CreatedAt,
     updatedAt: row.UpdatedAt,
     userId: row.UserId,
-    paymentId: row.PaymentId,
-    subscriptionKey: row.subscriptionKey,
-    totalAmount: row.TotalAmount,
-    origin: row.origin,
-    itemReference: row.ItemReference,
-    orderReference: row.OrderReference,
-    studentReference: row.StudentReference,
     document: row.Document,
-    typeOfPayment: row.TypeOfPayment,
-    paymentStatus: row.PaymentStatus
+    studentReference: row.StudentReference,
+    originId: row.OriginId,
+    system: row.System,
+    businessKey: row.BusinessKey,
+    orderReference: row.OrderReference,
+    invoiceType: row.InvoiceType,
+    paymentType: row.PaymentType,
+    paymentStatus: row.PaymentStatus,
+    totalAmount: row.TotalAmount
   }
 }
