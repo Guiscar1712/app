@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const logger = require('./utils/logger.util')
 const morgan = require('./middlewares/morgan.middleware')
+const errorHandler = require('./middlewares/errorHandler')
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 dotenv.config()
@@ -16,18 +16,8 @@ app.use(express.json({ limit: '50mb' }))
 app.use(cookieParser())
 
 app.use(require('./routes'))
+app.use('/api/v1', require('./routes/v1'))
 
-app.use(function (error, _, response, next) {
-  response.locals.message = error.message
-
-  response.locals.error = error
-
-  logger.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
-
-  return response.status(error.status || 500).send({
-    message: error.message,
-    stack: error.stack
-  })
-})
+app.use(errorHandler)
 
 module.exports = app

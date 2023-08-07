@@ -7,11 +7,7 @@ module.exports = class SubscriptionController {
 
       cpf = formatCpf(cpf)
 
-      const token = await IngressoKrotonService.getToken()
-      const subscription = await IngressoKrotonService.getSubscription(
-        cpf,
-        token.access_token
-      )
+      const subscription = await IngressoKrotonService.getSubscription(cpf)
       response.json(subscription)
     } catch (error) {
       if (error.response) {
@@ -37,11 +33,7 @@ module.exports = class SubscriptionController {
 
   static async post (request, response, next) {
     try {
-      const token = await IngressoKrotonService.getToken()
-      const subscription = await IngressoKrotonService.createSubscription(
-        request.body,
-        token.access_token
-      )
+      const subscription = await IngressoKrotonService.createSubscription(request.body)
       response.json(subscription)
     } catch (error) {
       if (error.response) {

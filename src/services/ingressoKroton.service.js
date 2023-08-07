@@ -2,6 +2,7 @@ const axios = require('axios').create({ timeout: 1000000 })
 const config = require('../utils/config')
 const { getSubscriptionDto } = require('../dto/subscription')
 const { getExamInfo, getTheme } = require('../dto/exam')
+const { getToken } = require('../clients/ingresso/')
 
 const ingresso = {
   grant_type: 'client_credentials',
@@ -12,23 +13,8 @@ const ingresso = {
 }
 
 module.exports = class IngressoKrotonService {
-  static async getToken () {
-    const body = new URLSearchParams({
-      grant_type: ingresso.grant_type,
-      client_id: ingresso.client_id,
-      client_secret: ingresso.client_secret
-    })
-
-    return (
-      await axios.post(ingresso.base_uri + '/oauth2/token', body, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
-    ).data
-  }
-
-  static async getSubscription (cpf, token) {
+  static async getSubscription (cpf) {
+    const token = await getToken()
     const res =
       await axios.get(
         `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao/cpf/${cpf}`,
@@ -47,7 +33,8 @@ module.exports = class IngressoKrotonService {
     throw new Error('Ops!')
   }
 
-  static async createSubscription (body, token) {
+  static async createSubscription (body) {
+    const token = await getToken()
     return (
       await axios.post(
         `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao`,
@@ -63,8 +50,9 @@ module.exports = class IngressoKrotonService {
     ).data
   }
 
-  static async eligibleExam (subscriptionKey, token) {
+  static async eligibleExam (subscriptionKey) {
     try {
+      const token = await getToken()
       const res = await axios.get(
         `${ingresso.base_uri}/ms/inscricao/v4/captacao/prova-online/businesskey/${subscriptionKey}`,
         {
@@ -88,9 +76,10 @@ module.exports = class IngressoKrotonService {
     }
   }
 
-  static async fetchExam (subscriptionKey, token) {
+  static async fetchExam (subscriptionKey) {
     const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
     try {
+      const token = await getToken()
       const res = await axios.get(
         `${ingresso.base_uri}/captacao/consultas/captacao/v1/consulta-provaonline/inscricao/${subscriptionKeyEncode}`,
         {
@@ -114,10 +103,11 @@ module.exports = class IngressoKrotonService {
     }
   }
 
-  static async startExam (subscriptionKey, token) {
+  static async startExam (subscriptionKey) {
     const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
 
     try {
+      const token = await getToken()
       const res = await axios.post(
         `${ingresso.base_uri}/captacao/salva/captacao/v1/salva-provaonline/iniciarProva/${subscriptionKeyEncode}`,
         null,
@@ -143,10 +133,12 @@ module.exports = class IngressoKrotonService {
     }
   }
 
-  static async submitExam (subscriptionKey, data, token) {
+  static async submitExam (subscriptionKey, data) {
     const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString('base64')
 
     try {
+      const token = await getToken()
+
       const body = {
         titulo: data.title,
         texto: data.text
