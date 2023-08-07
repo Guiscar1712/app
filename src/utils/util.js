@@ -40,4 +40,8 @@ module.exports = class Util {
 
     return cnpjCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '\$1.\$2.\$3-\$4')
   }
+
+  static isEmpty (object) {
+    return Object.keys(object).length === 0
+  }
 }

@@ -15,7 +15,7 @@ router.put('/not-read/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthentic
 router.delete('/:id', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.delete)
 
 router.post('/send-to-topic', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.sendNotificationTopic)
-router.post('/send-to-client', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.sendNotificationClient)
+router.post('/send-to-client', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, NotificationController.sendNotificationClient)
 router.post('/subscribe-topic', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.subscribeToTopic)
 router.post('/unsubscribe-topic', TrackMiddleware.tracking, AuthMiddleware.isLocalhost, NotificationController.unsubscribeFromTopic)
 

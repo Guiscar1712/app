@@ -16,8 +16,20 @@ ValidationContract.prototype.hasMinLen = (value, min, code, message) => {
   }
 }
 
+ValidationContract.prototype.hasNumMin = (value, min, code, message) => {
+  if (value && value < min) {
+    errors.push({ code, message })
+  }
+}
+
 ValidationContract.prototype.hasMaxLen = (value, max, code, message) => {
   if (value && value.length > max) {
+    errors.push({ code, message })
+  }
+}
+
+ValidationContract.prototype.hasNumMax = (value, max, code, message) => {
+  if (value && value > max) {
     errors.push({ code, message })
   }
 }

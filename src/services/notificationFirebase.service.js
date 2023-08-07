@@ -3,6 +3,7 @@ const { firebaseMessaging } = require('../services/firebase.service')
 
 const UserRepository = require('../repositories/userRepository')
 const RegisterAppRepository = require('../repositories/RegisterAppRepository')
+const { ClientServerError } = require('./../utils/errors')
 
 module.exports = class NotificationFirebaseService {
   static async updateSubscribeToTopic (userId) {
@@ -54,17 +55,22 @@ module.exports = class NotificationFirebaseService {
     }
   }
 
-  static async sendFromClient (tokenClient, message) {
-    const payload = {
-      token: tokenClient,
-      notification: message,
-      data: message
-    }
+  static async sendFromClient (tokenClients, message) {
+    const payload = []
+    tokenClients.forEach(token => {
+      payload.push(
+        {
+          token,
+          notification: { title: message.title, body: message.body },
+          data: message.data
+        }
+      )
+    })
 
     try {
-      return await firebaseMessaging.send(payload)
+      return await firebaseMessaging.sendAll(payload)
     } catch (error) {
-      return error
+      throw new ClientServerError('Envio de notificação falhou', [{ tokenClients, message }, { message_error: error.message }])
     }
   }
 

@@ -28,7 +28,8 @@ class EnrollmentDto {
     this.monthlyPayment = course.vlMensalidadePara
     this.setCourseName(course.dsCurso)
 
-    this.studentEnrollment = new StudentEnrollmentDto(matricula, dadosPessoais, contrato)
+    this.studentEnrollment = new EnrollmentStudentDto(matricula, dadosPessoais)
+    this.contract = new EnrollmentContractDto(contrato)
 
     this.setClassification(classificacao)
   }
@@ -84,11 +85,58 @@ class EnrollmentEnemDto {
   }
 }
 
-class StudentEnrollmentDto {
-  constructor (matricula, dadosPessoais, contrato) {
+class EnrollmentContractDto {
+  available
+  accepted
+  constructor (contrato) {
+    this.setContract(contrato)
+  }
+
+  setContract (contrato) {
+    // Redirecionar para pagamento? Pagamento Pendente/
+    if (!contrato || contrato.status === 'NAO_GERADO') {
+      this.incomplete = null
+      this.incompleteLink = null
+      this.available = false
+      this.accepted = false
+      return
+    }
+
+    // Redirecionar para Contratos Incompleto
+    const cadastroImcompleto = ['CADASTRO_INCOMPLETO']
+    if (cadastroImcompleto.includes(contrato.status)) {
+      this.incomplete = true
+      this.incompleteLink = contrato.link
+      this.available = null
+      this.accepted = null
+      return
+    }
+
+    // Redirecionar para Contratos Pendentes
+    const aguardandoAceite = ['AGUARDANDO_ACEITE']
+    if (aguardandoAceite.includes(contrato.status)) {
+      this.incomplete = null
+      this.incompleteLink = null
+      this.available = true
+      this.accepted = false
+      return
+    }
+
+    // Redirecionar para pagamento? Pagamento Pendente/
+    if (contrato.status === 'ACEITO') {
+      this.incomplete = null
+      this.incompleteLink = null
+      this.available = true
+      this.accepted = true
+    }
+  }
+}
+
+class EnrollmentStudentDto {
+  constructor (matricula, dadosPessoais) {
+    this.enrollmentId = matricula?.id
     this.studentCode = matricula?.ra
 
-    this.contract = contrato?.status
     this.studentName = dadosPessoais?.nome
     this.studentEmail = dadosPessoais?.email
     this.studentDocument = dadosPessoais?.cpf
@@ -97,8 +145,10 @@ class StudentEnrollmentDto {
     this.setActiveEnrollment()
   }
 
+  // quando false consultar status pagamento
   setPayment (matricula) {
     this.payment = !!matricula?.pagamento?.pago
+    // payment to this.paid = !!matricula?.pagamento?.pago
   }
 
   setActiveEnrollment () {
