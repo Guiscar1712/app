@@ -26,10 +26,10 @@ module.exports = class UserService {
     const user = await this.UserRepository.findBy({ Email: email })
     if (!user) {
       const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Email não cadastrado!' }])
-      stepUser.finalize({ user, error: { stack: error.stack, message: error.message } })
+      stepUser.Finalize({ user, error: { stack: error.stack, message: error.message } })
       throw error
     }
-    stepUser.finalize(user)
+    stepUser.Finalize(user)
     return user
   }
 
@@ -39,10 +39,10 @@ module.exports = class UserService {
 
     if (!membership.password) {
       const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Senha Inválida' }])
-      stepMembership.finalize({ membership, error: { stack: error.stack, message: error.message } })
+      stepMembership.Finalize({ membership, error: { stack: error.stack, message: error.message } })
       throw error
     }
-    stepMembership.finalize(membership)
+    stepMembership.Finalize(membership)
     return membership
   }
 
@@ -51,10 +51,10 @@ module.exports = class UserService {
     const passwordIsValid = comparePassword(password, membership.password)
     if (!passwordIsValid) {
       const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Senha Inválida' }])
-      stepComparePassword.finalize({ passwordIsValid, error: { stack: error.stack, message: error.message } })
+      stepComparePassword.Finalize({ passwordIsValid, error: { stack: error.stack, message: error.message } })
       throw error
     }
     this.LoggerService.SetUserId(membership.userId)
-    stepComparePassword.finalize({ passwordIsValid })
+    stepComparePassword.Finalize({ passwordIsValid })
   }
 }

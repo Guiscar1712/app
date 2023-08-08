@@ -23,20 +23,20 @@ module.exports = class UserController {
     try {
       const contract = LoginValidate({ email, password })
       if (!contract.isValid()) {
-        stepLoginValidate.finalize({ message: 'Parâmetros inválidos', erros: contract.errors() })
+        stepLoginValidate.Finalize({ message: 'Parâmetros inválidos', erros: contract.errors() })
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
-      stepLoginValidate.finalize({ contract: contract.isValid() })
+      stepLoginValidate.Finalize({ contract: contract.isValid() })
 
       const data = await this.UserService.login(email, password)
-      stepUserControllerLogin.finalize(data)
+      stepUserControllerLogin.Finalize(data)
       next(data)
     } catch (error) {
-      stepUserControllerLogin.finalize({ error })
+      stepUserControllerLogin.Finalize({ error })
       this.LoggerService.SetError()
       next(error)
     } finally {
-      this.LoggerService.finalize()
+      this.LoggerService.Finalize()
     }
   }
 }

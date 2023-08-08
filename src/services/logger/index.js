@@ -32,7 +32,7 @@ module.exports = class LoggerService {
     this.Log.SetLevelERROR()
   }
 
-  finalize = () => {
+  Finalize = () => {
     this.Log.Finalize()
 
     if (this.Log.level === 'INFO') {

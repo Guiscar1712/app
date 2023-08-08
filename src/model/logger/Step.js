@@ -5,7 +5,7 @@ class Step {
     this.entryDate = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
   }
 
-  finalize (data) {
+  Finalize (data) {
     this.data = obscureSensitiveData(data)
 
     const entryDate = moment(this.entryDate)
