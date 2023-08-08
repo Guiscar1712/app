@@ -1,8 +1,10 @@
 const BaseError = require('./BaseError')
 
 class ClientServerAuthError extends BaseError {
-  errorCode = 500
-  errorType = 'CLIENT-SERVER-AUTH_ERROR'
+  statusCode = 500
+  code = 50000
+  type = 'CLIENT-SERVER-AUTH_ERROR'
+  name = 'ClientServerAuthError'
   errors
 
   constructor (message, errors) {

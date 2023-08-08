@@ -12,28 +12,28 @@ module.exports = class ErrorMiddleware {
 
     if (error instanceof ValidationError) {
       send = {
-        type: error.errorType,
-        errorCode: error.errorCode,
+        type: error.type,
+        code: error.code,
         message: error.message,
         errors: error.serializeErrors()
       }
-      res.status(error.errorCode).json(send)
+      res.status(error.statusCode).json(send)
     } else if (error instanceof NotFoundError) {
       send = {
-        type: error.errorType,
-        errorCode: error.errorCode,
+        type: error.type,
+        code: error.code,
         message: error.message,
         errors: error.serializeErrors()
       }
-      res.status(error.errorCode).json(send)
+      res.status(error.statusCode).json(send)
     } else if (error instanceof ClientServerError) {
       send = {
-        type: error.errorType,
-        errorCode: error.errorCode,
+        type: error.type,
+        code: error.code,
         message: error.message,
         errors: error.serializeErrors()
       }
-      res.status(error.errorCode).json(send)
+      res.status(error.statusCode).json(send)
     } else {
       send = 'Something went wrong'
       res.status(500).send(send)

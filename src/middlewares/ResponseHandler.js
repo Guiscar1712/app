@@ -58,17 +58,18 @@ module.exports = class ResponseMiddleware {
 function setErrorResponse (error, send, res) {
   if (error instanceof BaseError) {
     send.error = {
-      type: error.errorType,
-      errorCode: error.errorCode,
+      type: error.type,
+      code: error.code,
       message: error.message,
       errors: error.serializeErrors()
     }
-    return res.status(error.errorCode).json(send)
+    return res.status(error.statusCode).json(send)
   }
 
   const errorType = 'INTERNAL_ERROR'
   send.error = {
     type: errorType,
+    code: -1,
     message: error.message,
     stack: error.stack
   }

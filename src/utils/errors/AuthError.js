@@ -1,11 +1,13 @@
 const BaseError = require('./BaseError')
 
 class AuthError extends BaseError {
-  errorCode = 401
-  errorType = 'AUTH_ERROR'
+  statusCode = 401
+  code = 40100
+  type = 'AUTH_ERROR'
+  name = 'AuthError'
 
   constructor (errors) {
-    super('Usuario não Authenticado')
+    super('Usuário não Authenticado')
 
     Object.setPrototypeOf(this, AuthError.prototype)
   }

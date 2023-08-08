@@ -1,6 +1,10 @@
 class BaseError extends Error {
-  errorCode
-  errorType
+  statusCode
+  name = 'BaseError'
+  code
+  type
+  stack
+
   constructor (message, errors) {
     super(message)
   }
