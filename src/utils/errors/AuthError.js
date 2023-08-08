@@ -1,6 +1,6 @@
-const CustomError = require('./CustomError')
+const BaseError = require('./BaseError')
 
-class AuthError extends CustomError {
+class AuthError extends BaseError {
   errorCode = 401
   errorType = 'AUTH_ERROR'
 

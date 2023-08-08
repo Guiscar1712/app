@@ -1,4 +1,4 @@
-const CustomError = require('../utils/errors/CustomError')
+const BaseError = require('../utils/errors/BaseError')
 
 module.exports = class ResponseMiddleware {
   constructor ({ LoggerService }) {
@@ -56,7 +56,7 @@ module.exports = class ResponseMiddleware {
   }
 }
 function setErrorResponse (error, send, res) {
-  if (error instanceof CustomError) {
+  if (error instanceof BaseError) {
     send.error = {
       type: error.errorType,
       errorCode: error.errorCode,

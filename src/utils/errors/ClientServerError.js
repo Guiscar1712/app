@@ -1,6 +1,6 @@
-const CustomError = require('./CustomError')
+const BaseError = require('./BaseError')
 
-class ClientServerError extends CustomError {
+class ClientServerError extends BaseError {
   errorCode = 500
   errorType = 'CLIENT-SERVER_ERROR'
   errors

@@ -1,4 +1,4 @@
-class CustomError extends Error {
+class BaseError extends Error {
   errorCode
   errorType
   constructor (message, errors) {
@@ -10,4 +10,4 @@ class CustomError extends Error {
   }
 }
 
-module.exports = CustomError
+module.exports = BaseError

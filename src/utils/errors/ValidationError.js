@@ -1,6 +1,6 @@
-const CustomError = require('./CustomError')
+const BaseError = require('./BaseError')
 
-class ValidationError extends CustomError {
+class ValidationError extends BaseError {
   errorCode = 400
   errorType = 'VALIDATION_ERROR'
   errors
