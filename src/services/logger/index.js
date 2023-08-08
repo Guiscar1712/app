@@ -3,9 +3,10 @@ const logger = require('../../utils/logger.util.datadog')
 const Log = require('../../model/logger/Log')
 const Message = require('../../model/logger/Message')
 const Step = require('../../model/logger/Step')
+const Util = require('../../utils/util')
 
 module.exports = class LoggerService {
-  Start = (data) => {
+  NewLog = (data) => {
     this.Log = new Log({ service: process.env.SERVICE_NAME, host: data.request.hostname })
     this.Log.content = new Message(data)
     return this.Log
@@ -14,7 +15,9 @@ module.exports = class LoggerService {
   AddStep = (name) => {
     const step = new Step()
     const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
-    const keyName = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+
+    const keyName = Util.createSlug(name)
+
     const key = `${index}-${keyName}`
     this.Log.content.AddStep(key, step)
     return this.Log.content.steps[key]
@@ -28,7 +31,10 @@ module.exports = class LoggerService {
     this.Log.content.AddResponse(data)
   }
 
-  SetError = (step, error) => {
+  SetError = (error) => {
+    const name = error.name
+    const stepError = this.AddStep(name)
+    stepError.Finalize(error)
     this.Log.SetLevelERROR()
   }
 

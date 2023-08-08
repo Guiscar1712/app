@@ -8,7 +8,7 @@ module.exports = class UserController {
 
   login = async (request, response, next) => {
     const { email, password } = request.body
-    this.LoggerService.Start({
+    this.LoggerService.NewLog({
       _indexs: {
         email,
         remoteAddress: request.connection.remoteAddress
@@ -30,10 +30,11 @@ module.exports = class UserController {
 
       const data = await this.UserService.login(email, password)
       stepUserControllerLogin.Finalize(data)
+
       next(data)
     } catch (error) {
-      stepUserControllerLogin.Finalize({ error })
-      this.LoggerService.SetError()
+      stepUserControllerLogin.Finalize(error)
+      this.LoggerService.SetError(error)
       next(error)
     } finally {
       this.LoggerService.Finalize()

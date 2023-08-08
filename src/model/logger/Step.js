@@ -6,7 +6,13 @@ class Step {
   }
 
   Finalize (data) {
-    this.data = obscureSensitiveData(data)
+    if (data instanceof Error) {
+      let { code, name, message, stack, errors } = data
+      code = code ?? -1
+      this.error = obscureSensitiveData({ code, name, message, stack, errors })
+    } else {
+      this.data = obscureSensitiveData(data)
+    }
 
     const entryDate = moment(this.entryDate)
     const endDate = moment()
