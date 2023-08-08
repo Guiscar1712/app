@@ -44,4 +44,23 @@ module.exports = class Util {
   static isEmpty (object) {
     return Object.keys(object).length === 0
   }
+
+  static isNullOrEmpty (str) {
+    return str === null || str === undefined || str.trim() === ''
+  }
+
+  static createSlug (inputString) {
+    if (this.isNullOrEmpty(inputString)) {
+      return ''
+    }
+
+    const stringWithHyphens = inputString.replace(/([a-z])([A-Z])/g, '$1-$2')
+    const lowerCaseString = stringWithHyphens.toLowerCase()
+    return lowerCaseString
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9-]/g, '')
+      .replace(/-+/g, '-')
+      .trim()
+  }
 }
