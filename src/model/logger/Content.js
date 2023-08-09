@@ -9,23 +9,23 @@ class Content {
     this.endpoint = data.endpoint
     this.type = data.type
     this.steps = {}
-    this.AddRequest(data.request)
+    this.addRequest(data.request)
   }
 
-  AddStep (name, data) {
+  addStep (name, data) {
     this.steps[name] = data
   }
 
-  AddRequest (request) {
+  addRequest (request) {
     const data = new MessageResquest(request)
     this.request = obscureSensitiveData(data)
   }
 
-  SetUserIdIndex (userId) {
+  setUserIdIndex (userId) {
     this._indexs.userId = userId
   }
 
-  AddResponse (response) {
+  addResponse (response) {
     const data = new MessageResponse(response)
     this.response = obscureSensitiveData(data)
   }

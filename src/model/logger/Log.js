@@ -9,22 +9,22 @@ class Log {
     this.host = data.host
     this.service = data.service
     this.thread = processId
-    this.SetLevelINFO()
+    this.setLevelInfo()
   }
 
   Message (data) {
     this.content = new Content(data)
   }
 
-  SetLevelINFO () {
+  setLevelInfo () {
     this.level = 'INFO'
   }
 
-  SetLevelERROR () {
+  setLevelError () {
     this.level = 'ERROR'
   }
 
-  Finalize (data) {
+  finalize (data) {
     const entryDate = moment(this.entryDate)
     const endDate = moment()
     this.duration = moment.duration(endDate.diff(entryDate)).asMilliseconds()

@@ -8,7 +8,7 @@ module.exports = class UserController {
 
   login = async (request, response, next) => {
     const { email, password } = request.body
-    this.LoggerService.NewLog({
+    this.LoggerService.newLog({
       _indexs: {
         email,
         remoteAddress: request.connection.remoteAddress
@@ -18,26 +18,26 @@ module.exports = class UserController {
       type: 'USER_LOGIN'
     })
 
-    const stepLoginValidate = this.LoggerService.AddStep('LoginValidate')
-    const stepUserControllerLogin = this.LoggerService.AddStep('UserControllerLogin')
+    const stepLoginValidate = this.LoggerService.addStep('LoginValidate')
+    const stepUserControllerLogin = this.LoggerService.addStep('UserControllerLogin')
     try {
       const contract = LoginValidate({ email, password })
       if (!contract.isValid()) {
-        stepLoginValidate.Finalize({ message: 'Parâmetros inválidos', erros: contract.errors() })
+        stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: contract.errors() })
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
-      stepLoginValidate.Finalize({ contract: contract.isValid() })
+      stepLoginValidate.finalize({ contract: contract.isValid() })
 
       const data = await this.UserService.login(email, password)
-      stepUserControllerLogin.Finalize(data)
+      stepUserControllerLogin.finalize(data)
 
       next(data)
     } catch (error) {
-      stepUserControllerLogin.Finalize(error)
-      this.LoggerService.SetError(error)
+      stepUserControllerLogin.finalize(error)
+      this.LoggerService.setError(error)
       next(error)
     } finally {
-      this.LoggerService.Finalize()
+      this.LoggerService.finalize()
     }
   }
 }

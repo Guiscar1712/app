@@ -5,7 +5,7 @@ class Step {
     this.date = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
   }
 
-  Finalize (data) {
+  finalize (data) {
     if (data instanceof Error) {
       let { code, message, stack, errors, type } = data
       code = code ?? -1

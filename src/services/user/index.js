@@ -22,39 +22,39 @@ module.exports = class UserService {
   }
 
   async loginFindUser (email) {
-    const stepUser = this.LoggerService.AddStep('UserServerLoginUserFindBy')
+    const stepUser = this.LoggerService.addStep('UserServerLoginUserFindBy')
     const user = await this.UserRepository.findBy({ Email: email })
     if (!user) {
       const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Email não cadastrado!' }])
-      stepUser.Finalize({ user, error })
+      stepUser.finalize({ user, error })
       throw error
     }
-    stepUser.Finalize(user)
+    stepUser.finalize(user)
     return user
   }
 
   async loginFindMembership (user) {
-    const stepMembership = this.LoggerService.AddStep('UserServerLoginMembershipFindBy')
+    const stepMembership = this.LoggerService.addStep('UserServerLoginMembershipFindBy')
     const membership = await this.MembershipRepository.findBy({ UserId: user.id })
 
     if (!membership.password) {
       const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Senha Inválida' }])
-      stepMembership.Finalize({ membership, error })
+      stepMembership.finalize({ membership, error })
       throw error
     }
-    stepMembership.Finalize(membership)
+    stepMembership.finalize(membership)
     return membership
   }
 
   loginComparePassword (password, membership, user) {
-    const stepComparePassword = this.LoggerService.AddStep('UserServerLoginComparePassword')
+    const stepComparePassword = this.LoggerService.addStep('UserServerLoginComparePassword')
     const passwordIsValid = comparePassword(password, membership.password)
     if (!passwordIsValid) {
       const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Senha Inválida' }])
-      stepComparePassword.Finalize({ passwordIsValid, error })
+      stepComparePassword.finalize({ passwordIsValid, error })
       throw error
     }
-    this.LoggerService.SetUserId(membership.userId)
-    stepComparePassword.Finalize({ passwordIsValid })
+    this.LoggerService.setUserId(membership.userId)
+    stepComparePassword.finalize({ passwordIsValid })
   }
 }

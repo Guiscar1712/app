@@ -39,7 +39,7 @@ module.exports = class ErrorMiddleware {
       res.status(500).send(send)
     }
 
-    this.LoggerService.SetResponse({
+    this.LoggerService.setResponse({
       statusCode: res.statusCode,
       statusMessage: res.statusMessage,
       send

@@ -1,45 +1,45 @@
 require('dotenv').config()
 const logger = require('../../utils/logger.util.datadog')
 const Log = require('../../model/logger/Log')
-const Message = require('../../model/logger/Message')
+const Content = require('../../model/logger/Content')
 const Step = require('../../model/logger/Step')
 const Util = require('../../utils/util')
 
 module.exports = class LoggerService {
-  NewLog = (data) => {
+  newLog = (data) => {
     this.Log = new Log({ service: process.env.SERVICE_NAME, host: data.request.hostname })
-    this.Log.content = new Message(data)
+    this.Log.content = new Content(data)
     return this.Log
   }
 
-  AddStep = (name) => {
+  addStep = (name) => {
     const step = new Step()
     const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
 
     const keyName = Util.createSlug(name)
 
     const key = `${index}-${keyName}`
-    this.Log.content.AddStep(key, step)
+    this.Log.content.addStep(key, step)
     return this.Log.content.steps[key]
   }
 
-  SetUserId (userId) {
-    this.Log.content.SetUserIdIndex(userId)
+  setUserId (userId) {
+    this.Log.content.setUserIdIndex(userId)
   }
 
-  SetResponse (data) {
-    this.Log.content.AddResponse(data)
+  setResponse (data) {
+    this.Log.content.addResponse(data)
   }
 
-  SetError = (error) => {
-    const name = error.name
-    const stepError = this.AddStep(name)
-    stepError.Finalize(error)
-    this.Log.SetLevelERROR()
+  setError = (error) => {
+    const name = error.type
+    const stepError = this.addStep(name)
+    stepError.finalize(error)
+    this.Log.setLevelError()
   }
 
-  Finalize = () => {
-    this.Log.Finalize()
+  finalize = () => {
+    this.Log.finalize()
 
     if (this.Log.level === 'INFO') {
       logger.info(this.Log)

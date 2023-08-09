@@ -13,7 +13,7 @@ module.exports = class ResponseMiddleware {
 
       setErrorResponse(error, send, res)
 
-      this.LoggerService.SetResponse({
+      this.LoggerService.setResponse({
         statusCode: res.statusCode,
         statusMessage: res.statusMessage,
         ...send
@@ -46,7 +46,7 @@ module.exports = class ResponseMiddleware {
 
     const response = res.status(status).send(sendData)
 
-    this.LoggerService.SetResponse({
+    this.LoggerService.setResponse({
       statusCode: res.statusCode,
       statusMessage: res.statusMessage,
       ...sendData
@@ -66,9 +66,8 @@ function setErrorResponse (error, send, res) {
     return res.status(error.statusCode).json(send)
   }
 
-  const errorType = 'INTERNAL_ERROR'
   send.error = {
-    type: errorType,
+    type: error.name,
     code: -1,
     message: error.message,
     stack: error.stack
