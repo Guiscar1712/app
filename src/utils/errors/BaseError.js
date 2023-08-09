@@ -1,6 +1,7 @@
 class BaseError extends Error {
   statusCode
   code
+  level
   type
   stack
 

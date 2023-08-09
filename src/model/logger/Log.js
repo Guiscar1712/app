@@ -24,6 +24,10 @@ class Log {
     this.level = 'ERROR'
   }
 
+  setLevelWarn () {
+    this.level = 'WARN'
+  }
+
   finalize (data) {
     const entryDate = moment(this.entryDate)
     const endDate = moment()

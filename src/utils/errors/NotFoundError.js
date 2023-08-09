@@ -3,8 +3,10 @@ const BaseError = require('./BaseError')
 class NotFoundError extends BaseError {
   statusCode = 404
   code = 200
+  level = 'WARN'
   type
   errors
+  stack
 
   constructor (message, errors) {
     super(message)

@@ -3,6 +3,7 @@ const BaseError = require('./BaseError')
 class ValidationError extends BaseError {
   statusCode = 400
   code = 300
+  level = 'WARN'
   type
   errors
   stack

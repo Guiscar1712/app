@@ -3,8 +3,10 @@ const BaseError = require('./BaseError')
 class ClientServerError extends BaseError {
   statusCode = 500
   code = 400
+  level = 'ERROR'
   type
   errors
+  stack
 
   constructor (message, errors) {
     super(message)

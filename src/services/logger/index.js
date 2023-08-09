@@ -35,7 +35,13 @@ module.exports = class LoggerService {
     const name = error.type
     const stepError = this.addStep(name)
     stepError.finalize(error)
-    this.Log.setLevelError()
+    if (error?.level === 'ERROR') {
+      this.Log.setLevelError()
+      return
+    }
+    if (error?.level === 'WARN') {
+      this.Log.setLevelWarn()
+    }
   }
 
   finalize = () => {
@@ -43,6 +49,10 @@ module.exports = class LoggerService {
 
     if (this.Log.level === 'INFO') {
       logger.info(this.Log)
+      return
+    }
+    if (this.Log.level === 'WARN') {
+      logger.warn(this.Log)
       return
     }
 
