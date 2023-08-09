@@ -2,7 +2,7 @@ const BaseError = require('./BaseError')
 
 class ClientServerAuthError extends BaseError {
   statusCode = 500
-  code = 50000
+  code = 401
   type
   errors
 

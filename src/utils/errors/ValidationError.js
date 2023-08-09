@@ -2,7 +2,7 @@ const BaseError = require('./BaseError')
 
 class ValidationError extends BaseError {
   statusCode = 400
-  code = 400
+  code = 300
   type
   errors
   stack

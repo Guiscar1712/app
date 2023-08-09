@@ -2,7 +2,7 @@ const BaseError = require('./BaseError')
 
 class NotFoundError extends BaseError {
   statusCode = 404
-  code = 40400
+  code = 200
   type
   errors
 

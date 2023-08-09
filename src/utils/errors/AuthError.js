@@ -2,7 +2,7 @@ const BaseError = require('./BaseError')
 
 class AuthError extends BaseError {
   statusCode = 401
-  code = 40100
+  code = 100
   type
 
   constructor (errors) {

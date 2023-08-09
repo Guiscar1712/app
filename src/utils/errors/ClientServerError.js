@@ -1,8 +1,8 @@
 const BaseError = require('./BaseError')
 
 class ClientServerError extends BaseError {
-  stausCode = 500
-  code = 500
+  statusCode = 500
+  code = 400
   type
   errors
 
