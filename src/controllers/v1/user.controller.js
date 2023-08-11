@@ -8,18 +8,14 @@ module.exports = class UserController {
 
   login = async (request, response, next) => {
     const { email, password } = request.body
-    this.LoggerService.newLog({
-      _indexs: {
-        email,
-        remoteAddress: request.connection.remoteAddress
-      },
-      request,
-      endpoint: request.originalUrl,
-      type: 'USER_LOGIN'
-    })
-
+    const indexLog = {
+      email,
+      remoteAddress: request.connection.remoteAddress
+    }
+    this.LoggerService.newLog(indexLog, 'USER_LOGIN', request)
     const stepLoginValidate = this.LoggerService.addStep('LoginValidate')
     const stepUserControllerLogin = this.LoggerService.addStep('UserControllerLogin')
+
     try {
       const contract = LoginValidate({ email, password })
       if (!contract.isValid()) {

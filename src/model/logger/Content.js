@@ -3,13 +3,13 @@ const obscureSensitiveData = require('./../../extensions/obscureSensitiveData')
 const MessageResponse = require('../../dto/logger/MessageResponse')
 const MessageResquest = require('../../dto/logger/MessageRequest')
 class Content {
-  constructor (data) {
+  constructor (indexs, type, request) {
     this.id = uuidv4()
-    this._indexs = data._indexs
-    this.endpoint = data.endpoint
-    this.type = data.type
+    this._indexs = indexs
+    this.endpoint = request.originalUrl
+    this.type = type
     this.steps = {}
-    this.addRequest(data.request)
+    this.addRequest(request)
   }
 
   addStep (name, data) {

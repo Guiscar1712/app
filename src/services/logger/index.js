@@ -6,9 +6,9 @@ const Step = require('../../model/logger/Step')
 const Util = require('../../utils/util')
 
 module.exports = class LoggerService {
-  newLog = (data) => {
-    this.Log = new Log({ service: process.env.SERVICE_NAME, host: data.request.hostname })
-    this.Log.content = new Content(data)
+  newLog = (indexs, type, request) => {
+    this.Log = new Log({ service: process.env.SERVICE_NAME, host: request.hostname })
+    this.Log.content = new Content(indexs, type, request)
     return this.Log
   }
 
