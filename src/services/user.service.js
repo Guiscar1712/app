@@ -10,7 +10,7 @@ const EmailService = require('./email.service')
 const Util = require('../utils/util')
 const AzureService = require('./azure.service.js')
 const { encryptPassword, comparePassword, getRecoverKey } = require('../utils/auth')
-const { firebaseAdmin } = require('../services/firebase.service')
+const { firebaseAdmin } = require('../clients/firebase/config')
 const { DuplicateRegister } = require('../validators/user')
 
 module.exports = class UserService {

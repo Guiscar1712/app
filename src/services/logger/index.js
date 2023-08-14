@@ -27,6 +27,10 @@ module.exports = class LoggerService {
     this.Log.content.setUserIdIndex(userId)
   }
 
+  setIndex (data) {
+    this.Log.content.setIndex(data)
+  }
+
   setResponse (data) {
     this.Log.content.addResponse(data)
   }

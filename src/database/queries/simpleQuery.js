@@ -18,10 +18,12 @@ module.exports = class SimpleQuery {
 
   static async deleteBy (query, from, transaction) {
     try {
-      const data = await (transaction || database)
+      const result = await (transaction || database)
         .from(from)
         .where(query)
         .del('*')
+
+      const data = result !== undefined ? result : null
       return data
     } catch (error) {
       console.log(error)
@@ -45,11 +47,12 @@ module.exports = class SimpleQuery {
 
   static async insert (entity, from, transaction) {
     try {
-      const data = await (transaction || database)(from).insert(
+      const result = await (transaction || database)(from).insert(
         entity,
         '*'
       )
 
+      const data = result !== undefined ? result : null
       return data[0]
     } catch (error) {
       console.log(error)
@@ -59,11 +62,12 @@ module.exports = class SimpleQuery {
 
   static async update (query, entity, from, transaction) {
     try {
-      await (transaction || database)(from)
+      const result = await (transaction || database)(from)
         .update(entity)
         .where(query)
 
-      return { ...query, ...entity }
+      const data = result !== undefined ? result : null
+      return { ...query, ...data }
     } catch (error) {
       console.log(error)
       return null

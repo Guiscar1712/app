@@ -7,6 +7,10 @@ module.exports = class UserRepository {
     const row = await SimpleQuery.findBy(query, table, transaction)
     return format(row)
   }
+
+  insert = async (entity, transaction) => {
+    return format(await SimpleQuery.insert(entity, table, transaction))
+  }
 }
 
 function format (row) {

@@ -25,6 +25,10 @@ class Content {
     this._indexs.userId = userId
   }
 
+  setIndex (data) {
+    this._indexs = { ...this._indexs, ...data }
+  }
+
   addResponse (response) {
     const data = new MessageResponse(response)
     this.response = obscureSensitiveData(data)

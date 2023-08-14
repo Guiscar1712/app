@@ -1,5 +1,4 @@
-
-const { firebaseMessaging } = require('../services/firebase.service')
+const { firebaseMessaging } = require('../clients/firebase/config')
 
 const UserRepository = require('../repositories/userRepository')
 const RegisterAppRepository = require('../repositories/RegisterAppRepository')
