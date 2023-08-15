@@ -33,7 +33,7 @@ module.exports = class UserController {
   }
 
   loginFirebase = async (request, response, next) => {
-    const { token } = request.headers
+    const { token } = request.body
     const indexLog = {
       remoteAddress: request.connection.remoteAddress
     }
