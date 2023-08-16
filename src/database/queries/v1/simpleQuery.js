@@ -1,4 +1,4 @@
-const database = require('../config.database')
+const database = require('../../config.database')
 const { RepositoryError } = require('../../../utils/errors')
 
 module.exports = class SimpleQuery {
