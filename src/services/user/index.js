@@ -5,13 +5,16 @@ const { ValidationError, RepositoryError } = require('../../utils/errors')
 const config = require('../../utils/config')
 const { comparePassword } = require('../../utils/auth')
 const Util = require('../../utils/util')
+const { getRecoverKey } = require('../../utils/auth')
+const { DuplicateRegister } = require('../../validators/user')
 module.exports = class UserService {
-  constructor ({ UserRepository, MembershipRepository, UserFirebaseRepository, LoggerService, FirebaseClient }) {
+  constructor ({ UserRepository, MembershipRepository, UserFirebaseRepository, LoggerService, FirebaseClient, SendGridClient }) {
     this.UserRepository = UserRepository
     this.MembershipRepository = MembershipRepository
     this.LoggerService = LoggerService
     this.FirebaseClient = FirebaseClient
     this.UserFirebaseRepository = UserFirebaseRepository
+    this.SendGridClient = SendGridClient
   }
 
   login = async (email, password) => {
@@ -66,13 +69,10 @@ module.exports = class UserService {
 
     let user = await this.UserRepository.findBy({ Email: decoded.email })
 
-    const newUser = !user
     if (!user) {
       const name = decoded.name || ''
       user = await this.createdUser({ name, email: decoded.email })
     }
-
-    this.LoggerService.setIndex({ userId: user.id, newUser })
 
     await this.createdUserFirebase(decoded, user)
 
@@ -83,7 +83,7 @@ module.exports = class UserService {
   }
 
   async createdUserFirebase (decoded, user) {
-    const stepCreatedUserFirebase = this.LoggerService.addStep('createdUserFirebase')
+    const stepCreatedUserFirebase = this.LoggerService.addStep('UserServerCreatedUserFirebase')
     try {
       let userFirebase = await this.UserFirebaseRepository.findByUid(decoded.uid)
 
@@ -104,7 +104,7 @@ module.exports = class UserService {
   }
 
   async createdUser (entity) {
-    const stepCreatedUser = this.LoggerService.addStep('createdUser')
+    const stepCreatedUser = this.LoggerService.addStep('UserServerCreatedUser')
     const transaction = await database.transaction()
     try {
       entity = prepare(entity)
@@ -116,10 +116,6 @@ module.exports = class UserService {
         transaction
       )
 
-      if (!user) {
-        throw new Error(user)
-      }
-
       await this.MembershipRepository.insert(
         {
           UserId: user.id
@@ -129,6 +125,7 @@ module.exports = class UserService {
 
       await transaction.commit()
 
+      this.LoggerService.setIndex({ userId: user.id, newUser: true })
       stepCreatedUser.finalize(user)
       return user
     } catch (error) {
@@ -136,6 +133,91 @@ module.exports = class UserService {
       const dataError = new RepositoryError('Error Insert Membership', error)
       stepCreatedUser.finalize(dataError)
       throw dataError
+    }
+  }
+
+  register = async (entity) => {
+    await this.validateDataEntity(entity)
+
+    const user = await this.createdUser(entity)
+
+    await this.sendVerificationCode(user.id, user.name, user.email)
+
+    return user
+  }
+
+  async validateDataEntity (entity, userId) {
+    const stepValidateDataEntity = this.LoggerService.addStep('UserServerValidateDataEntity')
+    try {
+      entity.cpf = Util.getNumbers(entity.cpf)
+      entity.phone = Util.getNumbers(entity.phone)
+
+      const search = await this.UserRepository.findByOr({ CPF: entity.cpf }, { Email: entity.email }, { Phone: entity.phone })
+
+      const user = {}
+      user.cpf = search.find(f => f.cpf === entity.cpf)?.cpf
+      user.email = search.find(f => f.email === entity.email)?.email
+      user.phone = search.find(f => f.phone === entity.phone)?.phone
+
+      const contract = DuplicateRegister(user)
+
+      if (!contract.isValid()) {
+        throw new ValidationError('Dados já cadastrados', contract.errors())
+      }
+
+      stepValidateDataEntity.finalize({ entity, userId, contract: contract.isValid() })
+    } catch (error) {
+      stepValidateDataEntity.finalize({ entity, userId, error })
+      throw error
+    }
+  }
+
+  async getRecoveryKey (userId) {
+    const stepGetRecoveryKey = this.LoggerService.addStep('UserServerGetRecoveryKey')
+    try {
+      const recoveryKey = await getRecoverKey()
+
+      const membership = await this.MembershipRepository.findBy({
+        UserId: userId
+      })
+
+      await this.MembershipRepository.update(membership.id, {
+        RecoveryKey: recoveryKey
+      })
+      stepGetRecoveryKey.finalize({ recoveryKey })
+      return recoveryKey
+    } catch (error) {
+      stepGetRecoveryKey.finalize({ userId, error })
+      throw error
+    }
+  }
+
+  async sendVerificationCode (userId, name, email) {
+    const stepSendVerificationCode = this.LoggerService.addStep('SendVerificationCode')
+
+    try {
+      const recoverKey = await this.getRecoveryKey(userId)
+
+      const templateName = process.env.SENDGRID_TEMPLATE_VERIFICATIONCODE
+      const templateTitle = process.env.SENDGRID_TEMPLATE_VERIFICATIONCODE_TITLE
+
+      const templateData = [
+        {
+          name: 'name_candidato',
+          value: name
+        },
+        {
+          name: 'code_recovery',
+          value: recoverKey
+        }
+      ]
+
+      const result = await this.SendGridClient.send(email, templateData, templateName, templateTitle)
+      stepSendVerificationCode.finalize(result)
+      return result
+    } catch (error) {
+      stepSendVerificationCode.finalize({ userId, name, email, error })
+      throw error
     }
   }
 }

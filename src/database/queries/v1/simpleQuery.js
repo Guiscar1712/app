@@ -56,11 +56,11 @@ module.exports = class SimpleQuery {
 
   static async update (query, entity, from, transaction) {
     try {
-      const result = await (transaction || database)(from)
+      await (transaction || database)(from)
         .update(entity)
         .where(query)
 
-      return { ...query, ...result }
+      return { ...query, ...entity }
     } catch (error) {
       throw new RepositoryError(error.message, error)
     }

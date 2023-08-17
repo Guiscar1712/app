@@ -1,5 +1,5 @@
 const { ValidationError } = require('../../utils/errors')
-const { LoginValidate } = require('../../validators/user')
+const { LoginValidate, ApplyValidate } = require('../../validators/user')
 module.exports = class UserController {
   constructor ({ UserService, LoggerService }) {
     this.UserService = UserService
@@ -53,6 +53,44 @@ module.exports = class UserController {
     } finally {
       this.LoggerService.finalize()
     }
+  }
+
+  register = async (request, response, next) => {
+    const body = request.body
+    const indexLog = {
+      email: body.email,
+      remoteAddress: request.connection.remoteAddress
+    }
+
+    this.LoggerService.newLog(indexLog, 'USER_REGISTER', request)
+
+    const stepUserControllerLogin = this.LoggerService.addStep('UserControllerRegister')
+
+    try {
+      this.validateRegister(body)
+
+      const data = await this.UserService.register(body)
+      stepUserControllerLogin.finalize(data)
+
+      next(data)
+    } catch (error) {
+      stepUserControllerLogin.finalize(error)
+      this.LoggerService.setError(error)
+      next(error)
+    } finally {
+      this.LoggerService.finalize()
+    }
+  }
+
+  validateRegister (body) {
+    const stepRegisterValidate = this.LoggerService.addStep('RegisterValidate')
+    const contract = ApplyValidate(body)
+    if (!contract.isValid()) {
+      stepRegisterValidate.finalize({ message: 'Parâmetros inválidos', errors: contract.errors() })
+      throw new ValidationError('Parâmetros inválidos', contract.errors())
+    }
+
+    stepRegisterValidate.finalize({ contract: contract.isValid() })
   }
 
   validateLogin (email, password) {
