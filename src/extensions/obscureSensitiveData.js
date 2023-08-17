@@ -1,13 +1,14 @@
 require('dotenv').config()
+const _ = require('lodash')
 
 module.exports = function obscureSensitiveData (obj) {
-  const obscuredObj = { ...obj }
+  const obscuredObj = _.cloneDeep(obj)
   try {
     const sensitiveFields = process.env.OBSCURE_DATA_SENSITIVE || []
 
-    function obscureFields (obj) {
-      if (typeof obj === 'object' && obj !== null) {
-        for (const [key, value] of Object.entries(obj)) {
+    function obscureFields (obscuredObj) {
+      if (typeof obscuredObj === 'object' && obscuredObj !== null) {
+        for (const [key, value] of Object.entries(obscuredObj)) {
           if (sensitiveFields.includes(key) && value && !key.startsWith('_')) {
             let length = value.toString().length
 
@@ -15,7 +16,7 @@ module.exports = function obscureSensitiveData (obj) {
               length = 15
             }
 
-            obj[key] = '*'.repeat(length)
+            obscuredObj[key] = '*'.repeat(length)
           } else {
             obscureFields(value)
           }
