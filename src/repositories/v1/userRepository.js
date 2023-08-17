@@ -1,15 +1,57 @@
 const moment = require('moment')
-const { SimpleQuery } = require('../../database')
+const database = require('../../database/config.database')
+const SimpleQuery = require('../../database/queries/v1/simpleQuery')
 const table = 'User'
 
 module.exports = class UserRepository {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
+
   findBy = async (query, transaction) => {
-    const row = await SimpleQuery.findBy(query, table, transaction)
-    return format(row)
+    const step = this.LoggerService.addStep('UserRepositoryFindBy')
+    try {
+      const row = await SimpleQuery.findBy(query, table, transaction)
+      const data = format(row)
+      step.finalize(data)
+      return data
+    } catch (error) {
+      step.finalize({ inputData: { query, transaction }, error })
+      throw error
+    }
   }
 
   insert = async (entity, transaction) => {
-    return format(await SimpleQuery.insert(entity, table, transaction))
+    const step = this.LoggerService.addStep('UserRepositoryInsert')
+    try {
+      const row = await SimpleQuery.insert(entity, table, transaction)
+      const data = format(row)
+      step.finalize(data)
+      return data
+    } catch (error) {
+      step.finalize({ inputData: { entity, transaction }, error })
+      throw error
+    }
+  }
+
+  findByOr = async (cpf, email, phone, transaction) => {
+    const step = this.LoggerService.addStep('UserRepositoryFindByOr')
+    try {
+      const result = await (transaction || database)(table)
+        .where(cpf)
+        .orWhere(email)
+        .orWhere(phone)
+
+      const items = []
+      for (const row of result) {
+        items.push(format(row))
+      }
+      step.finalize(items)
+      return items
+    } catch (error) {
+      step.finalize({ inputData: { cpf, email, phone, transaction }, error })
+      throw error
+    }
   }
 }
 
