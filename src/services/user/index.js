@@ -32,7 +32,7 @@ module.exports = class UserService {
     const stepUser = this.LoggerService.addStep('UserServerLoginUserFindBy')
     const user = await this.UserRepository.findBy({ Email: email })
     if (!user) {
-      const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Email não cadastrado!' }])
+      const error = new ValidationError('Login falhou!', [{ code: 404, message: 'O email que você inseriu não está cadastrado no nosso APP. Crie uma nova conta do zero, e comece a aproveita!' }])
       stepUser.finalize({ user, error })
       throw error
     }
