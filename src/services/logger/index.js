@@ -36,10 +36,10 @@ module.exports = class LoggerService {
   }
 
   setError = (error) => {
-    const name = error.type
+    const name = error.type || error.name
     const stepError = this.addStep(name)
     stepError.finalize(error)
-    if (error?.level === 'ERROR') {
+    if (!error.level || error.level === 'ERROR') {
       this.Log.setLevelError()
       return
     }

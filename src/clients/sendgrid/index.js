@@ -13,7 +13,8 @@ module.exports = class SendGridServer {
     try {
       const htmlEmail = templateEmail.get(templateName, templateData)
       const result = await sendGridHelper.sendMessage(email, templateTitle, htmlEmail)
-      stepSend.finalize(result)
+      const stepResult = result.length > 0 ? result[0] : result
+      stepSend.finalize(stepResult)
       return result
     } catch (error) {
       const clientServerError = new ClientServerError('Sendgrid Error', error)

@@ -7,6 +7,7 @@ const { comparePassword } = require('../../utils/auth')
 const Util = require('../../utils/util')
 const { getRecoverKey } = require('../../utils/auth')
 const { DuplicateRegister } = require('../../validators/user')
+
 module.exports = class UserService {
   constructor ({ UserRepository, MembershipRepository, UserFirebaseRepository, LoggerService, FirebaseClient, SendGridClient }) {
     this.UserRepository = UserRepository
@@ -116,7 +117,7 @@ module.exports = class UserService {
         transaction
       )
 
-      await this.MembershipRepository.insert(
+      const membership = await this.MembershipRepository.insert(
         {
           UserId: user.id
         },
@@ -126,7 +127,7 @@ module.exports = class UserService {
       await transaction.commit()
 
       this.LoggerService.setIndex({ userId: user.id, newUser: true })
-      stepCreatedUser.finalize(user)
+      stepCreatedUser.finalize({ model, insertedUser: !!user, insertedMembership: !!membership })
       return user
     } catch (error) {
       await transaction.rollback()
@@ -152,7 +153,7 @@ module.exports = class UserService {
       entity.cpf = Util.getNumbers(entity.cpf)
       entity.phone = Util.getNumbers(entity.phone)
 
-      const search = await this.UserRepository.findByOr({ CPF: entity.cpf }, { Email: entity.email }, { Phone: entity.phone })
+      const search = await this.UserRepository.findByCpfOrEmailOrPhone({ CPF: entity.cpf }, { Email: entity.email }, { Phone: entity.phone })
 
       const user = {}
       user.cpf = search.find(f => f.cpf === entity.cpf)?.cpf
@@ -165,9 +166,9 @@ module.exports = class UserService {
         throw new ValidationError('Dados já cadastrados', contract.errors())
       }
 
-      stepValidateDataEntity.finalize({ entity, userId, contract: contract.isValid() })
+      stepValidateDataEntity.finalize({ entity, userId, isValid: contract.isValid() })
     } catch (error) {
-      stepValidateDataEntity.finalize({ entity, userId, error })
+      stepValidateDataEntity.finalize(error)
       throw error
     }
   }
@@ -213,7 +214,7 @@ module.exports = class UserService {
       ]
 
       const result = await this.SendGridClient.send(email, templateData, templateName, templateTitle)
-      stepSendVerificationCode.finalize(result)
+      stepSendVerificationCode.finalize({ email, templateName, templateTitle, sendEmailStatus: result[0]?.statusCode })
       return result
     } catch (error) {
       stepSendVerificationCode.finalize({ userId, name, email, error })

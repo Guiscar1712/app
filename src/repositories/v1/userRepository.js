@@ -34,8 +34,8 @@ module.exports = class UserRepository {
     }
   }
 
-  findByOr = async (cpf, email, phone, transaction) => {
-    const step = this.LoggerService.addStep('UserRepositoryFindByOr')
+  findByCpfOrEmailOrPhone = async (cpf, email, phone, transaction) => {
+    const step = this.LoggerService.addStep('UserRepositoryFindByCpfOrEmailOrPhone')
     try {
       const result = await (transaction || database)(table)
         .where(cpf)

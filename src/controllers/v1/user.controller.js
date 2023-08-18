@@ -90,7 +90,7 @@ module.exports = class UserController {
       throw new ValidationError('Parâmetros inválidos', contract.errors())
     }
 
-    stepRegisterValidate.finalize({ contract: contract.isValid() })
+    stepRegisterValidate.finalize({ isValid: contract.isValid() })
   }
 
   validateLogin (email, password) {
@@ -100,7 +100,7 @@ module.exports = class UserController {
       stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: contract.errors() })
       throw new ValidationError('Parâmetros inválidos', contract.errors())
     }
-    stepLoginValidate.finalize({ contract: contract.isValid() })
+    stepLoginValidate.finalize({ isValid: contract.isValid() })
   }
 
   validateLoginFirebase (token) {
@@ -110,6 +110,6 @@ module.exports = class UserController {
       stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors })
       throw new ValidationError('Parâmetros inválidos', errors)
     }
-    stepLoginValidate.finalize({ contract: true })
+    stepLoginValidate.finalize({ isValid: true })
   }
 }
