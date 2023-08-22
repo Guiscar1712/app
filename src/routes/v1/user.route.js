@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const TrackMiddleware = require('../../middlewares/trackMiddleware')
 
-module.exports = ({ UserController, ResponseMiddleware }) => {
-  router.post('/login', TrackMiddleware.tracking, UserController.login, ResponseMiddleware.Handler)
-  router.post('/login-firebase', TrackMiddleware.tracking, UserController.loginFirebase, ResponseMiddleware.Handler)
+module.exports = ({ TrackMiddleware, AuthMiddleware, UserController, ResponseMiddleware }) => {
+  router.post('/login', TrackMiddleware.tracking('USER_LOGIN'), UserController.login, ResponseMiddleware.Handler)
+  router.post('/login-firebase', TrackMiddleware.tracking('USER_LOGIN_FIREBASE'), UserController.loginFirebase, ResponseMiddleware.Handler)
 
-  router.post('/register', TrackMiddleware.tracking, UserController.register, ResponseMiddleware.Handler)
+  router.post('/register', TrackMiddleware.tracking('USER_REGISTER'), UserController.register, ResponseMiddleware.Handler)
+  router.get('/:cpf/personal-data', TrackMiddleware.tracking('USER_DATA_CONSULT'), AuthMiddleware.isAuthenticated, UserController.getPersonalData, ResponseMiddleware.Handler)
   return router
 }

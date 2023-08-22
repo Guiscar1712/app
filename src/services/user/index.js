@@ -7,15 +7,17 @@ const { comparePassword } = require('../../utils/auth')
 const Util = require('../../utils/util')
 const { getRecoverKey } = require('../../utils/auth')
 const { DuplicateRegister } = require('../../validators/user')
+const PersonalData = require('../../dto/personalData/persona')
 
 module.exports = class UserService {
-  constructor ({ UserRepository, MembershipRepository, UserFirebaseRepository, LoggerService, FirebaseClient, SendGridClient }) {
+  constructor ({ UserRepository, MembershipRepository, UserFirebaseRepository, LoggerService, FirebaseClient, SendGridClient, IngressoClient }) {
     this.UserRepository = UserRepository
     this.MembershipRepository = MembershipRepository
     this.LoggerService = LoggerService
     this.FirebaseClient = FirebaseClient
     this.UserFirebaseRepository = UserFirebaseRepository
     this.SendGridClient = SendGridClient
+    this.IngressoClient = IngressoClient
   }
 
   login = async (email, password) => {
@@ -220,6 +222,35 @@ module.exports = class UserService {
       stepSendVerificationCode.finalize({ userId, name, email, error })
       throw error
     }
+  }
+
+  getPersonalData = async (cpf) => {
+    const step = this.LoggerService.addStep('UserServerGetPersonalData')
+    try {
+      const user = await this.findUserByCpf(cpf)
+      this.LoggerService.setIndex({ id: user.id, email: user.email })
+
+      const cpfFormat = Util.formatCpf(cpf)
+      const personalData = await this.IngressoClient.getPersonalData(cpfFormat)
+      const personalDataModel = new PersonalData(personalData)
+      step.finalize({ cpf, user, personalDataModel })
+      return personalDataModel
+    } catch (error) {
+      step.finalize({ cpf, error })
+      throw error
+    }
+  }
+
+  async findUserByCpf (cpf) {
+    const stepUser = this.LoggerService.addStep('UserServerUserFindByCpf')
+    const user = await this.UserRepository.findBy({ Cpf: cpf })
+    if (!user) {
+      const error = new ValidationError('Login falhou!', [{ code: 404, message: 'Email não cadastrado!' }])
+      stepUser.finalize({ user, error })
+      throw error
+    }
+    stepUser.finalize({ cpf, user })
+    return user
   }
 }
 

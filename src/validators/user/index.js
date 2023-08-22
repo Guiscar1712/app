@@ -13,6 +13,15 @@ module.exports = {
     return contract
   },
 
+  CpfValidate (model) {
+    const contract = new Validator()
+
+    contract.isRequired(Util.getNumbers(model.cpf), '40001', 'CPF é Obrigatório')
+    contract.isFixedLen(Util.getNumbers(model.cpf), 11, '40002', 'CPF inválido')
+
+    return contract
+  },
+
   LoginValidate (model) {
     const contract = new Validator()
 

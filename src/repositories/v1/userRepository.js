@@ -13,7 +13,7 @@ module.exports = class UserRepository {
     try {
       const row = await SimpleQuery.findBy(query, table, transaction)
       const data = format(row)
-      step.finalize(data)
+      step.finalize({ query, data, transaction })
       return data
     } catch (error) {
       step.finalize({ inputData: { query, transaction }, error })

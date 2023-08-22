@@ -1,5 +1,7 @@
+const { utc } = require('moment-timezone')
 const { ValidationError } = require('../../utils/errors')
-const { LoginValidate, ApplyValidate } = require('../../validators/user')
+const { LoginValidate, ApplyValidate, CpfValidate } = require('../../validators/user')
+const Util = require('../../utils/util')
 module.exports = class UserController {
   constructor ({ UserService, LoggerService }) {
     this.UserService = UserService
@@ -8,12 +10,7 @@ module.exports = class UserController {
 
   login = async (request, response, next) => {
     const { email, password } = request.body
-    const indexLog = {
-      email,
-      remoteAddress: request.connection.remoteAddress
-    }
-    this.LoggerService.newLog(indexLog, 'USER_LOGIN', request)
-
+    this.LoggerService.setIndex({ email })
     const stepUserControllerLogin = this.LoggerService.addStep('UserControllerLogin')
 
     try {
@@ -25,19 +22,12 @@ module.exports = class UserController {
       next(data)
     } catch (error) {
       stepUserControllerLogin.finalize(error)
-      this.LoggerService.setError(error)
       next(error)
-    } finally {
-      this.LoggerService.finalize()
     }
   }
 
   loginFirebase = async (request, response, next) => {
     const { token } = request.body
-    const indexLog = {
-      remoteAddress: request.connection.remoteAddress
-    }
-    this.LoggerService.newLog(indexLog, 'USER_LOGIN_FIREBASE', request)
     const stepUserControllerLogin = this.LoggerService.addStep('UserControllerLogin')
 
     try {
@@ -48,22 +38,13 @@ module.exports = class UserController {
       next(data)
     } catch (error) {
       stepUserControllerLogin.finalize(error)
-      this.LoggerService.setError(error)
       next(error)
-    } finally {
-      this.LoggerService.finalize()
     }
   }
 
   register = async (request, response, next) => {
     const body = request.body
-    const indexLog = {
-      email: body.email,
-      remoteAddress: request.connection.remoteAddress
-    }
-
-    this.LoggerService.newLog(indexLog, 'USER_REGISTER', request)
-
+    this.LoggerService.setIndex({ email: body.email })
     const stepUserControllerLogin = this.LoggerService.addStep('UserControllerRegister')
 
     try {
@@ -75,10 +56,25 @@ module.exports = class UserController {
       next(data)
     } catch (error) {
       stepUserControllerLogin.finalize(error)
-      this.LoggerService.setError(error)
       next(error)
-    } finally {
-      this.LoggerService.finalize()
+    }
+  }
+
+  getPersonalData = async (request, response, next) => {
+    const cpf = request.params.cpf
+    this.LoggerService.setIndex({ cpf })
+    const step = this.LoggerService.addStep('UserControllerGetPersonalData')
+
+    try {
+      this.validateGetPersonalData(request.user, cpf)
+
+      const data = await this.UserService.getPersonalData(cpf)
+      step.finalize(data)
+
+      next(data)
+    } catch (error) {
+      step.finalize(error)
+      next(error)
     }
   }
 
@@ -111,5 +107,23 @@ module.exports = class UserController {
       throw new ValidationError('Parâmetros inválidos', errors)
     }
     stepLoginValidate.finalize({ isValid: true })
+  }
+
+  validateGetPersonalData (user, cpf) {
+    const stepLoginValidate = this.LoggerService.addStep('PersonalDataValidate')
+    const contract = CpfValidate({ cpf })
+    if (!contract.isValid()) {
+      stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: contract.errors() })
+      throw new ValidationError('Parâmetros inválidos', contract.errors())
+    }
+    const cpfClean = Util.getNumbers(cpf)
+
+    if (user.cpf !== cpfClean) {
+      const error = [{ code: 4010, message: 'CPF não pertence ao usuário autenticado' }]
+      stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: [{ code: 4010, message: error }] })
+      throw new ValidationError('Parâmetros inválidos', error)
+    }
+
+    stepLoginValidate.finalize({ isValid: contract.isValid() })
   }
 }
