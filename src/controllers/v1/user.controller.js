@@ -1,6 +1,5 @@
-const { utc } = require('moment-timezone')
 const { ValidationError } = require('../../utils/errors')
-const { LoginValidate, ApplyValidate, CpfValidate } = require('../../validators/user')
+const { LoginValidate, ApplyValidate, CpfValidate, UpdatePersonalDataValidate } = require('../../validators/user')
 const Util = require('../../utils/util')
 module.exports = class UserController {
   constructor ({ UserService, LoggerService }) {
@@ -78,6 +77,24 @@ module.exports = class UserController {
     }
   }
 
+  updatePersonalData = async (request, response, next) => {
+    const body = request.body
+    this.LoggerService.setIndex({ cpf: body.cpf })
+    const step = this.LoggerService.addStep('UserControllerUpdatePersonalData')
+
+    try {
+      this.validateUpdatePersonalData(request.user, body)
+
+      const data = {} // await this.UserService.getPersonalData(cpf)
+      step.finalize(data)
+
+      next(data)
+    } catch (error) {
+      step.finalize(error)
+      next(error)
+    }
+  }
+
   validateRegister (body) {
     const stepRegisterValidate = this.LoggerService.addStep('RegisterValidate')
     const contract = ApplyValidate(body)
@@ -122,6 +139,25 @@ module.exports = class UserController {
       const error = [{ code: 4010, message: 'CPF não pertence ao usuário autenticado' }]
       stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: [{ code: 4010, message: error }] })
       throw new ValidationError('Parâmetros inválidos', error)
+    }
+
+    stepLoginValidate.finalize({ isValid: contract.isValid() })
+  }
+
+  validateUpdatePersonalData (user, model) {
+    const stepLoginValidate = this.LoggerService.addStep('PersonalDataValidate')
+    const cpfClean = Util.getNumbers(model.cpf)
+
+    if (user.cpf !== cpfClean) {
+      const error = [{ code: 4010, message: 'CPF não pertence ao usuário autenticado' }]
+      stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: [{ code: 4010, message: error }] })
+      throw new ValidationError('Parâmetros inválidos', error)
+    }
+
+    const contract = UpdatePersonalDataValidate(model)
+    if (!contract.isValid()) {
+      stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors: contract.errors() })
+      throw new ValidationError('Parâmetros inválidos', contract.errors())
     }
 
     stepLoginValidate.finalize({ isValid: contract.isValid() })

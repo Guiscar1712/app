@@ -62,6 +62,30 @@ ValidationContract.prototype.cpf = (value, code, message) => {
   }
 }
 
+ValidationContract.prototype.isTrue = (value, code, message) => {
+  if (value !== true) {
+    errors.push({ code, message })
+  }
+}
+
+ValidationContract.prototype.isDateValid = (value, code, message) => {
+  if (!value) {
+    errors.push({ code, message })
+    return
+  }
+
+  const date = new Date(value)
+  if (isNaN(date) && date.toString() === 'Invalid Date') {
+    errors.push({ code, message })
+  }
+}
+
+ValidationContract.prototype.containsInArray = (value, array, code, message) => {
+  if (!value || !array.includes(value)) {
+    errors.push({ code, message })
+  }
+}
+
 ValidationContract.prototype.errors = () => {
   return errors
 }
