@@ -3,7 +3,12 @@ const { paymentForPix, paymentStatus } = require('../../services/payment')
 const { ApplyValidate } = require('../../validators/payment')
 
 module.exports = class PaymentController {
-  static async paymentPix (request, response, next) {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
+
+  paymentPix = async (request, response, next) => {
+    const step = this.LoggerService.addStep('PaymentControllerPaymentPix')
     try {
       const originId = request.params.originId
       const contract = ApplyValidate(originId)
@@ -13,12 +18,10 @@ module.exports = class PaymentController {
 
       const data = await paymentForPix(originId, request.user.id)
 
-      if (!data || data.error) {
-        return response.status(400).json(data)
-      }
-
-      return response.status(201).json(data)
+      step.finalize(data)
+      next(data)
     } catch (error) {
+      step.finalize(error)
       next(error)
     }
   }

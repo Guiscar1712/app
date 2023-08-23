@@ -1,12 +1,17 @@
 const express = require('express')
 const router = express.Router()
 
-const PaymentController = require('../../controllers/v1/payment.controller')
+const paymentController = require('../../controllers/v1/payment.controller')
+const authMiddleware = require('../../middlewares/authMiddleware')
+const trackMiddleware = require('../../middlewares/trackMiddleware')
+const errorHandler = require('../../middlewares/errorHandler')
 
-const AuthMiddleware = require('../../middlewares/authMiddleware')
-const TrackMiddleware = require('../../middlewares/trackMiddleware')
+module.exports = ({ TrackMiddleware, AuthMiddleware, PaymentController, ResponseMiddleware }) => {
+  // new
+  router.get('/pix/:originId', TrackMiddleware.tracking('PAYMENT_PIX'), AuthMiddleware.isAuthenticated, PaymentController.paymentPix, ResponseMiddleware.Handler)
 
-router.get('/pix/:originId', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, PaymentController.paymentPix)
-router.get('/status/:originId', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, PaymentController.paymentStatus)
+  // TODO: Implement DI Logger
+  router.get('/status/:originId', trackMiddleware.tracking, authMiddleware.isAuthenticated, paymentController.paymentStatus, errorHandler)
 
-module.exports = router
+  return router
+}
