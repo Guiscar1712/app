@@ -1,6 +1,6 @@
 class EnrollmentDto {
   constructor (data) {
-    const { inscricao, matricula, dadosPessoais, processamento } = data
+    const { sistema, inscricao, matricula, dadosPessoais, processamento } = data
 
     if (processamento?.status !== 'SUCCESS') {
       this.status = 'ERROR'
@@ -32,6 +32,27 @@ class EnrollmentDto {
     this.contract = new EnrollmentContractDto(contrato)
 
     this.setClassification(classificacao)
+    this.setPaymentConfig(sistema)
+  }
+
+  setPaymentConfig (system) {
+    system = system.toUpperCase()
+
+    let isEnabled = false
+
+    if (system === 'COLABORAR' && process.env.COLABORAR_PAYMENT_PIX_ENABLED) {
+      isEnabled = process.env.COLABORAR_PAYMENT_PIX_ENABLED === 'true'
+    } else if (system === 'OLIMPO' && process.env.OLIMPO_PAYMENT_PIX_ENABLED) {
+      isEnabled = process.env.OLIMPO_PAYMENT_PIX_ENABLED === 'true'
+    } else if ((system === 'SAP' || system === 'ATHENAS') && process.env.ATHENAS_PAYMENT_PIX_ENABLED) {
+      isEnabled = process.env.ATHENAS_PAYMENT_PIX_ENABLED === 'true'
+    }
+
+    this.paymentConfig = {
+      pix: {
+        enabled: isEnabled
+      }
+    }
   }
 
   setClassification (classificacao) {
