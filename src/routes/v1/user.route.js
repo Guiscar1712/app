@@ -7,6 +7,6 @@ module.exports = ({ TrackMiddleware, AuthMiddleware, UserController, ResponseMid
 
   router.post('/register', TrackMiddleware.tracking('USER_REGISTER'), UserController.register, ResponseMiddleware.Handler)
   router.get('/:cpf/personal-data', TrackMiddleware.tracking('USER_DATA_CONSULT'), AuthMiddleware.isAuthenticated, UserController.getPersonalData, ResponseMiddleware.Handler)
-  router.patch('/:cpf/personal-data', TrackMiddleware.tracking('USER_DATA﻿﻿_UPDATE'), AuthMiddleware.isAuthenticated, UserController.updatePersonalData, ResponseMiddleware.Handler)
+  router.patch('/:cpf/personal-data', TrackMiddleware.tracking('USER_DATA_UPDATE'), AuthMiddleware.isAuthenticated, UserController.updatePersonalData, ResponseMiddleware.Handler)
   return router
 }
