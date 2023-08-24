@@ -14,10 +14,15 @@ const ingresso = {
 
 const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato/`
 
-async function main ({ contractId, body }) {
-  try {
-    const token = await getToken()
-    const res = await axios.put(
+class ContratoAceite {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
+
+  async main ({ contractId, body }) {
+    try {
+      const token = await getToken()
+      const res = await axios.put(
         `${url}/${contractId}`,
         body,
         {
@@ -26,26 +31,27 @@ async function main ({ contractId, body }) {
             Authorization: 'Bearer ' + token
           }
         }
-    ).catch(function (error) {
-      return error.response
-    })
+      ).catch(function (error) {
+        return error.response
+      })
 
-    if (res.status === 200) {
-      return res.data
+      if (res.status === 200) {
+        return res.data
+      }
+
+      throw res
+    } catch (error) {
+      if (error instanceof ClientServerError) {
+        throw error
+      }
+
+      if (error.status === 401) {
+        throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+      }
+
+      throw new ClientServerError('Something went wrong', { client: url, ...error.data })
     }
-
-    throw res
-  } catch (error) {
-    if (error instanceof ClientServerError) {
-      throw error
-    }
-
-    if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
-    }
-
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
   }
 }
 
-module.exports = main
+module.exports = ContratoAceite
