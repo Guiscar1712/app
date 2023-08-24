@@ -1,11 +1,14 @@
 const retry = require('../../utils/retry')
 const { ClientServerError } = require('../../utils/errors')
-const { contratoAceite } = require('./../../clients/ingresso/')
 const { ContractDto } = require('../../dto/enrollment')
+const ContratoAceite = require('../../clients/ingresso/contratoAceite')
+
+const _contratoAceite = new ContratoAceite()
 
 async function contractAccepted (contractId, clientIp) {
   const body = { opcao: 1, ip: clientIp }
-  const res = await retry(contratoAceite.Main, { contractId, body })
+
+  const res = await retry(_contratoAceite.main, { contractId, body })
   if (!res || !res.dadosAceite) {
     throw new ClientServerError('Something went wrong', [{ contractId, body }])
   }
