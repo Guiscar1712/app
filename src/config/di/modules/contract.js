@@ -1,9 +1,9 @@
 const { asClass } = require('awilix')
 
 const ContractController = require('../../../controllers/v1/contract.controller')
-const ContractService = require('../../../services/enrollments/contractAccepted.js')
+const ContractAcceptedService = require('../../../services/enrollments/contractAccepted')
 
 module.exports = {
   ContractController: asClass(ContractController).scoped(),
-  ContractService: asClass(ContractService).scoped()
+  ContractService: asClass(ContractAcceptedService).scoped()
 }
