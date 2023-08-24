@@ -5,10 +5,10 @@ const authMiddleware = require('../../middlewares/authMiddleware')
 const trackMiddleware = require('../../middlewares/trackMiddleware')
 const errorHandler = require('../../middlewares/errorHandler')
 
-module.exports = ({ ContractController, AuthMiddleware, TrackMiddleware }) => {
+module.exports = ({ ContractController, AuthMiddleware, TrackMiddleware, ResponseMiddleware }) => {
   router.get('/', trackMiddleware.tracking, authMiddleware.isAuthenticated, contractController.getContracts, errorHandler)
   router.get('/:contractId', trackMiddleware.tracking, authMiddleware.isAuthenticated, contractController.getByContractId, errorHandler)
-  router.put('/:contractId', TrackMiddleware.tracking('CONTRACT_ACCEPT'), AuthMiddleware.isAuthenticated, ContractController.accepted)
+  router.put('/:contractId', TrackMiddleware.tracking('CONTRACT_ACCEPT'), AuthMiddleware.isAuthenticated, ContractController.accepted, ResponseMiddleware.Handler)
 
   return router
 }

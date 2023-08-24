@@ -6,7 +6,7 @@ module.exports = class NotificationController {
     this.LoggerService = LoggerService
   }
 
-  async getContracts (request, response, next) {
+  static async getContracts (request, response, next) {
     try {
       if (!request.query || !request.query.idOrigin) {
         throw new ValidationError('Parâmetros inválidos', [{}])
@@ -18,7 +18,7 @@ module.exports = class NotificationController {
     }
   }
 
-  async getByContractId (request, response, next) {
+  static async getByContractId (request, response, next) {
     try {
       if (!request.params.contractId) {
         throw new ValidationError('Parâmetros inválidos', [{}])
@@ -30,7 +30,7 @@ module.exports = class NotificationController {
     }
   }
 
-  async accepted (request, response, next) {
+  accepted = async (request, response, next) => {
     const stepAccepted = this.LoggerService.addStep('Accepted')
     try {
       if (!request.params.contractId) {

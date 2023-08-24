@@ -5,7 +5,7 @@ const { ContractDto } = require('../../dto/enrollment')
 
 async function contractAccepted (contractId, clientIp) {
   const body = { opcao: 1, ip: clientIp }
-  const res = await retry(contratoAceite, { contractId, body })
+  const res = await retry(contratoAceite.Main, { contractId, body })
   if (!res || !res.dadosAceite) {
     throw new ClientServerError('Something went wrong', [{ contractId, body }])
   }
