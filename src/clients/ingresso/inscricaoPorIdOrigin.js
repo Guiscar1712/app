@@ -27,7 +27,7 @@ async function main (idOrigin) {
           }
         }
     ).catch(function (error) {
-      return error.response
+      throw new ClientServerError(error.message, { client: url, ...error.data })
     })
 
     if (res.status === 200) {

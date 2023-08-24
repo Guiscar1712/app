@@ -6,19 +6,16 @@ const paymentStatus = require('./paymentStatus')
 const retry = require('../../utils/retry')
 const { ClientServerError } = require('../../utils/errors')
 
-async function paymentForPix (originId, userId, LoggerService) {
-  const step = LoggerService.addStep('PaymentServicePaymentForPix')
-  try {
+module.exports = class PaymentForPix {
+  get = async (originId, userId, LoggerService) => {
     const status = await paymentStatus(originId)
     if (status?.status === 'PAID') {
-      step.finalize(status)
       return null
     }
 
     const enrollment = await retry(ingressoClient.inscricaoPorIdOrigin, originId)
     const businessKey = enrollment.inscricao.businessKey
     if (!businessKey) {
-      step.finalize(enrollment)
       return null
     }
 
@@ -36,14 +33,7 @@ async function paymentForPix (originId, userId, LoggerService) {
 
     if (!data.error) {
       await paymentPixSave(userId, originId, businessKey, system, payDto)
-      const res = new PaymentPixResponse(data.qrCode, data.qrCodeUrl, payDto.preDefinedOptions.pix.expireAtDateTime, payDto.totalAmount)
-      step.finalize(res)
-      return res
+      return new PaymentPixResponse(data.qrCode, data.qrCodeUrl, payDto.preDefinedOptions.pix.expireAtDateTime, payDto.totalAmount)
     }
-  } catch (error) {
-    step.finalize(error)
-    throw error
   }
 }
-
-module.exports = paymentForPix

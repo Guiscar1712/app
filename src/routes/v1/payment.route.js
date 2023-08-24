@@ -11,7 +11,7 @@ module.exports = ({ TrackMiddleware, AuthMiddleware, PaymentController, Response
   router.get('/pix/:originId', TrackMiddleware.tracking('PAYMENT_PIX'), AuthMiddleware.isAuthenticated, PaymentController.paymentPix, ResponseMiddleware.Handler)
 
   // TODO: Implement DI Logger
-  router.get('/status/:originId', trackMiddleware.tracking, authMiddleware.isAuthenticated, paymentController.paymentStatus, errorHandler)
+  // router.get('/status/:originId', trackMiddleware.tracking, authMiddleware.isAuthenticated, paymentController.paymentStatus, errorHandler)
 
   return router
 }

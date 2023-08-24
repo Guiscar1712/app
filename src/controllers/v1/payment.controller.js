@@ -1,10 +1,12 @@
 const { ValidationError, NotFoundError } = require('../../utils/errors')
-const { paymentForPix, paymentStatus } = require('../../services/payment')
+// const { paymentForPix, paymentStatus } = require('../../services/payment')
+const PaymentServices = require('../../services/payment')
 const { ApplyValidate } = require('../../validators/payment')
 
 module.exports = class PaymentController {
-  constructor ({ LoggerService }) {
+  constructor ({ PaymentService, LoggerService }) {
     this.LoggerService = LoggerService
+    this.PaymentService = PaymentService
   }
 
   paymentPix = async (request, response, next) => {
@@ -16,7 +18,7 @@ module.exports = class PaymentController {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
 
-      const data = await paymentForPix(originId, request.user.id)
+      const data = await this.PaymentService.paymentForPix(originId, request.user.id)
 
       step.finalize(data)
       next(data)
@@ -34,7 +36,8 @@ module.exports = class PaymentController {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
 
-      const data = await paymentStatus(originId)
+      const paymentService = new PaymentServices()
+      const data = await paymentService.paymentStatus(originId)
 
       if (!data) {
         throw new NotFoundError('Registro não encontrato', [{ originId }])
