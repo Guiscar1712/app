@@ -7,39 +7,51 @@ const cognaPayConfig = { ...config.kroton.cognapay }
 
 const url = `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=`
 
-async function main (orderReference, system) {
-  try {
-    const token = await getToken(system)
+module.exports = class PaymentPixStatus {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
 
-    const res = await axios.get(
+  get = async (orderReference, system) => {
+    const step = this.LoggerService.addStep('PaymentPixStatusGet')
+    try {
+      const token = await getToken(system)
+
+      const res = await axios.get(
         `${url}${orderReference}`,
         {
           headers: {
             Authorization: 'Bearer ' + token
           }
         }
-    ).catch(function (error) {
-      return error.response
-    })
+      ).catch(function (error) {
+        return error.response
+      })
 
-    if (res.status === 200) {
-      return res.data
-    } else if (res.status === 404) {
-      return null
-    } else {
-      throw res
-    }
-  } catch (error) {
-    if (error instanceof ClientServerError) {
-      throw error
-    }
+      if (res.status === 200) {
+        step.finalize({ orderReference, system, data: res.data })
+        return res.data
+      } else if (res.status === 404) {
+        step.finalize({ orderReference, system, data: res })
+        return null
+      } else {
+        throw res
+      }
+    } catch (error) {
+      if (error instanceof ClientServerError) {
+        step.finalize({ orderReference, system, error })
+        throw error
+      }
 
-    if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
-    }
+      if (error.status === 401) {
+        const errorData = new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
+        step.finalize({ orderReference, system, errorData })
+        throw errorData
+      }
 
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
+      const errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
+      step.finalize({ orderReference, system, errorData })
+      throw errorData
+    }
   }
 }
-
-module.exports = main

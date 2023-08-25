@@ -9,25 +9,38 @@ const cognaPayConfig = { ...config.kroton.cognapay }
 
 const url = `${cognaPayConfig.url}/api/authentication/GenerateToken`
 
-async function main (system) {
-  try {
-    const tokenCognapay = getTokenEnv(system)
+module.exports = class CognaPayClient {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
 
-    if (tokenCognapay === null) {
-      return await getToken(system)
+  getToken = async (system) => {
+    const step = this.LoggerService.addStep('CognaPayClientGetToken')
+    try {
+      const tokenCognapay = getTokenEnv(system)
+
+      if (tokenCognapay === null) {
+        return await getToken(system)
+      }
+
+      step.finalize({ system, token: tokenCognapay })
+      return tokenCognapay
+    } catch (error) {
+      if (error instanceof ClientServerError) {
+        step.finalize({ system, error })
+        throw error
+      }
+
+      if (error.status === 401) {
+        const errorData = new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
+        step.finalize({ system, errorData })
+        throw errorData
+      }
+
+      const errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
+      step.finalize({ system, errorData })
+      throw errorData
     }
-
-    return tokenCognapay
-  } catch (error) {
-    if (error instanceof ClientServerError) {
-      throw error
-    }
-
-    if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
-    }
-
-    throw new ClientServerError('Something went wrong', { client: url, errors: error.data })
   }
 }
 
@@ -104,5 +117,3 @@ function getParams (system) {
     return { ...cognaPayConfig.sap }
   }
 }
-
-module.exports = main

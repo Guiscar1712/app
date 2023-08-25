@@ -7,37 +7,48 @@ const cognaPayConfig = { ...config.kroton.cognapay }
 
 const url = `${cognaPayConfig.url}/api/v2.5/Checkout`
 
-async function main ({ body, system }) {
-  try {
-    const token = await getToken(system)
+module.exports = class PaymentPix {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
 
-    const res = await axios.post(
+  get = async (body, system) => {
+    const step = this.LoggerService.addStep('PaymentPixGet')
+    try {
+      const token = await getToken(system)
+
+      const res = await axios.post(
         `${url}`, body,
         {
           headers: {
             Authorization: 'Bearer ' + token
           }
         }
-    ).catch(function (error) {
-      return error.response
-    })
+      ).catch(function (error) {
+        return error.response
+      })
 
-    if (res.status === 201) {
-      return res.data
-    } else {
-      throw res
-    }
-  } catch (error) {
-    if (error instanceof ClientServerError) {
-      throw error
-    }
+      if (res.status === 201) {
+        step.finalize({ body, system, data: res.data })
+        return res.data
+      } else {
+        throw res
+      }
+    } catch (error) {
+      if (error instanceof ClientServerError) {
+        step.finalize({ body, system, error })
+        throw error
+      }
 
-    if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
-    }
+      if (error.status === 401) {
+        const errorData = new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
+        step.finalize({ body, system, errorData })
+        throw errorData
+      }
 
-    throw new ClientServerError('Something went wrong', { client: url, errors: error.data })
+      const errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
+      step.finalize({ body, system, errorData })
+      throw errorData
+    }
   }
 }
-
-module.exports = main
