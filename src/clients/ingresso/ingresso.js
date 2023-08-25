@@ -15,8 +15,9 @@ const ingresso = {
 const urlBase = ingresso.base_uri
 
 module.exports = class Ingresso {
-  constructor ({ LoggerService }) {
+  constructor ({ LoggerService, IngressoGetDadosPagamento }) {
     this.LoggerService = LoggerService
+    this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
   }
 
   getPersonalData = async (cpf) => {
@@ -88,5 +89,9 @@ module.exports = class Ingresso {
       step.finalize({ body, url, errorData })
       throw errorData
     }
+  }
+
+  getDadosPagamento = async (businessKey) => {
+    return await this.IngressoGetDadosPagamento.get(businessKey)
   }
 }

@@ -3,7 +3,6 @@ const inscricoesPorCpf = require('./inscricoesPorCpf')
 const inscricaoPorIdOrigin = require('./inscricaoPorIdOrigin')
 const consultaProvaOnline = require('./consultaProvaOnline')
 const consultaProvaOnlinePorBusinesskey = require('./consultaProvaOnlinePorBusinesskey')
-const consultaDadosPagamento = require('./consultaDadosPagamento')
 const contratoAceite = require('./contratoAceite')
 const contratoPorId = require('./contratoPorContratoId')
 const contratosPorMatricula = require('./contratosPorMatricula')
@@ -15,7 +14,6 @@ module.exports = {
   inscricaoPorIdOrigin,
   consultaProvaOnline,
   consultaProvaOnlinePorBusinesskey,
-  consultaDadosPagamento,
   contratoAceite,
   contratoPorId,
   contratosPorMatricula,

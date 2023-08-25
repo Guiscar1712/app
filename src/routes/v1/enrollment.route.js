@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
-const EnrollmentsController = require('../../controllers/v1/enrollments.controller')
-const AuthMiddleware = require('../../middlewares/authMiddleware')
-const TrackMiddleware = require('../../middlewares/trackMiddleware')
+const enrollmentsController = require('../../controllers/v1/enrollments.controller')
+const authMiddleware = require('../../middlewares/authMiddleware')
+const trackMiddleware = require('../../middlewares/trackMiddleware')
+const errorHandler = require('../../middlewares/errorHandler')
 
-router.get('/:document', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, EnrollmentsController.get)
-router.get('/:idOrigin/details', TrackMiddleware.tracking, AuthMiddleware.isAuthenticated, EnrollmentsController.getDetails)
+module.exports = ({ AuthMiddleware, TrackMiddleware, EnrollmentsController, ResponseMiddleware }) => {
+  router.get('/:document', trackMiddleware.tracking, authMiddleware.isAuthenticated, enrollmentsController.get, errorHandler)
+  router.get('/:idOrigin/details', TrackMiddleware.tracking('ENROLLMENTS_DETAILS'), AuthMiddleware.isAuthenticated, EnrollmentsController.getDetails, ResponseMiddleware.Handler)
 
-module.exports = router
+  return router
+}

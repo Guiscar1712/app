@@ -2,26 +2,40 @@ const { inscricaoPorIdOrigin, consultaProvaOnline, consultaProvaOnlinePorBusines
 const retry = require('../../utils/retry')
 const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 const { ClientServerError } = require('../../utils/errors')
-const { paymentStatus } = require('./../payment')
 
-async function enrollmentDetails (idOrigin) {
-  const data = await retry(inscricaoPorIdOrigin, idOrigin)
-
-  const enrollmentsDto = new EnrollmentsDto(data)
-
-  if (!enrollmentsDto || !enrollmentsDto.businessKey || enrollmentsDto.status === 'ERROR') {
-    throw new ClientServerError('Unexpected Content', { method: 'EnrollmentsDto', data })
+module.exports = class EnrollmentDetails {
+  constructor ({ LoggerService, PaymentService }) {
+    this.LoggerService = LoggerService
+    this.PaymentService = PaymentService
   }
 
-  if (!enrollmentsDto.enem.active) {
-    await getAdmissionsTest(enrollmentsDto, data)
+  get = async (idOrigin) => {
+    const data = await retry(inscricaoPorIdOrigin, idOrigin)
+
+    const enrollmentsDto = new EnrollmentsDto(data)
+
+    if (!enrollmentsDto || !enrollmentsDto.businessKey || enrollmentsDto.status === 'ERROR') {
+      throw new ClientServerError('Unexpected Content', { method: 'EnrollmentsDto', data })
+    }
+
+    if (!enrollmentsDto.enem.active) {
+      await getAdmissionsTest(enrollmentsDto, data)
+    }
+
+    await this.getPaymentStatus(idOrigin, enrollmentsDto)
+
+    return enrollmentsDto
   }
 
-  await getPaymentStatus(idOrigin, enrollmentsDto)
+  async getPaymentStatus (idOrigin, enrollmentsDto) {
+    const status = await this.PaymentService.paymentStatus(idOrigin)
 
-  return enrollmentsDto
+    if (status) {
+      const paymentStatus = status.status === 'PAID' ?? false
+      enrollmentsDto.studentEnrollment.payment = paymentStatus
+    }
+  }
 }
-
 async function getAdmissionsTest (enrollmentsDto, data) {
   // Verificar implementadação - no ambiente de homologção os dados do exame só ficaram disponives após executar essa chamada.
   const res = await retry(consultaProvaOnlinePorBusinesskey, enrollmentsDto.businessKey)
@@ -39,13 +53,11 @@ async function getAdmissionsTest (enrollmentsDto, data) {
   }
 }
 
-async function getPaymentStatus (idOrigin, enrollmentsDto) {
-  const status = await paymentStatus(idOrigin)
+// async function getPaymentStatus (idOrigin, enrollmentsDto, PaymentService) {
+//   const status = await PaymentService.paymentStatus(idOrigin)
 
-  if (status) {
-    const paymentStatus = status.status === 'PAID' ?? false
-    enrollmentsDto.studentEnrollment.payment = paymentStatus
-  }
-}
-
-module.exports = enrollmentDetails
+//   if (status) {
+//     const paymentStatus = status.status === 'PAID' ?? false
+//     enrollmentsDto.studentEnrollment.payment = paymentStatus
+//   }
+// }

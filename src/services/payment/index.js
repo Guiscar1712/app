@@ -1,26 +1,21 @@
-const PaymentForPix = require('./paymentForPix')
-const paymentStatus = require('./paymentStatus')
-const paymentNotification = require('./paymentNotification')
-const paymentPixSave = require('./paymentPixSave')
-
 module.exports = class PaymentService {
-  constructor ({ LoggerService }) {
+  constructor ({ LoggerService, PaymentPixService, PaymentPixSaveService, PaymentPixStatusService, PaymentPixUpdateService }) {
     this.LoggerService = LoggerService
+    this.PaymentPixService = PaymentPixService
+    this.PaymentPixSaveService = PaymentPixSaveService
+    this.PaymentPixStatusService = PaymentPixStatusService
+    this.PaymentPixUpdateService = PaymentPixUpdateService
   }
 
   paymentForPix = async (originId, userId) => {
-    return await PaymentForPix(originId, userId, this.LoggerService)
+    return await this.PaymentPixService.get(originId, userId)
   }
 
   paymentStatus = async (originId) => {
-    return await paymentStatus(originId)
-  }
-
-  paymentNotification = async (payment) => {
-    return await paymentNotification(payment)
+    return await this.PaymentPixStatusService.get(originId)
   }
 
   paymentPixSave = async (userId, originId, businessKey, system, payDto) => {
-    return await paymentPixSave(userId, originId, businessKey, system, payDto)
+    return await this.PaymentPixSaveService.save(userId, originId, businessKey, system, payDto)
   }
 }
