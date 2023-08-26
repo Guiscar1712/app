@@ -1,4 +1,6 @@
-const { SimpleQuery, UpdateInIds } = require('../../database')
+const SimpleQuery = require('../../database/queries/v1/simpleQuery')
+const UpdateInIds = require('../../database/queries/v1/updateInIds')
+
 const table = 'Notification'
 
 module.exports = class UserRepository {
