@@ -13,7 +13,7 @@ module.exports = class RegisterApp {
 
     if (hasRegistration) {
       const UpdatedAt = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
-      return await registerAppRepository.update(hasRegistration, UserId, UpdatedAt)
+      return await registerAppRepository.update(hasRegistration, UserId, { UpdatedAt })
     }
 
     return await registerAppRepository.insert({ token, UserId })
