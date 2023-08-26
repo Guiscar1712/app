@@ -1,7 +1,12 @@
-const { contractsList, contractByContractId, contractAccepted } = require('../../services/enrollments')
-const { ValidationError, ClientServerError } = require('../../utils/errors')
+const { contractsList, contractByContractId } = require('../../services/enrollments')
+const { ValidationError } = require('../../utils/errors')
 
 module.exports = class NotificationController {
+  constructor ({ ContractService, LoggerService }) {
+    this.ContractService = ContractService
+    this.LoggerService = LoggerService
+  }
+
   static async getContracts (request, response, next) {
     try {
       if (!request.query || !request.query.idOrigin) {
@@ -26,7 +31,9 @@ module.exports = class NotificationController {
     }
   }
 
-  static async accepted (request, response, next) {
+  accepted = async (request, response, next) => {
+    const stepAccepted = this.LoggerService.addStep('Accepted')
+
     try {
       if (!request.params.contractId) {
         throw new ValidationError('Parâmetros inválidos', [{}])
@@ -34,9 +41,11 @@ module.exports = class NotificationController {
 
       const { ipAddress } = request.body
 
-      const data = await contractAccepted(request.params.contractId, ipAddress)
-      return response.status(200).json(data)
+      const data = await this.ContractService.contractAccepted(request.params.contractId, ipAddress)
+      stepAccepted.finalize({ contratoAceito: data.response })
+      next(data)
     } catch (error) {
+      stepAccepted.finalize({ errorAccepted: error })
       next(error)
     }
   }

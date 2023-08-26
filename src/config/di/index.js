@@ -3,6 +3,7 @@ const { createContainer } = require('awilix')
 /* modules */
 const logger = require('./modules/logger')
 const user = require('./modules/user')
+const contract = require('./modules/contract')
 const enrollments = require('./modules/enrollments')
 const payment = require('./modules/payment')
 const middlewares = require('./modules/middlewares')
@@ -20,6 +21,7 @@ container.register(enrollments)
 container.register(payment)
 
 container.register(clients)
+container.register(contract)
 container.register(cognaPayClient)
 container.register(ingressoClient)
 
