@@ -12,7 +12,7 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
 }
 
-const url = `${ingresso.base_uri}/financeiro/v4/pagamentos/`
+const urlBase = `${ingresso.base_uri}/financeiro/v4/pagamentos/`
 
 module.exports = class DadosPagamento {
   constructor ({ LoggerService }) {
@@ -21,11 +21,12 @@ module.exports = class DadosPagamento {
 
   get = async (businessKey) => {
     const step = this.LoggerService.addStep('IngressoClientGetDadosPagamento')
+    const url = `${urlBase}/${businessKey}`
     try {
       const token = await getToken()
 
       const res = await axios.get(
-        `${url}/${businessKey}`,
+        url,
         {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
@@ -37,7 +38,7 @@ module.exports = class DadosPagamento {
       })
 
       if (res.status === 200) {
-        step.finalize(res)
+        step.finalize({ businessKey, url, data: res.data })
         return res.data
       }
 

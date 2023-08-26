@@ -6,15 +6,15 @@ module.exports = class CognaPayClient {
     this.CognaPayPaymentPixStatus = CognaPayPaymentPixStatus
   }
 
-  getToken = async (system) => {
+  getToken = async ({ system }) => {
     return await this.CognaPayGetToken.get(system)
   }
 
-  payForPix = async (body, system) => {
+  payForPix = async ({ body, system }) => {
     return await this.CognaPayPaymentPix.get(body, system)
   }
 
-  getPaymentStatus = async (orderReference, system) => {
+  getPaymentStatus = async ({ orderReference, system }) => {
     return await this.CognaPayPaymentPixStatus.get(orderReference, system)
   }
 }

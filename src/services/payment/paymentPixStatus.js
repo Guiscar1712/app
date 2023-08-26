@@ -51,7 +51,7 @@ module.exports = class PaymentStatus {
 }
 
 async function getStatus (orderReference, system, PaymentPixUpdateService, CognaPayClient) {
-  const paymentStatus = await CognaPayClient.getPaymentStatus(orderReference, system)
+  const paymentStatus = await CognaPayClient.getPaymentStatus({ orderReference, system })
   if (paymentStatus && paymentStatus.length >= 1) {
     const status = paymentStatus[paymentStatus.length - 1].status.toUpperCase()
     await PaymentPixUpdateService.update(orderReference, status)

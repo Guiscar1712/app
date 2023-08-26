@@ -52,12 +52,3 @@ async function getAdmissionsTest (enrollmentsDto, data) {
     throw new ClientServerError('Unexpected Content', { method: 'AdmissionsTest', errors: [data, enrollmentsDto, res, exam] })
   }
 }
-
-// async function getPaymentStatus (idOrigin, enrollmentsDto, PaymentService) {
-//   const status = await PaymentService.paymentStatus(idOrigin)
-
-//   if (status) {
-//     const paymentStatus = status.status === 'PAID' ?? false
-//     enrollmentsDto.studentEnrollment.payment = paymentStatus
-//   }
-// }

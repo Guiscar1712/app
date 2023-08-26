@@ -1,21 +1,20 @@
 const axios = require('axios').create({ timeout: 6000000 })
 const config = require('../../utils/config')
 const { ClientServerError, ClientServerAuthError } = require('../../utils/errors')
-const getToken = require('./token')
-
 const cognaPayConfig = { ...config.kroton.cognapay }
 
 const url = `${cognaPayConfig.url}/api/v2.5/Checkout`
 
 module.exports = class PaymentPix {
-  constructor ({ LoggerService }) {
+  constructor ({ LoggerService, CognaPayGetToken }) {
     this.LoggerService = LoggerService
+    this.CognaPayGetToken = CognaPayGetToken
   }
 
   get = async (body, system) => {
-    const step = this.LoggerService.addStep('PaymentPixGet')
+    const step = this.LoggerService.addStep('CognaPayClientGetPix')
     try {
-      const token = await getToken(system)
+      const token = await this.CognaPayGetToken.get(system)
 
       const res = await axios.post(
         `${url}`, body,
@@ -29,14 +28,14 @@ module.exports = class PaymentPix {
       })
 
       if (res.status === 201) {
-        step.finalize({ body, system, data: res.data })
+        step.finalize({ url, body, system, data: res.data })
         return res.data
       } else {
         throw res
       }
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize({ body, system, error })
+        step.finalize({ url, body, system, error })
         throw error
       }
 

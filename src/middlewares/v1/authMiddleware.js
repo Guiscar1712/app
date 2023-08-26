@@ -12,7 +12,7 @@ module.exports = class AuthMiddleware {
       getUserAuthenticated(req)
         .then(decoded => {
           req.user = decoded
-          this.LoggerService.setIndex({ UserId: decoded.id, email: decoded.email })
+          this.LoggerService.setIndex({ userId: decoded.id, email: decoded.email })
           step.finalize({ isAuthenticated: true, decoded })
           next()
         })

@@ -1,24 +1,25 @@
 const axios = require('axios').create({ timeout: 6000000 })
 const config = require('../../utils/config')
 const { ClientServerError, ClientServerAuthError } = require('../../utils/errors')
-const getToken = require('./token')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
-const url = `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=`
+const urlBase = `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=`
 
 module.exports = class PaymentPixStatus {
-  constructor ({ LoggerService }) {
+  constructor ({ LoggerService, CognaPayGetToken }) {
     this.LoggerService = LoggerService
+    this.CognaPayGetToken = CognaPayGetToken
   }
 
   get = async (orderReference, system) => {
-    const step = this.LoggerService.addStep('PaymentPixStatusGet')
+    const step = this.LoggerService.addStep('CognaPayClientGetStatus')
+    const url = `${urlBase}${orderReference}`
     try {
-      const token = await getToken(system)
+      const token = await this.CognaPayGetToken.get(system)
 
       const res = await axios.get(
-        `${url}${orderReference}`,
+        url,
         {
           headers: {
             Authorization: 'Bearer ' + token
@@ -29,17 +30,17 @@ module.exports = class PaymentPixStatus {
       })
 
       if (res.status === 200) {
-        step.finalize({ orderReference, system, data: res.data })
+        step.finalize({ url, orderReference, system, data: res.data })
         return res.data
       } else if (res.status === 404) {
-        step.finalize({ orderReference, system, data: res })
+        step.finalize({ url, orderReference, system, data: res })
         return null
       } else {
         throw res
       }
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize({ orderReference, system, error })
+        step.finalize({ url, orderReference, system, error })
         throw error
       }
 

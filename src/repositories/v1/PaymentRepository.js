@@ -20,7 +20,7 @@ module.exports = class PaymentRepository {
   }
 
   deleteBy = async (query, transaction) => {
-    const step = this.LoggerService.addStep('PaymentRepositoryFindBy')
+    const step = this.LoggerService.addStep('PaymentRepositoryDeleteBy')
     try {
       return await SimpleQuery.deleteBy(query, table, transaction)
     } catch (error) {
@@ -30,7 +30,7 @@ module.exports = class PaymentRepository {
   }
 
   filterBy = async (query, transaction) => {
-    const step = this.LoggerService.addStep('PaymentRepositoryFindBy')
+    const step = this.LoggerService.addStep('PaymentRepositoryFilterBy')
     try {
       const rows = await SimpleQuery.filterBy(query, table, transaction)
       const items = []
@@ -45,7 +45,7 @@ module.exports = class PaymentRepository {
   }
 
   insert = async (entity, transaction) => {
-    const step = this.LoggerService.addStep('PaymentRepositoryFindBy')
+    const step = this.LoggerService.addStep('PaymentRepositoryInsertBy')
     try {
       const row = await SimpleQuery.insert(entity, table, transaction)
       const data = format(row)
@@ -58,7 +58,7 @@ module.exports = class PaymentRepository {
   }
 
   update = async (id, entity, transaction) => {
-    const step = this.LoggerService.addStep('PaymentRepositoryFindBy')
+    const step = this.LoggerService.addStep('PaymentRepositoryUpdateBy')
     try {
       return await SimpleQuery.update({ id }, entity, table, transaction)
     } catch (error) {
