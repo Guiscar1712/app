@@ -8,7 +8,7 @@ module.exports = class PaymentPixUpdate {
   update = async (orderReference, paymentStatus) => {
     const step = this.LoggerService.addStep('PaymentServicePixUpdate')
     try {
-      const paymentData = await this.paymentRepository.findBy({ orderReference })
+      const paymentData = await this.PaymentRepository.findBy({ orderReference })
       if (paymentData) {
         const updatedAt = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
         const updateData = {
@@ -16,7 +16,7 @@ module.exports = class PaymentPixUpdate {
           updatedAt
         }
 
-        const data = await this.paymentRepository.update(paymentData.id, updateData)
+        const data = await this.PaymentRepository.update(paymentData.id, updateData)
         step.finalize({ orderReference, paymentStatus, paymentData, data })
         return data
       }
