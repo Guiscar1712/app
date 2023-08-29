@@ -1,6 +1,8 @@
 const { contratosPorMatricula, inscricaoPorIdOrigin, contratosPorBusinessKey } = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
+const BaseError = require('../../utils/errors/BaseError')
+const { ServerError } = require('../../utils/errors')
 
 class ContractsService {
   constructor ({ LoggerService }) {
@@ -17,40 +19,52 @@ class ContractsService {
       throw new Error('Error ao processar ao consultar inscricão')
     }
 
-    let data
-
-    if (enrollment.sistema === 'COLABORAR') {
-      const enrollmentId = enrollmentsDto.studentEnrollment.enrollmentId
-      if (!enrollmentId) {
-        stepContractList.finalize({ COLABORAR: enrollmentId })
-        return []
-      }
-      data = await retry(contratosPorMatricula, enrollmentId)
-    } else if (enrollment.sistema === 'ATHENAS') {
-      const businessKey = enrollmentsDto.businessKey
-      if (!businessKey) {
-        stepContractList.finalize({ ATHENAS: businessKey })
-        return []
-      }
-      data = await retry(contratosPorBusinessKey, businessKey)
+    const queryFetch = {
+      system: enrollment.sistema,
+      enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
+      businessKey: enrollmentsDto.businessKey
     }
 
-    if (!data || data.length <= 0) {
-      stepContractList.finalize({ data: 'Lista vazia' })
-      return []
-    }
+    return await this.fetchContracts(queryFetch)
+  }
 
-    const contracts = []
-    data.forEach(element => {
-      const contract = new ContractDto(element)
-      if (contract.status === 'ERROR') {
-        return
+  async fetchContracts ({ system, enrollmentId, businessKey }) {
+    const step = this.LoggerService.addStep('ContractListServiceFetchContracts')
+
+    try {
+      let data
+
+      if (system === 'COLABORAR' && !enrollmentId) {
+        data = await retry(contratosPorMatricula, enrollmentId)
+      } else if (system === 'ATHENAS' && !businessKey) {
+        data = await retry(contratosPorBusinessKey, businessKey)
       }
-      contracts.push(contract)
-    })
 
-    stepContractList.finalize({ data })
-    return contracts
+      if (!data || data.length <= 0) {
+        step.finalize({ system, enrollmentId, businessKey, data: [] })
+        return []
+      }
+
+      const contracts = []
+      data.forEach(element => {
+        const contract = new ContractDto(element)
+        if (contract.status === 'ERROR') {
+          return
+        }
+        contracts.push(contract)
+      })
+
+      step.finalize({ system, enrollmentId, businessKey, data })
+      return contracts
+    } catch (error) {
+      if (error instanceof BaseError) {
+        step.finalize({ system, enrollmentId, businessKey, error })
+        throw error
+      }
+      const errorData = new ServerError('Error consulting contracts.', error)
+      step.finalize({ system, enrollmentId, businessKey, error: errorData })
+      throw errorData
+    }
   }
 }
 

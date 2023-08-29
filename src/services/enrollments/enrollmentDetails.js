@@ -4,9 +4,10 @@ const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 const { ClientServerError } = require('../../utils/errors')
 
 module.exports = class EnrollmentDetails {
-  constructor ({ LoggerService, PaymentService }) {
+  constructor ({ LoggerService, PaymentService, ContractListService }) {
     this.LoggerService = LoggerService
     this.PaymentService = PaymentService
+    this.ContractListService = ContractListService
   }
 
   get = async (idOrigin) => {
@@ -23,6 +24,17 @@ module.exports = class EnrollmentDetails {
     }
 
     await this.getPaymentStatus(idOrigin, enrollmentsDto)
+
+    if (enrollmentsDto.contract.available) {
+      const queryFetch = {
+        system: data.sistema,
+        enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
+        businessKey: enrollmentsDto.businessKey
+      }
+
+      const contracts = await this.ContractListService.fetchContracts(queryFetch)
+      enrollmentsDto.contract.available = contracts.length > 1
+    }
 
     return enrollmentsDto
   }
