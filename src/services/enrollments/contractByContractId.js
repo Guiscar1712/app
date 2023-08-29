@@ -2,18 +2,32 @@ const retry = require('../../utils/retry')
 const { ClientServerError } = require('../../utils/errors')
 const { contratoPorId } = require('./../../clients/ingresso/')
 
-async function enrollmentDetails (contractId) {
-  const res = await retry(contratoPorId, contractId)
-
-  if (!res || !res.arquivo) {
-    throw new ClientServerError('Não foi possivel obter o contrato', [{ contractId }])
+module.exports = class EnrollmentDetailsService {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
   }
 
-  const data = {
-    contract: res.arquivo
-  }
+  async enrollmentDetails (contractId) {
+    const stepEnrollmentDetails = this.LoggerService.addStep('EnrollmentDetailsServiceEnrollmentDetails')
 
-  return data
+    try {
+      const res = await retry(contratoPorId, contractId)
+
+      if (!res || !res.arquivo) {
+        const error = new ClientServerError('Não foi possível obter o contrato', [{ contractId }])
+        stepEnrollmentDetails.finalize({ contractId, error })
+        throw error
+      }
+
+      const data = {
+        contract: res.arquivo
+      }
+
+      stepEnrollmentDetails.finalize({ contractId, data })
+      return data
+    } catch (error) {
+      stepEnrollmentDetails.finalize({ contractId, error })
+      throw error
+    }
+  }
 }
-
-module.exports = enrollmentDetails
