@@ -2,7 +2,7 @@ const { contratosPorMatricula, inscricaoPorIdOrigin, contratosPorBusinessKey } =
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
 
-async function contracts (idOrigin) {
+async function contractsList (idOrigin) {
   const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
   const enrollmentsDto = new EnrollmentsDto(enrollment)
 
@@ -10,16 +10,24 @@ async function contracts (idOrigin) {
     throw new Error('Error ao processar ao consultar inscricão')
   }
 
+  const queryFetch = {
+    system: enrollment.sistema,
+    enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
+    businessKey: enrollmentsDto.businessKey
+  }
+
+  return fetchContracts(queryFetch)
+}
+
+async function fetchContracts ({ system, enrollmentId, businessKey }) {
   let data
 
-  if (enrollment.sistema === 'COLABORAR') {
-    const enrollmentId = enrollmentsDto.studentEnrollment.enrollmentId
+  if (system === 'COLABORAR') {
     if (!enrollmentId) {
       return []
     }
     data = await retry(contratosPorMatricula, enrollmentId)
-  } else if (enrollment.sistema === 'ATHENAS') {
-    const businessKey = enrollmentsDto.businessKey
+  } else if (system === 'ATHENAS') {
     if (!businessKey) {
       return []
     }
@@ -42,4 +50,4 @@ async function contracts (idOrigin) {
   return contracts
 }
 
-module.exports = contracts
+module.exports = { contractsList, fetchContracts }

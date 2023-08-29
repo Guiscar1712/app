@@ -2,6 +2,7 @@ const { inscricaoPorIdOrigin, consultaProvaOnline, consultaProvaOnlinePorBusines
 const retry = require('../../utils/retry')
 const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 const { ClientServerError } = require('../../utils/errors')
+const { fetchContracts } = require('./contractsList')
 
 module.exports = class EnrollmentDetails {
   constructor ({ LoggerService, PaymentService }) {
@@ -24,6 +25,17 @@ module.exports = class EnrollmentDetails {
 
     await this.getPaymentStatus(idOrigin, enrollmentsDto)
 
+    if (enrollmentsDto.contract.available) {
+      const queryFetch = {
+        system: data.sistema,
+        enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
+        businessKey: enrollmentsDto.businessKey
+      }
+
+      const contracts = await fetchContracts(queryFetch)
+      enrollmentsDto.contract.available = contracts.length > 1
+    }
+
     return enrollmentsDto
   }
 
@@ -36,6 +48,7 @@ module.exports = class EnrollmentDetails {
     }
   }
 }
+
 async function getAdmissionsTest (enrollmentsDto, data) {
   // Verificar implementadação - no ambiente de homologção os dados do exame só ficaram disponives após executar essa chamada.
   const res = await retry(consultaProvaOnlinePorBusinesskey, enrollmentsDto.businessKey)
