@@ -2,44 +2,56 @@ const { contratosPorMatricula, inscricaoPorIdOrigin, contratosPorBusinessKey } =
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
 
-async function contracts (idOrigin) {
-  const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
-  const enrollmentsDto = new EnrollmentsDto(enrollment)
-
-  if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
-    throw new Error('Error ao processar ao consultar inscricão')
+class ContractsService {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
   }
 
-  let data
+  async contracts (idOrigin) {
+    const stepContractList = this.LoggerService.addStep('ContractListServiceContracts')
+    const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
+    const enrollmentsDto = new EnrollmentsDto(enrollment)
 
-  if (enrollment.sistema === 'COLABORAR') {
-    const enrollmentId = enrollmentsDto.studentEnrollment.enrollmentId
-    if (!enrollmentId) {
+    if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
+      stepContractList.finalize({ errorGetContractsServiceContracts: enrollmentsDto })
+      throw new Error('Error ao processar ao consultar inscricão')
+    }
+
+    let data
+
+    if (enrollment.sistema === 'COLABORAR') {
+      const enrollmentId = enrollmentsDto.studentEnrollment.enrollmentId
+      if (!enrollmentId) {
+        stepContractList.finalize({ COLABORAR: enrollmentId })
+        return []
+      }
+      data = await retry(contratosPorMatricula, enrollmentId)
+    } else if (enrollment.sistema === 'ATHENAS') {
+      const businessKey = enrollmentsDto.businessKey
+      if (!businessKey) {
+        stepContractList.finalize({ ATHENAS: businessKey })
+        return []
+      }
+      data = await retry(contratosPorBusinessKey, businessKey)
+    }
+
+    if (!data || data.length <= 0) {
+      stepContractList.finalize({ data: 'Lista vazia' })
       return []
     }
-    data = await retry(contratosPorMatricula, enrollmentId)
-  } else if (enrollment.sistema === 'ATHENAS') {
-    const businessKey = enrollmentsDto.businessKey
-    if (!businessKey) {
-      return []
-    }
-    data = await retry(contratosPorBusinessKey, businessKey)
+
+    const contracts = []
+    data.forEach(element => {
+      const contract = new ContractDto(element)
+      if (contract.status === 'ERROR') {
+        return
+      }
+      contracts.push(contract)
+    })
+
+    stepContractList.finalize({ data })
+    return contracts
   }
-
-  if (!data || data.length <= 0) {
-    return []
-  }
-
-  const contracts = []
-  data.forEach(element => {
-    const contract = new ContractDto(element)
-    if (contract.status === 'ERROR') {
-      return
-    }
-    contracts.push(contract)
-  })
-
-  return contracts
 }
 
-module.exports = contracts
+module.exports = ContractsService

@@ -1,4 +1,3 @@
-
 const retry = require('../../utils/retry')
 const { ClientServerError } = require('../../utils/errors')
 const { contratoPorId } = require('./../../clients/ingresso/')
