@@ -1,20 +1,27 @@
-const { contractsList, contractByContractId } = require('../../services/enrollments')
+const { contractByContractId } = require('../../services/enrollments')
 const { ValidationError } = require('../../utils/errors')
 
 module.exports = class NotificationController {
-  constructor ({ ContractService, LoggerService }) {
+  constructor ({ ContractService, ContractListService, LoggerService }) {
     this.ContractService = ContractService
+    this.ContractListService = ContractListService
     this.LoggerService = LoggerService
   }
 
-  static async getContracts (request, response, next) {
+  getContracts = async (request, response, next) => {
+    const stepGetContracts = this.LoggerService.addStep('GetContracts')
     try {
       if (!request.query || !request.query.idOrigin) {
+        stepGetContracts.finalize({ errorGetContracts: `Parâmetros inválidos -> request.query: ${request.query}  ---  request.query.idOrigin: ${request.query.idOrigin}` })
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
-      const data = await contractsList(request.query.idOrigin)
+      const data = await this.ContractListService.contracts(request.query.idOrigin)
+
+      stepGetContracts.finalize({ getContracts: data.length })
+
       return response.status(200).json(data)
     } catch (error) {
+      stepGetContracts.finalize({ errorGetContracts: error })
       next(error)
     }
   }
