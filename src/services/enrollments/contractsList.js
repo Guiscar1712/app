@@ -34,9 +34,9 @@ class ContractsService {
     try {
       let data
 
-      if (system === 'COLABORAR' && !enrollmentId) {
+      if (system === 'COLABORAR' && enrollmentId) {
         data = await retry(contratosPorMatricula, enrollmentId)
-      } else if (system === 'ATHENAS' && !businessKey) {
+      } else if (system === 'ATHENAS' && businessKey) {
         data = await retry(contratosPorBusinessKey, businessKey)
       }
 
