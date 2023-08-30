@@ -33,7 +33,7 @@ module.exports = class EnrollmentDetails {
       }
 
       const contracts = await this.ContractListService.fetchContracts(queryFetch)
-      enrollmentsDto.contract.available = contracts.length > 1
+      enrollmentsDto.contract.available = contracts.length >= 1
     }
 
     return enrollmentsDto
