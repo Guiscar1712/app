@@ -23,6 +23,18 @@ module.exports = class LoggerService {
     return this.Log.content.steps[key]
   }
 
+  addStepTrace = (name, data) => {
+    const step = new Step()
+    const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
+
+    const keyName = Util.createSlug(name)
+
+    const key = `${index}-${keyName}`
+    step.finalize(data)
+
+    this.Log.content.addStep(key, step)
+  }
+
   setUserId (userId) {
     this.Log.content.setUserIdIndex(userId)
   }

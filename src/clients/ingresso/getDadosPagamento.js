@@ -12,7 +12,7 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
 }
 
-const urlBase = `${ingresso.base_uri}/financeiro/v4/pagamentos/`
+const urlBase = `${ingresso.base_uri}/financeiro/v4/pagamentos`
 
 module.exports = class DadosPagamento {
   constructor ({ LoggerService }) {
