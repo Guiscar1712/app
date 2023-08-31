@@ -1,10 +1,10 @@
-const { contractByContractId } = require('../../services/enrollments')
 const { ValidationError } = require('../../utils/errors')
 
 module.exports = class NotificationController {
-  constructor ({ ContractService, ContractListService, LoggerService }) {
+  constructor ({ ContractService, ContractListService, ContractDetailService, LoggerService }) {
     this.ContractService = ContractService
     this.ContractListService = ContractListService
+    this.ContractDetailService = ContractDetailService
     this.LoggerService = LoggerService
   }
 
@@ -19,20 +19,23 @@ module.exports = class NotificationController {
 
       stepGetContracts.finalize({ getContracts: data.length })
 
-      return response.status(200).json(data)
+      next(data)
     } catch (error) {
       stepGetContracts.finalize({ errorGetContracts: error })
       next(error)
     }
   }
 
-  static async getByContractId (request, response, next) {
+  getByContractId = async (request, response, next) => {
+    const stepContractDetails = this.LoggerService.addStep('ContractDetails')
     try {
       if (!request.params.contractId) {
+        stepContractDetails.finalize({ ParamsError: 'Parâmetros inválidos' })
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
-      const data = await contractByContractId(request.params.contractId)
-      return response.status(200).json(data)
+      const data = await this.ContractDetailService.enrollmentDetails(request.params.contractId)
+      stepContractDetails.finalize({ ContractDetails: data })
+      next(data)
     } catch (error) {
       next(error)
     }
