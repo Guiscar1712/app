@@ -19,7 +19,7 @@ module.exports = class NotificationController {
 
       stepGetContracts.finalize({ getContracts: data.length })
 
-      return response.status(200).json(data)
+      next(data)
     } catch (error) {
       stepGetContracts.finalize({ errorGetContracts: error })
       next(error)
@@ -35,7 +35,7 @@ module.exports = class NotificationController {
       }
       const data = await this.ContractDetailService.enrollmentDetails(request.params.contractId)
       stepContractDetails.finalize({ ContractDetails: data })
-      return response.status(200).json(data)
+      next(data)
     } catch (error) {
       next(error)
     }
