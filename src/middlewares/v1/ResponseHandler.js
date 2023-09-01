@@ -6,12 +6,13 @@ module.exports = class ResponseMiddleware {
   }
 
   Handler = (data, req, res, next) => {
-    const step = this.LoggerService.addStep('ResponseMiddlewareHandler')
+    // const step = this.LoggerService.newStep()
     try {
       if (data instanceof Error) {
         const send = { success: false }
 
         const error = data
+        this.LoggerService.setError(error)
 
         setErrorResponse(error, send, res)
 
@@ -21,12 +22,12 @@ module.exports = class ResponseMiddleware {
           ...send
         })
 
-        step.finalize({
-          statusCode: res.statusCode,
-          statusMessage: res.statusMessage,
-          ...send
-        })
-        this.LoggerService.setError(error)
+        // this.LoggerService.finalizeStep(step, 'ResponseMiddlewareHandler', {
+        //   statusCode: res.statusCode,
+        //   statusMessage: res.statusMessage,
+        //   ...send
+        // })
+
         return res
       }
 
@@ -60,14 +61,14 @@ module.exports = class ResponseMiddleware {
         ...sendData
       })
 
-      step.finalize({
-        statusCode: res.statusCode,
-        statusMessage: res.statusMessage,
-        ...sendData
-      })
+      // this.LoggerService.finalizeStep(step, 'ResponseMiddlewareHandler', {
+      //   statusCode: res.statusCode,
+      //   statusMessage: res.statusMessage,
+      //   ...sendData
+      // })
       return response
     } catch (error) {
-      step.finalize(error)
+      // this.LoggerService.finalizeStep(step, 'ResponseMiddlewareHandler', error)
     } finally {
       this.LoggerService.finalize()
     }

@@ -44,7 +44,7 @@ module.exports = class PaymentStatus {
       step.finalize({ originId, status })
       return status
     } catch (error) {
-      step.finalize(error)
+      step.finalize()
       throw error
     }
   }

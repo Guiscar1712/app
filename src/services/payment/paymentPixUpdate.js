@@ -23,7 +23,7 @@ module.exports = class PaymentPixUpdate {
       step.finalize({ orderReference, paymentStatus, paymentData })
       return null
     } catch (error) {
-      step.finalize(error)
+      step.finalize()
       throw error
     }
   }
