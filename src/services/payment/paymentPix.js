@@ -2,7 +2,7 @@ const { ingressoClient } = require('../../clients')
 const PaymentPixResponse = require('../../dto/payment/PaymentPixResponse.Dto')
 const PaymentPixRequest = require('../../dto/payment/PaymentPixRequest.Dto')
 const retry = require('../../utils/retry')
-const { ClientServerError, ValidationError } = require('../../utils/errors')
+const { ClientServerError, ValidationError, ServerError } = require('../../utils/errors')
 
 module.exports = class PaymentForPix {
   constructor ({ LoggerService, PaymentPixSaveService, PaymentPixStatusService, CognaPayClient, IngressoClient }) {
@@ -18,7 +18,6 @@ module.exports = class PaymentForPix {
     try {
       const status = await this.PaymentPixStatusService.get(originId)
       if (status?.status === 'PAID') {
-        step.finalize(status)
         throw new ValidationError('Pagamento não disponível', status)
       }
 
@@ -27,7 +26,6 @@ module.exports = class PaymentForPix {
       const businessKey = enrollment.inscricao.businessKey
       if (!businessKey) {
         this.LoggerService.setIndex({ system, businessKey, originId })
-        step.finalize(enrollment)
         throw new ValidationError('Pagamento não disponível', { status, system, enrollment })
       }
 
@@ -50,8 +48,9 @@ module.exports = class PaymentForPix {
         step.finalize(res)
         return res
       }
+      throw new ServerError('Solicitação da chave Pix falhou', data.error)
     } catch (error) {
-      step.finalize(error)
+      step.finalize()
       throw error
     }
   }

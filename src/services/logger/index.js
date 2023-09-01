@@ -33,6 +33,25 @@ module.exports = class LoggerService {
     step.finalize(data)
 
     this.Log.content.addStep(key, step)
+
+    return step.date
+  }
+
+  newStep = () => {
+    const step = new Step()
+    return step
+  }
+
+  finalizeStep = (step, stepName, data) => {
+    const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
+
+    const keyName = Util.createSlug(stepName)
+
+    const key = `${index}-${keyName}`
+
+    this.Log.content.addStep(key, step)
+    step.finalize(data)
+    return this.Log.content.steps[key]
   }
 
   setUserId (userId) {
@@ -48,7 +67,7 @@ module.exports = class LoggerService {
   }
 
   setError = (error) => {
-    const name = error.type || error.name
+    const name = error.functionError || error.type || error.name
     const stepError = this.addStep(name)
     stepError.finalize(error)
     if (!error.level || error.level === 'ERROR') {

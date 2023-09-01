@@ -7,6 +7,20 @@ class Step {
 
   finalize (data) {
     if (data instanceof Error) {
+      let { code, message, stack, errors, type, functionError } = data
+      code = code ?? -1
+      this.data = obscureSensitiveData({ code, message, stack, errors, type, functionError })
+    } else {
+      this.data = obscureSensitiveData(data)
+    }
+
+    const entryDate = moment(this.date)
+    const endDate = moment()
+    this.duration = moment.duration(endDate.diff(entryDate)).asMilliseconds()
+  }
+
+  finalizeTrace (data, startDateTrace) {
+    if (data instanceof Error) {
       let { code, message, stack, errors, type } = data
       code = code ?? -1
       this.data = obscureSensitiveData({ code, message, stack, errors, type })
@@ -14,7 +28,7 @@ class Step {
       this.data = obscureSensitiveData(data)
     }
 
-    const entryDate = moment(this.date)
+    const entryDate = moment(startDateTrace)
     const endDate = moment()
     this.duration = moment.duration(endDate.diff(entryDate)).asMilliseconds()
   }

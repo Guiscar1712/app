@@ -30,7 +30,7 @@ module.exports = class PaymentPixSave {
       step.finalize({ userId, originId, businessKey, system, payDto })
       return paymentData
     } catch (error) {
-      step.finalize(error)
+      step.finalize()
       throw error
     }
   }

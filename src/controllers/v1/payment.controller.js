@@ -16,11 +16,10 @@ module.exports = class PaymentController {
       }
 
       const data = await this.PaymentService.paymentForPix(originId, request.user.id)
-
       step.finalize(data)
       next(data)
     } catch (error) {
-      step.finalize(error)
+      step.finalize()
       next(error)
     }
   }
@@ -43,7 +42,7 @@ module.exports = class PaymentController {
       step.finalize(data)
       next(data)
     } catch (error) {
-      step.finalize(error)
+      step.finalize()
       next(error)
     }
   }
