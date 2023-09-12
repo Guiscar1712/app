@@ -1,8 +1,11 @@
-const { inscricaoPorIdOrigin, consultaProvaOnline, consultaProvaOnlinePorBusinesskey } = require('../../clients/ingresso/')
+const {
+  inscricaoPorIdOrigin,
+  consultaProvaOnline,
+  consultaProvaOnlinePorBusinesskey
+} = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 const { ClientServerError } = require('../../utils/errors')
-const { fetchContracts } = require('./contractsList')
 
 module.exports = class EnrollmentDetails {
   constructor ({ LoggerService, PaymentService, ContractListService }) {
@@ -16,8 +19,15 @@ module.exports = class EnrollmentDetails {
 
     const enrollmentsDto = new EnrollmentsDto(data)
 
-    if (!enrollmentsDto || !enrollmentsDto.businessKey || enrollmentsDto.status === 'ERROR') {
-      throw new ClientServerError('Unexpected Content', { method: 'EnrollmentsDto', data })
+    if (
+      !enrollmentsDto ||
+      !enrollmentsDto.businessKey ||
+      enrollmentsDto.status === 'ERROR'
+    ) {
+      throw new ClientServerError('Unexpected Content', {
+        method: 'EnrollmentsDto',
+        data
+      })
     }
 
     if (!enrollmentsDto.enem.active) {
@@ -33,7 +43,9 @@ module.exports = class EnrollmentDetails {
         businessKey: enrollmentsDto.businessKey
       }
 
-      const contracts = await this.ContractListService.fetchContracts(queryFetch)
+      const contracts = await this.ContractListService.fetchContracts(
+        queryFetch
+      )
       enrollmentsDto.contract.available = contracts.length >= 1
     }
 
@@ -52,9 +64,15 @@ module.exports = class EnrollmentDetails {
 
 async function getAdmissionsTest (enrollmentsDto, data) {
   // Verificar implementadação - no ambiente de homologção os dados do exame só ficaram disponives após executar essa chamada.
-  const res = await retry(consultaProvaOnlinePorBusinesskey, enrollmentsDto.businessKey)
+  const res = await retry(
+    consultaProvaOnlinePorBusinesskey,
+    enrollmentsDto.businessKey
+  )
   if (!res) {
-    throw new ClientServerError('Unexpected Content', { method: 'AdmissionsTest', errors: [data, enrollmentsDto, res] })
+    throw new ClientServerError('Unexpected Content', {
+      method: 'AdmissionsTest',
+      errors: [data, enrollmentsDto, res]
+    })
   }
   //
 
@@ -62,7 +80,13 @@ async function getAdmissionsTest (enrollmentsDto, data) {
   enrollmentsDto.admissionsTest = new AdmissionsTest(exam)
 
   // Revisa tratamento de erro quando inscrição não tem dados de elegibiliade
-  if (!enrollmentsDto.admissionsTest || enrollmentsDto.admissionsTest.status === 'ERROR') {
-    throw new ClientServerError('Unexpected Content', { method: 'AdmissionsTest', errors: [data, enrollmentsDto, res, exam] })
+  if (
+    !enrollmentsDto.admissionsTest ||
+    enrollmentsDto.admissionsTest.status === 'ERROR'
+  ) {
+    throw new ClientServerError('Unexpected Content', {
+      method: 'AdmissionsTest',
+      errors: [data, enrollmentsDto, res, exam]
+    })
   }
 }

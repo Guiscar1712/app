@@ -1,10 +1,10 @@
-const { contratosPorMatricula, inscricaoPorIdOrigin, contratosPorBusinessKey } = require('../../clients/ingresso/')
+const {
+  contratosPorMatricula,
+  inscricaoPorIdOrigin,
+  contratosPorBusinessKey
+} = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
-
-async function contractsList (idOrigin) {
-  const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
-  const enrollmentsDto = new EnrollmentsDto(enrollment)
 const BaseError = require('../../utils/errors/BaseError')
 const { ServerError } = require('../../utils/errors')
 
@@ -14,12 +14,16 @@ class ContractsService {
   }
 
   async contracts (idOrigin) {
-    const stepContractList = this.LoggerService.addStep('ContractListServiceContracts')
+    const stepContractList = this.LoggerService.addStep(
+      'ContractListServiceContracts'
+    )
     const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
     const enrollmentsDto = new EnrollmentsDto(enrollment)
 
     if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
-      stepContractList.finalize({ errorGetContractsServiceContracts: enrollmentsDto })
+      stepContractList.finalize({
+        errorGetContractsServiceContracts: enrollmentsDto
+      })
       throw new Error('Error ao processar ao consultar inscricão')
     }
 
@@ -50,7 +54,7 @@ class ContractsService {
       }
 
       const contracts = []
-      data.forEach(element => {
+      data.forEach((element) => {
         const contract = new ContractDto(element)
         if (contract.status === 'ERROR') {
           return
