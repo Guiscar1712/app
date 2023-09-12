@@ -12,7 +12,7 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
 }
 
-const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato/`
+const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato`
 
 class ContratoAceite {
   constructor ({ LoggerService }) {

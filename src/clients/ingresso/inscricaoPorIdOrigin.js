@@ -12,7 +12,7 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
 }
 
-const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao/`
+const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao`
 
 async function main (idOrigin) {
   try {
