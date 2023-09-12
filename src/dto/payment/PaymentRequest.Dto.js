@@ -34,6 +34,10 @@ class PaymentRequest {
   adjustLayoutToIFrame
 
   constructor (data) {
+    errors = {}
+    errorsAddress = []
+    errorsChargesItems = []
+
     this.orderReference = data.orderReference
     this.invoiceType = data.invoiceType
     this.totalAmount = data.totalAmount
@@ -65,7 +69,7 @@ class PaymentRequest {
     }
   }
 
-  _setDiscount (data) {
+  _setDiscount(data) {
     if (!data) {
       return null
     }
@@ -84,7 +88,7 @@ class PaymentRequest {
     return discount
   }
 
-  _setLinkCheckout (data) {
+  _setLinkCheckout(data) {
     const linkCheckout = {
       emailNotification: data.emailNotification,
       smsNotification: data.smsNotification,
@@ -96,7 +100,7 @@ class PaymentRequest {
     return linkCheckout
   }
 
-  _setLinkCheckoutChallenge (data) {
+  _setLinkCheckoutChallenge(data) {
     const challenge = {
       question: data.question,
       answer: data.answer,
@@ -105,14 +109,14 @@ class PaymentRequest {
     return challenge
   }
 
-  _setCharges (data) {
+  _setCharges(data) {
     if (!data || data.length <= 0) {
       return null
     }
 
     const charges = []
 
-    data.forEach(element => {
+    data.forEach((element) => {
       if (element) {
         const charge = {
           chargeReference: element.chargeReference,
@@ -143,7 +147,7 @@ class PaymentRequest {
     return charges
   }
 
-  _setChargesCourse (data) {
+  _setChargesCourse(data) {
     const course = {
       courseReference: data.courseReference,
       name: data.name
@@ -152,7 +156,7 @@ class PaymentRequest {
     return course
   }
 
-  _setChargesItems (data) {
+  _setChargesItems(data) {
     errorsChargesItems = []
     if (!data) {
       return null
@@ -160,20 +164,21 @@ class PaymentRequest {
 
     const items = []
 
-    data.forEach(element => {
-      const item =
-              {
-                itemReference: element.itemReference,
-                lineNumber: element.lineNumber,
-                product: element.product,
-                description: element.description,
-                unitPrice: element.unitPrice,
-                quantity: element.quantity,
-                totalPrice: element.totalPrice,
-                remarks: element.remarks,
-                groupDefinition: this._setChargesItemsGroupDefinition(element.groupDefinition),
-                issueDate: element.issueDate
-              }
+    data.forEach((element) => {
+      const item = {
+        itemReference: element.itemReference,
+        lineNumber: element.lineNumber,
+        product: element.product,
+        description: element.description,
+        unitPrice: element.unitPrice,
+        quantity: element.quantity,
+        totalPrice: element.totalPrice,
+        remarks: element.remarks,
+        groupDefinition: this._setChargesItemsGroupDefinition(
+          element.groupDefinition
+        ),
+        issueDate: element.issueDate
+      }
 
       items.push(item)
 
@@ -187,7 +192,7 @@ class PaymentRequest {
     return items
   }
 
-  _setChargesItemsGroupDefinition (data) {
+  _setChargesItemsGroupDefinition(data) {
     const groupDefinition = {
       key: data.key,
       order: data.order,
@@ -198,7 +203,7 @@ class PaymentRequest {
     return groupDefinition
   }
 
-  _setStudent (data) {
+  _setStudent(data) {
     if (!data) {
       return null
     }
@@ -239,7 +244,7 @@ class PaymentRequest {
     return student
   }
 
-  _setSchool (data) {
+  _setSchool(data) {
     const school = {
       name: data.name,
       cnpj: data.cnpj,
@@ -263,7 +268,7 @@ class PaymentRequest {
     return school
   }
 
-  _setAddress (data) {
+  _setAddress(data) {
     errorsAddress = []
     if (!data) {
       return null
@@ -290,15 +295,15 @@ class PaymentRequest {
     return address
   }
 
-  setPreDefinedOptions () {
+  setPreDefinedOptions() {
     throw new Error('Method must be implemented')
   }
 
-  isValid () {
+  isValid() {
     return isEmpty(errors)
   }
 
-  errors () {
+  errors() {
     return errors
   }
 }

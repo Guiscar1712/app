@@ -1,4 +1,3 @@
-
 function toDto (item) {
   return {
     name: item.Name,
@@ -18,7 +17,7 @@ module.exports = (item) => {
   if (Array.isArray(item)) {
     const courses = []
 
-    item.forEach(element => {
+    item.forEach((element) => {
       // Remover esta condição apos implementasção no StrApi
       if (element.Price) {
         courses.push(toDto(element))

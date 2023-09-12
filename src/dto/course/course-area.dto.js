@@ -1,4 +1,3 @@
-
 function toDto (item) {
   return {
     id: item.id,
@@ -13,7 +12,7 @@ module.exports = (item) => {
   if (Array.isArray(item)) {
     const courses = []
 
-    item.forEach(element => {
+    item.forEach((element) => {
       courses.push(toDto(element))
     })
 
