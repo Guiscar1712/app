@@ -6,7 +6,7 @@ async function Save (title, content, notificationId, data, userId) {
     Content: content,
     NotificationId: notificationId,
     Data: data,
-    NotificationType: data.notificationType,
+    NotificationType: data?.notificationType,
     UserId: userId
   }
 

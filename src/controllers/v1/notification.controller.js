@@ -1,4 +1,4 @@
-const { ValidationError, ClientServerError } = require('../../utils/errors')
+const { ValidationError } = require('../../utils/errors')
 const {
   notificationSave,
   notificationList,
@@ -19,10 +19,7 @@ module.exports = class NotificationController {
       }
 
       const notification = await notificationSave(title, content, notificationId, data, request.user.id)
-      if (notification && notification.title) {
-        return response.status(201).json(notification)
-      }
-      throw new ClientServerError('Something went wrong', notification)
+      return response.status(201).json(notification)
     } catch (error) {
       next(error)
     }
@@ -52,12 +49,7 @@ module.exports = class NotificationController {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
       const data = await notificationDelete(request.params.id, request.user.id)
-
-      if (data && data[0].id > 0) {
-        return response.status(200).send()
-      }
-
-      throw new ClientServerError('Something went wrong', [{}])
+      return response.status(200).send(data)
     } catch (error) {
       next(error)
     }
@@ -69,11 +61,7 @@ module.exports = class NotificationController {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
       const data = await notificationRead(request.params.id, request.user.id)
-      if (data && data.dateRead) {
-        return response.status(200).send()
-      }
-
-      throw new ClientServerError('Something went wrong', [{}])
+      return response.status(200).send(data)
     } catch (error) {
       next(error)
     }
@@ -82,11 +70,7 @@ module.exports = class NotificationController {
   static async readAll (request, response, next) {
     try {
       const data = await notificationAllRead(request.user.id)
-      if (data && data.dateRead) {
-        return response.status(200).send()
-      }
-
-      throw new ClientServerError('Something went wrong', [{}])
+      return response.status(200).send(data)
     } catch (error) {
       next(error)
     }
@@ -98,11 +82,7 @@ module.exports = class NotificationController {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
       const data = await notificationNotRead(request.params.id, request.user.id)
-      if (data && data.dateRead === null) {
-        return response.status(200).send()
-      }
-
-      throw new ClientServerError('Something went wrong', [{}])
+      return response.status(200).send(data)
     } catch (error) {
       next(error)
     }
