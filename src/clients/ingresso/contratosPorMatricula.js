@@ -14,26 +14,27 @@ const ingresso = {
 
 const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato/pendentes?labels=`
 
-async function main (enrollmentId) {
+async function main(enrollmentId) {
   try {
     const token = await getToken()
 
     const param = `{"matricula":"${enrollmentId}"}`
 
-    const res = await axios.get(
-        `${url}${param}`,
-        {
-          headers: {
-            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
+    const res = await axios
+      .get(`${url}${param}`, {
+        headers: {
+          'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
+          Authorization: 'Bearer ' + token
         }
-    ).catch(function (error) {
-      return error.response
-    })
+      })
+      .catch(function (error) {
+        return error.response
+      })
 
     if (res.status === 200) {
       return res.data
+    } else if (res.status === 404) {
+      return []
     }
 
     throw res
@@ -43,10 +44,16 @@ async function main (enrollmentId) {
     }
 
     if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+      throw new ClientServerAuthError('Something went wrong', {
+        client: url,
+        ...error.data
+      })
     }
 
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
+    throw new ClientServerError('Something went wrong', {
+      client: url,
+      ...error.data
+    })
   }
 }
 
