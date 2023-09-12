@@ -1,5 +1,8 @@
 const { ValidationError } = require('../../utils/errors')
-const { CpfValidate, IdOriginValidate } = require('../../validators/subscription')
+const {
+  CpfValidate,
+  IdOriginValidate
+} = require('../../validators/subscription')
 const { searchForEnrollments } = require('../../services/enrollments')
 
 module.exports = class EnrollmentsController {
@@ -36,7 +39,7 @@ module.exports = class EnrollmentsController {
 
       const data = await this.EnrollmentDetails.get(idOrigin)
 
-      response.json(data)
+      next(data)
     } catch (error) {
       next(error)
     }
