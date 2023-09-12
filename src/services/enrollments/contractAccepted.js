@@ -11,9 +11,9 @@ module.exports = class ContractAcceptedService {
   contractAccepted = async (contractId, clientIp) => {
     const body = { opcao: 1, ip: clientIp }
     const stepContractAccepted = this.LoggerService.addStep('ContractAcceptedServiceContractAccepted')
+    const contratoAceiteInstance = new ContratoAceite({ LoggerService: this.LoggerService })
 
     try {
-      const contratoAceiteInstance = new ContratoAceite({ LoggerService: this.LoggerService })
       const res = await retry(contratoAceiteInstance.main, { contractId, body })
       if (!res || !res.dadosAceite) {
         const error = new ClientServerError('Something went wrong', [{ contractId, body }])
