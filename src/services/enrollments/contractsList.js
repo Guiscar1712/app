@@ -1,6 +1,10 @@
 const { contratosPorMatricula, inscricaoPorIdOrigin, contratosPorBusinessKey } = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
+
+async function contractsList (idOrigin) {
+  const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
+  const enrollmentsDto = new EnrollmentsDto(enrollment)
 const BaseError = require('../../utils/errors/BaseError')
 const { ServerError } = require('../../utils/errors')
 
