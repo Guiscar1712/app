@@ -39,7 +39,7 @@ module.exports = class EnrollmentsController {
 
       const data = await this.EnrollmentDetails.get(idOrigin)
 
-      next(data)
+      response.json(data)
     } catch (error) {
       next(error)
     }
