@@ -7,14 +7,19 @@ const Util = require('../../utils/util')
 
 module.exports = class LoggerService {
   newLog = (indexs, type, request) => {
-    this.Log = new Log({ service: process.env.SERVICE_NAME, host: request.hostname })
+    this.Log = new Log({
+      service: process.env.SERVICE_NAME,
+      host: request.hostname,
+    })
     this.Log.content = new Content(indexs, type, request)
     return this.Log
   }
 
   addStep = (name) => {
     const step = new Step()
-    const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
+    const index = String(
+      Object.keys(this.Log.content.steps).length + 1
+    ).padStart(2, '0')
 
     const keyName = Util.createSlug(name)
 
@@ -25,7 +30,9 @@ module.exports = class LoggerService {
 
   addStepTrace = (name, data) => {
     const step = new Step()
-    const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
+    const index = String(
+      Object.keys(this.Log.content.steps).length + 1
+    ).padStart(2, '0')
 
     const keyName = Util.createSlug(name)
 
@@ -37,13 +44,25 @@ module.exports = class LoggerService {
     return step.date
   }
 
+  addStepStepTrace = (name, data = null) => {
+    this.addStepTrace(name, data)
+
+    const step = new Step()
+
+    const keyName = Util.createSlug(name)
+
+    return { key: keyName, value: step }
+  }
+
   newStep = () => {
     const step = new Step()
     return step
   }
 
   finalizeStep = (step, stepName, data) => {
-    const index = String(Object.keys(this.Log.content.steps).length + 1).padStart(2, '0')
+    const index = String(
+      Object.keys(this.Log.content.steps).length + 1
+    ).padStart(2, '0')
 
     const keyName = Util.createSlug(stepName)
 
@@ -54,15 +73,15 @@ module.exports = class LoggerService {
     return this.Log.content.steps[key]
   }
 
-  setUserId (userId) {
+  setUserId(userId) {
     this.Log.content.setUserIdIndex(userId)
   }
 
-  setIndex (data) {
+  setIndex(data) {
     this.Log.content.setIndex(data)
   }
 
-  setResponse (data) {
+  setResponse(data) {
     this.Log.content.addResponse(data)
   }
 

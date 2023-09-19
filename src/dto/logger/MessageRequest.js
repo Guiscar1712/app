@@ -1,5 +1,5 @@
 class MessageRequest {
-  constructor (data) {
+  constructor(data) {
     this.url = data.originalUrl
     this.type = data.method
     this.headers = data.headers

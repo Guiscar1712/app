@@ -4,19 +4,24 @@ const _ = require('lodash')
 module.exports = function obscureSensitiveData (obj) {
   const obscuredObj = _.cloneDeep(obj)
   try {
-    const sensitiveFields = process.env.OBSCURE_DATA_SENSITIVE || []
+    const dataSenditive = process.env.OBSCURE_DATA_SENSITIVE || []
+
+    const sensitiveFields = dataSenditive.split(',').map((string) => {
+      return string.toLowerCase()
+    })
 
     function obscureFields (obscuredObj) {
       if (typeof obscuredObj === 'object' && obscuredObj !== null) {
         for (const [key, value] of Object.entries(obscuredObj)) {
-          if (sensitiveFields.includes(key) && value && !key.startsWith('_')) {
+          const keyLowerCase = key.toLowerCase()
+          if (sensitiveFields.includes(keyLowerCase) && value && !keyLowerCase.startsWith('_')) {
             let length = value.toString().length
 
             if (length > 15) {
               length = 15
             }
 
-            obscuredObj[key] = '*'.repeat(length)
+            obscuredObj[keyLowerCase] = '*'.repeat(length)
           } else {
             obscureFields(value)
           }
