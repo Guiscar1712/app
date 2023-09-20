@@ -14,38 +14,48 @@ const ingresso = {
 
 const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao`
 
-async function main (idOrigin) {
-  try {
-    const token = await getToken()
+class InscricaoPorIdOrigin {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
 
-    const res = await axios.get(
-        `${url}/${idOrigin}`,
-        {
-          headers: {
-            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
+  main = async (idOrigin) => {
+    const step = this.LoggerService.addStep('InscricaoPorIdOriginModule')
+    try {
+      const token = await getToken()
+
+      const res = await axios.get(`${url}/${idOrigin}`, {
+        headers: {
+          'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
+          Authorization: 'Bearer ' + token
         }
-    ).catch(function (error) {
-      throw new ClientServerError(error.message, { client: url, ...error.data })
-    })
+      }).catch(function (error) {
+        throw new ClientServerError(error.message, { client: url, ...error.data })
+      })
 
-    if (res.status === 200) {
-      return res.data
+      if (res.status === 200) {
+        const system = res.data.sistema.toUpperCase()
+        const bk = res.data.inscricao.ofertas.primeiraOpcao.businessKey
+        this.LoggerService.setIndex({ sistema: system, idOrigin, businessKey: bk })
+        step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: res.config.method, url })
+
+        return res.data
+      }
+
+      throw res
+    } catch (error) {
+      if (error instanceof ClientServerError) {
+        step.finalize(idOrigin, error)
+        throw error
+      }
+
+      if (error.status === 401) {
+        throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
+      }
+
+      throw new ClientServerError('Something went wrong', { client: url, ...error.data })
     }
-
-    throw res
-  } catch (error) {
-    if (error instanceof ClientServerError) {
-      throw error
-    }
-
-    if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
-    }
-
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
   }
 }
 
-module.exports = main
+module.exports = InscricaoPorIdOrigin

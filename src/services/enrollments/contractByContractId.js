@@ -1,6 +1,6 @@
 const retry = require('../../utils/retry')
 const { ClientServerError } = require('../../utils/errors')
-const { contratoPorId } = require('./../../clients/ingresso/')
+const ContratoPorId = require('./../../clients/ingresso/contratoPorContratoId')
 
 module.exports = class EnrollmentDetailsService {
   constructor ({ LoggerService }) {
@@ -11,7 +11,8 @@ module.exports = class EnrollmentDetailsService {
     const stepEnrollmentDetails = this.LoggerService.addStep('EnrollmentDetailsServiceEnrollmentDetails')
 
     try {
-      const res = await retry(contratoPorId, contractId)
+      const contratoPorId = new ContratoPorId({ LoggerService: this.LoggerService })
+      const res = await retry(contratoPorId.main, contractId)
 
       if (!res || !res.arquivo) {
         const error = new ClientServerError('Não foi possível obter o contrato', [{ contractId }])

@@ -1,8 +1,8 @@
 const {
   contratosPorMatricula,
-  inscricaoPorIdOrigin,
   contratosPorBusinessKey
 } = require('../../clients/ingresso/')
+const InscricaoPorIdOrigin = require('../../clients/ingresso/inscricaoPorIdOrigin')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
 const BaseError = require('../../utils/errors/BaseError')
@@ -17,7 +17,9 @@ class ContractsService {
     const stepContractList = this.LoggerService.addStep(
       'ContractListServiceContracts'
     )
-    const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
+    const inscricaoPorIdOrigin = new InscricaoPorIdOrigin({ LoggerService: this.LoggerService })
+    const enrollment = await retry(inscricaoPorIdOrigin.main, idOrigin)
+
     const enrollmentsDto = new EnrollmentsDto(enrollment)
 
     if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
