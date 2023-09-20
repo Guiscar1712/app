@@ -9,15 +9,20 @@ const ingresso = {
   client_id: config.kroton.ingresso.client_id,
   client_secret: config.kroton.ingresso.client_secret,
   base_uri: config.kroton.ingresso.url,
-  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
+  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey,
 }
 
 const urlBase = ingresso.base_uri
 
 module.exports = class Ingresso {
-  constructor ({ LoggerService, IngressoGetDadosPagamento }) {
+  constructor({
+    LoggerService,
+    IngressoGetDadosPagamento,
+    InscricaoPorIdOrigin,
+  }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
+    this.InscricaoPorIdOrigin = InscricaoPorIdOrigin
   }
 
   getPersonalData = async (cpf) => {
@@ -25,19 +30,24 @@ module.exports = class Ingresso {
     const url = `${urlBase}/ms/dadospessoais/captacao/v1/dadospessoais/${cpf}`
     try {
       const token = await getToken()
-      const res = await axios.get(
-        url,
-        {
+      const res = await axios
+        .get(url, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
-        }
-      ).catch(function (error) {
-        return error.response
-      })
+            Authorization: 'Bearer ' + token,
+          },
+        })
+        .catch(function (error) {
+          return error.response
+        })
 
-      step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: res.config.method, url })
+      step.finalize({
+        status: res.status,
+        data: res.data,
+        headers: res.config.headers,
+        method: res.config.method,
+        url,
+      })
       if (res.status === 200) {
         return res.data
       }
@@ -46,9 +56,15 @@ module.exports = class Ingresso {
     } catch (error) {
       let errorData
       if (error.status === 401) {
-        errorData = new ClientServerAuthError('Not authorized', { client: url, errors: error.data })
+        errorData = new ClientServerAuthError('Not authorized', {
+          client: url,
+          errors: error.data,
+        })
       } else {
-        errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
+        errorData = new ClientServerError('Something went wrong', {
+          client: url,
+          errors: error.data,
+        })
       }
       step.finalize({ cpf, url, errorData })
       throw errorData
@@ -60,20 +76,24 @@ module.exports = class Ingresso {
     const url = `${urlBase}/ms/dadospessoais/captacao/v1/dadospessoais`
     try {
       const token = await getToken()
-      const res = await axios.post(
-        url,
-        body,
-        {
+      const res = await axios
+        .post(url, body, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
-        }
-      ).catch(function (error) {
-        return error.response
-      })
+            Authorization: 'Bearer ' + token,
+          },
+        })
+        .catch(function (error) {
+          return error.response
+        })
 
-      step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: res.config.method, url })
+      step.finalize({
+        status: res.status,
+        data: res.data,
+        headers: res.config.headers,
+        method: res.config.method,
+        url,
+      })
       if (res.status === 200) {
         return res.data
       }
@@ -82,9 +102,15 @@ module.exports = class Ingresso {
     } catch (error) {
       let errorData
       if (error.status === 401) {
-        errorData = new ClientServerAuthError('Not authorized', { client: url, errors: error.data })
+        errorData = new ClientServerAuthError('Not authorized', {
+          client: url,
+          errors: error.data,
+        })
       } else {
-        errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
+        errorData = new ClientServerError('Something went wrong', {
+          client: url,
+          errors: error.data,
+        })
       }
       step.finalize({ body, url, errorData })
       throw errorData
@@ -93,5 +119,9 @@ module.exports = class Ingresso {
 
   getDadosPagamento = async (businessKey) => {
     return await this.IngressoGetDadosPagamento.get(businessKey)
+  }
+
+  inscricaoPorIdOrigin = async (idOrigin) => {
+    return await this.InscricaoPorIdOrigin.get(idOrigin)
   }
 }

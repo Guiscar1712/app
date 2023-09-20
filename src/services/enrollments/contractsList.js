@@ -1,6 +1,6 @@
 const {
   contratosPorMatricula,
-  contratosPorBusinessKey
+  contratosPorBusinessKey,
 } = require('../../clients/ingresso/')
 const InscricaoPorIdOrigin = require('../../clients/ingresso/inscricaoPorIdOrigin')
 const retry = require('../../utils/retry')
@@ -9,22 +9,24 @@ const BaseError = require('../../utils/errors/BaseError')
 const { ServerError } = require('../../utils/errors')
 
 class ContractsService {
-  constructor ({ LoggerService }) {
+  constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
-  async contracts (idOrigin) {
+  async contracts(idOrigin) {
     const stepContractList = this.LoggerService.addStep(
       'ContractListServiceContracts'
     )
-    const inscricaoPorIdOrigin = new InscricaoPorIdOrigin({ LoggerService: this.LoggerService })
-    const enrollment = await retry(inscricaoPorIdOrigin.main, idOrigin)
+    const inscricaoPorIdOrigin = new InscricaoPorIdOrigin({
+      LoggerService: this.LoggerService,
+    })
+    const enrollment = await retry(inscricaoPorIdOrigin.get, idOrigin)
 
     const enrollmentsDto = new EnrollmentsDto(enrollment)
 
     if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
       stepContractList.finalize({
-        errorGetContractsServiceContracts: enrollmentsDto
+        errorGetContractsServiceContracts: enrollmentsDto,
       })
       throw new Error('Error ao processar ao consultar inscricão')
     }
@@ -32,13 +34,13 @@ class ContractsService {
     const queryFetch = {
       system: enrollment.sistema,
       enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
-      businessKey: enrollmentsDto.businessKey
+      businessKey: enrollmentsDto.businessKey,
     }
 
     return await this.fetchContracts(queryFetch)
   }
 
-  async fetchContracts ({ system, enrollmentId, businessKey }) {
+  async fetchContracts({ system, enrollmentId, businessKey }) {
     const step = this.LoggerService.addStep('ContractListServiceFetchContracts')
 
     try {

@@ -1,4 +1,3 @@
-const { ingressoClient } = require('../../clients')
 const PaymentPixResponse = require('../../dto/payment/PaymentPixResponse.Dto')
 const PaymentPixRequest = require('../../dto/payment/PaymentPixRequest.Dto')
 const retry = require('../../utils/retry')
@@ -34,7 +33,7 @@ module.exports = class PaymentForPix {
       }
 
       const enrollment = await retry(
-        ingressoClient.inscricaoPorIdOrigin,
+        this.IngressoClient.inscricaoPorIdOrigin,
         originId
       )
       const system = enrollment.sistema.toUpperCase()
@@ -97,9 +96,8 @@ module.exports = class PaymentForPix {
           originId,
           orderReference: order.orderReference,
         })
-        this.LoggerService.finalizeStep(step.value, step.key, {
-          outputData: res,
-        })
+
+        this.LoggerService.finalizeStep(step.value, step.key, res)
         return res
       }
 
