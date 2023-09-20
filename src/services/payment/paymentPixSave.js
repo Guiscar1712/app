@@ -1,13 +1,15 @@
 module.exports = class PaymentPixSave {
-  constructor ({ LoggerService, PaymentRepository }) {
+  constructor({ LoggerService, PaymentRepository }) {
     this.LoggerService = LoggerService
     this.PaymentRepository = PaymentRepository
   }
 
   save = async (userId, originId, businessKey, system, payDto) => {
-    const step = this.LoggerService.addStep('PaymentServicePixSave')
+    const step = this.LoggerService.addStepStepTrace('PaymentServicePixSave')
     try {
-      let paymentData = await this.PaymentRepository.findBy({ orderReference: payDto.orderReference })
+      let paymentData = await this.PaymentRepository.findBy({
+        orderReference: payDto.orderReference,
+      })
       if (!paymentData) {
         paymentData = {
           userId,
@@ -20,17 +22,29 @@ module.exports = class PaymentPixSave {
           invoiceType: payDto.invoiceType,
           paymentType: 'PIX',
           paymentStatus: 'GENERATED',
-          totalAmount: payDto.totalAmount
+          totalAmount: payDto.totalAmount,
         }
 
         const data = await this.PaymentRepository.insert(paymentData)
-        step.finalize({ userId, originId, businessKey, system, payDto, data })
+        this.LoggerService.finalizeStep(step.value, step.key, {
+          userId,
+          originId,
+          businessKey,
+          system,
+          payDto,
+          data,
+        })
         return data
       }
-      step.finalize({ userId, originId, businessKey, system, payDto })
+      this.LoggerService.finalizeStep(step.value, step.key, {
+        userId,
+        originId,
+        businessKey,
+        system,
+        payDto,
+      })
       return paymentData
     } catch (error) {
-      step.finalize()
       throw error
     }
   }

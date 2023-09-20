@@ -43,6 +43,7 @@ module.exports = class PaymentForPix {
         'EnrollmentForIdoriginRequest',
         enrollment
       )
+
       if (!businessKey) {
         this.LoggerService.setIndex({ system, businessKey, originId })
         throw new ValidationError('Pagamento não disponível', [

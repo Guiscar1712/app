@@ -23,7 +23,7 @@ module.exports = class DadosPagamento {
 
   get = async (businessKey) => {
     const step = this.LoggerService.addStep(
-      'IngressoClientGetDadosPagamentoRequest'
+      'IngressoClientGetOrderRefecenceRequest'
     )
     const url = `${urlBase}/${businessKey}`
     try {
