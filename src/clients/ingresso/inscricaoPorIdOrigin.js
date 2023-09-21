@@ -44,7 +44,7 @@ class InscricaoPorIdOrigin {
         const system = res.data.sistema.toUpperCase()
         const bk = res.data.inscricao.ofertas.primeiraOpcao.businessKey
         this.LoggerService.setIndex({
-          sistema: system,
+          system: system,
           idOrigin,
           businessKey: bk,
         })
