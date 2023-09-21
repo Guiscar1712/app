@@ -45,7 +45,9 @@ module.exports = class LoggerService {
   }
 
   addStepStepTrace = (name, data = null) => {
-    this.addStepTrace(name, data)
+    if (data) {
+      this.addStepTrace(name, data)
+    }
 
     const step = new Step()
 
