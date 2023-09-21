@@ -16,7 +16,7 @@ module.exports = class PaymentPixStatus {
   }
 
   request = async (orderReference, system) => {
-    const token = await this.CognaPayGetToken.get(system)
+    const token = await this.CognaPayGetToken.request(system)
     const step = this.LoggerService.addStep('CognaPayClientStatusRequest')
     const url = `${urlBase}${orderReference}`
     try {

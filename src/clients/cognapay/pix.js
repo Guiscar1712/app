@@ -13,7 +13,7 @@ module.exports = class PaymentPix {
   }
 
   request = async (body, system) => {
-    const token = await this.CognaPayGetToken.get(system)
+    const token = await this.CognaPayGetToken.request(system)
     const step = this.LoggerService.addStep('CognaPayClientCheckoutRequest')
     try {
       const res = await axios
