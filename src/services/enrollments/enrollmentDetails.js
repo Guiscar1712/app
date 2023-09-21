@@ -1,21 +1,26 @@
 const {
-  inscricaoPorIdOrigin,
   consultaProvaOnline,
-  consultaProvaOnlinePorBusinesskey
+  consultaProvaOnlinePorBusinesskey,
 } = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { EnrollmentsDto, AdmissionsTest } = require('../../dto/enrollment')
 const { ClientServerError } = require('../../utils/errors')
 
 module.exports = class EnrollmentDetails {
-  constructor ({ LoggerService, PaymentService, ContractListService }) {
+  constructor({
+    LoggerService,
+    PaymentService,
+    ContractListService,
+    IngressoClient,
+  }) {
     this.LoggerService = LoggerService
     this.PaymentService = PaymentService
     this.ContractListService = ContractListService
+    this.IngressoClient = IngressoClient
   }
 
   get = async (idOrigin) => {
-    const data = await retry(inscricaoPorIdOrigin, idOrigin)
+    const data = await retry(this.IngressoClient.inscricaoPorIdOrigin, idOrigin)
 
     const enrollmentsDto = new EnrollmentsDto(data)
 
@@ -26,7 +31,7 @@ module.exports = class EnrollmentDetails {
     ) {
       throw new ClientServerError('Unexpected Content', {
         method: 'EnrollmentsDto',
-        data
+        data,
       })
     }
 
@@ -40,19 +45,18 @@ module.exports = class EnrollmentDetails {
       const queryFetch = {
         system: data.sistema,
         enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
-        businessKey: enrollmentsDto.businessKey
+        businessKey: enrollmentsDto.businessKey,
       }
 
-      const contracts = await this.ContractListService.fetchContracts(
-        queryFetch
-      )
+      const contracts =
+        await this.ContractListService.fetchContracts(queryFetch)
       enrollmentsDto.contract.available = contracts.length >= 1
     }
 
     return enrollmentsDto
   }
 
-  async getPaymentStatus (idOrigin, enrollmentsDto) {
+  async getPaymentStatus(idOrigin, enrollmentsDto) {
     const status = await this.PaymentService.paymentStatus(idOrigin)
 
     if (status) {
@@ -62,7 +66,7 @@ module.exports = class EnrollmentDetails {
   }
 }
 
-async function getAdmissionsTest (enrollmentsDto, data) {
+async function getAdmissionsTest(enrollmentsDto, data) {
   // Verificar implementadação - no ambiente de homologção os dados do exame só ficaram disponives após executar essa chamada.
   const res = await retry(
     consultaProvaOnlinePorBusinesskey,
@@ -71,7 +75,7 @@ async function getAdmissionsTest (enrollmentsDto, data) {
   if (!res) {
     throw new ClientServerError('Unexpected Content', {
       method: 'AdmissionsTest',
-      errors: [data, enrollmentsDto, res]
+      errors: [data, enrollmentsDto, res],
     })
   }
   //
@@ -86,7 +90,7 @@ async function getAdmissionsTest (enrollmentsDto, data) {
   ) {
     throw new ClientServerError('Unexpected Content', {
       method: 'AdmissionsTest',
-      errors: [data, enrollmentsDto, res, exam]
+      errors: [data, enrollmentsDto, res, exam],
     })
   }
 }

@@ -1,4 +1,4 @@
-const axios = require('axios').create({ timeout: 1000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
@@ -19,9 +19,9 @@ class InscricaoPorIdOrigin {
     this.LoggerService = LoggerService
   }
 
-  get = async (idOrigin) => {
+  request = async (idOrigin) => {
     const step = this.LoggerService.addStep(
-      'IngressoClientGetInscricaoPorIdOriginRequest'
+      'IngressoClientInscricaoPorIdOriginRequest'
     )
     try {
       const token = await getToken()
@@ -35,8 +35,7 @@ class InscricaoPorIdOrigin {
         })
         .catch(function (error) {
           throw new ClientServerError(error.message, {
-            client: url,
-            ...error.data,
+            request: error.config,
           })
         })
 
@@ -49,11 +48,8 @@ class InscricaoPorIdOrigin {
           businessKey: bk,
         })
         step.finalize({
-          status: res.status,
-          data: res.data,
-          headers: res.config.headers,
-          method: res.config.method,
-          url,
+          request: res.config,
+          response: res,
         })
 
         return res.data
@@ -62,7 +58,6 @@ class InscricaoPorIdOrigin {
       throw res
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize(idOrigin, error)
         throw error
       }
 

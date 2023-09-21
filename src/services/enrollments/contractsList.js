@@ -2,25 +2,26 @@ const {
   contratosPorMatricula,
   contratosPorBusinessKey,
 } = require('../../clients/ingresso/')
-const InscricaoPorIdOrigin = require('../../clients/ingresso/inscricaoPorIdOrigin')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
 const BaseError = require('../../utils/errors/BaseError')
 const { ServerError } = require('../../utils/errors')
 
 class ContractsService {
-  constructor({ LoggerService }) {
+  constructor({ IngressoClient, LoggerService }) {
     this.LoggerService = LoggerService
+    this.IngressoClient = IngressoClient
   }
 
   async contracts(idOrigin) {
     const stepContractList = this.LoggerService.addStep(
       'ContractListServiceContracts'
     )
-    const inscricaoPorIdOrigin = new InscricaoPorIdOrigin({
-      LoggerService: this.LoggerService,
-    })
-    const enrollment = await retry(inscricaoPorIdOrigin.get, idOrigin)
+
+    const enrollment = await retry(
+      this.IngressoClient.inscricaoPorIdOrigin,
+      idOrigin
+    )
 
     const enrollmentsDto = new EnrollmentsDto(enrollment)
 

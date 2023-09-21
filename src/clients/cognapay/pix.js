@@ -1,22 +1,18 @@
-const axios = require('axios').create({ timeout: 6000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const {
   ClientServerError,
   ClientServerAuthError,
 } = require('../../utils/errors')
 const cognaPayConfig = { ...config.kroton.cognapay }
-const MessageResponse = require('../../dto/logger/MessageResponse')
-const MessageRequest = require('../../dto/logger/MessageRequest')
-
 const url = `${cognaPayConfig.url}/api/v2.5/Checkout`
-
 module.exports = class PaymentPix {
   constructor({ LoggerService, CognaPayGetToken }) {
     this.LoggerService = LoggerService
     this.CognaPayGetToken = CognaPayGetToken
   }
 
-  get = async (body, system) => {
+  request = async (body, system) => {
     const token = await this.CognaPayGetToken.get(system)
     const step = this.LoggerService.addStep('CognaPayClientCheckoutRequest')
     try {
@@ -32,7 +28,8 @@ module.exports = class PaymentPix {
 
       if (res.status === 201) {
         step.finalize({
-          response: new MessageResponse(res),
+          request: res.config,
+          response: res,
         })
         return res.data
       } else {
@@ -40,7 +37,6 @@ module.exports = class PaymentPix {
       }
     } catch (error) {
       if (error instanceof ClientServerError) {
-        //step.finalize({ url, body, system, error })
         throw error
       }
 
@@ -49,7 +45,6 @@ module.exports = class PaymentPix {
           client: url,
           errors: error.data,
         })
-        //step.finalize({ body, system, errorData })
         throw errorData
       }
 
@@ -57,7 +52,6 @@ module.exports = class PaymentPix {
         client: url,
         errors: error.data,
       })
-      //step.finalize({ body, system, errorData })
       throw errorData
     }
   }

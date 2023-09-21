@@ -118,10 +118,10 @@ module.exports = class Ingresso {
   }
 
   getDadosPagamento = async (businessKey) => {
-    return await this.IngressoGetDadosPagamento.get(businessKey)
+    return await this.IngressoGetDadosPagamento.request(businessKey)
   }
 
   inscricaoPorIdOrigin = async (idOrigin) => {
-    return await this.InscricaoPorIdOrigin.get(idOrigin)
+    return await this.InscricaoPorIdOrigin.request(idOrigin)
   }
 }

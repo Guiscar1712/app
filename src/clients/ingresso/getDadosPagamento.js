@@ -1,10 +1,8 @@
-const axios = require('axios').create({ timeout: 1000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
 const getToken = require('./token')
-const MessageResponse = require('../../dto/logger/MessageResponse')
-const MessageRequest = require('../../dto/logger/MessageRequest')
 
 const ingresso = {
   grant_type: 'client_credentials',
@@ -21,9 +19,9 @@ module.exports = class DadosPagamento {
     this.LoggerService = LoggerService
   }
 
-  get = async (businessKey) => {
+  request = async (businessKey) => {
     const step = this.LoggerService.addStep(
-      'IngressoClientGetOrderRefecenceRequest'
+      'IngressoClientOrderRefecenceRequest'
     )
     const url = `${urlBase}/${businessKey}`
     try {
@@ -41,7 +39,7 @@ module.exports = class DadosPagamento {
         })
 
       if (res.status === 200) {
-        step.finalize({ response: new MessageResponse(res) })
+        step.finalize({ request: res.config, response: res })
         return res.data
       }
 

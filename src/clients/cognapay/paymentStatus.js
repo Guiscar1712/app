@@ -1,11 +1,9 @@
-const axios = require('axios').create({ timeout: 6000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const {
   ClientServerError,
   ClientServerAuthError,
 } = require('../../utils/errors')
-const MessageResponse = require('../../dto/logger/MessageResponse')
-const MessageRequest = require('../../dto/logger/MessageRequest')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
@@ -17,9 +15,9 @@ module.exports = class PaymentPixStatus {
     this.CognaPayGetToken = CognaPayGetToken
   }
 
-  get = async (orderReference, system) => {
+  request = async (orderReference, system) => {
     const token = await this.CognaPayGetToken.get(system)
-    const step = this.LoggerService.addStep('CognaPayClientGetStatusRequest')
+    const step = this.LoggerService.addStep('CognaPayClientStatusRequest')
     const url = `${urlBase}${orderReference}`
     try {
       const res = await axios
@@ -33,7 +31,8 @@ module.exports = class PaymentPixStatus {
         })
 
       step.finalize({
-        response: new MessageResponse(res),
+        request: res.config,
+        response: res,
       })
       if (res.status === 200) {
         return res.data

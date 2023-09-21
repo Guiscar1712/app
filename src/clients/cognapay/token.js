@@ -1,7 +1,7 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
-const axios = require('axios').create({ timeout: 1000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const {
   ClientServerError,
@@ -17,18 +17,23 @@ module.exports = class CognaPayToken {
     this.LoggerService = LoggerService
   }
 
-  get = async (system) => {
-    const step = this.LoggerService.addStep('CognaPayClientGetTokenRequest')
+  request = async (system) => {
+    const step = this.LoggerService.addStepStepTrace(
+      'CognaPayClientTokenRequest'
+    )
+
     try {
       const tokenCognapay = this.getTokenEnv(system)
-
       if (tokenCognapay === null) {
-        const token = await this.getToken(system)
-        step.finalize({ system, token })
+        const token = await this.getToken(system, step)
         return token
       }
 
-      step.finalize({ url, system, token: tokenCognapay })
+      this.LoggerService.finalizeStep({
+        system,
+        token: tokenCognapay,
+        tokenInMemory: true,
+      })
       return tokenCognapay
     } catch (error) {
       if (error instanceof ClientServerError) {
@@ -54,7 +59,7 @@ module.exports = class CognaPayToken {
     }
   }
 
-  async getToken(system) {
+  async getToken(system, step) {
     const auth = await this.getParams(system)
 
     const res = await axios
@@ -64,6 +69,13 @@ module.exports = class CognaPayToken {
       .catch(function (error) {
         return error.response
       })
+
+    // Implementar ajuste no logger para identificar atributos request e response para modelar de accordo com os modelso
+    this.LoggerService.finalizeStep(step.value, step.key, {
+      request: res.config,
+      response: res,
+    })
+
     if (res.status === 200) {
       this.setTokenEnv(res.data, system)
       return res.data
