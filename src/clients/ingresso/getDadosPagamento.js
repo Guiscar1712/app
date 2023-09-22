@@ -35,6 +35,7 @@ module.exports = class DadosPagamento {
           },
         })
         .catch(function (error) {
+          step.finalize({ request: error.config, response: error.response })
           return error.response
         })
 

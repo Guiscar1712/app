@@ -1,5 +1,6 @@
 const BaseError = require('./BaseError')
 const MessageRequest = require('./../../dto/logger/MessageRequest')
+const MessageResponse = require('./../../dto/logger/MessageResponse')
 class ClientServerError extends BaseError {
   statusCode = 500
   code = 400
@@ -23,6 +24,7 @@ class ClientServerError extends BaseError {
   serializeErrorsRequest() {
     if (this.errors?.request) {
       this.errors.request = new MessageRequest(this.errors.request)
+      this.errors.response = new MessageResponse(this.errors.response)
     }
     return this.errors
   }

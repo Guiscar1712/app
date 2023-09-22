@@ -6,7 +6,8 @@ module.exports = class TrackMiddleware {
   tracking = (typeLog) => {
     return async (req, res, next) => {
       const indexLog = {
-        remoteAddress: req.connection.remoteAddress,
+        remoteAddress:
+          req.headers['x-forwarded-for'] || req.socket.remoteAddress || null,
       }
       this.LoggerService.newLog(indexLog, typeLog, req)
       const step = this.LoggerService.addStep('TrackMiddleware')
@@ -59,7 +60,7 @@ function RemoveCommands(container) {
 }
 
 function addLog(req, res) {
-  const ip = req.connection.remoteAddress
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null
   const id = res.user ? res.user.id : 0
 
   const log = {

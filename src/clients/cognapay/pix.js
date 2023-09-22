@@ -23,6 +23,10 @@ module.exports = class PaymentPix {
           },
         })
         .catch(function (error) {
+          step.finalize({
+            request: error.config,
+            response: error.response,
+          })
           return error.response
         })
 

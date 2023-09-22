@@ -37,7 +37,6 @@ module.exports = class CognaPayToken {
       return tokenCognapay
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize({ url, system, error })
         throw error
       }
 
@@ -46,7 +45,6 @@ module.exports = class CognaPayToken {
           client: url,
           errors: error.data,
         })
-        step.finalize({ system, errorData })
         throw errorData
       }
 
@@ -54,7 +52,6 @@ module.exports = class CognaPayToken {
         client: url,
         errors: error.data,
       })
-      step.finalize({ system, errorData })
       throw errorData
     }
   }
@@ -67,10 +64,13 @@ module.exports = class CognaPayToken {
         auth,
       })
       .catch(function (error) {
+        this.LoggerService.finalizeStep(step.value, step.key, {
+          request: error.config,
+          response: error.response,
+        })
         return error.response
       })
 
-    // Implementar ajuste no logger para identificar atributos request e response para modelar de accordo com os modelso
     this.LoggerService.finalizeStep(step.value, step.key, {
       request: res.config,
       response: res,
