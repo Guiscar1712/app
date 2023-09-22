@@ -19,102 +19,22 @@ module.exports = class Ingresso {
     LoggerService,
     IngressoGetDadosPagamento,
     InscricaoPorIdOrigin,
+    PersonalData,
+    PersonalDataUpdate,
   }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
     this.InscricaoPorIdOrigin = InscricaoPorIdOrigin
+    this.PersonalData = PersonalData
+    this.PersonalDataUpdate = PersonalDataUpdate
   }
 
-  getPersonalData = async (cpf) => {
-    const step = this.LoggerService.addStep('IngressoClientGetPersonalData')
-    const url = `${urlBase}/ms/dadospessoais/captacao/v1/dadospessoais/${cpf}`
-    try {
-      const token = await getToken()
-      const res = await axios
-        .get(url, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token,
-          },
-        })
-        .catch(function (error) {
-          return error.response
-        })
-
-      step.finalize({
-        status: res.status,
-        data: res.data,
-        headers: res.config.headers,
-        method: res.config.method,
-        url,
-      })
-      if (res.status === 200) {
-        return res.data
-      }
-
-      throw res
-    } catch (error) {
-      let errorData
-      if (error.status === 401) {
-        errorData = new ClientServerAuthError('Not authorized', {
-          client: url,
-          errors: error.data,
-        })
-      } else {
-        errorData = new ClientServerError('Something went wrong', {
-          client: url,
-          errors: error.data,
-        })
-      }
-      step.finalize({ cpf, url, errorData })
-      throw errorData
-    }
+  personalDataGet = async (cpf) => {
+    return await this.PersonalData.request(cpf)
   }
 
-  updatePersonalData = async (body) => {
-    const step = this.LoggerService.addStep('IngressoClientUpdatePersonalData')
-    const url = `${urlBase}/ms/dadospessoais/captacao/v1/dadospessoais`
-    try {
-      const token = await getToken()
-      const res = await axios
-        .post(url, body, {
-          headers: {
-            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token,
-          },
-        })
-        .catch(function (error) {
-          return error.response
-        })
-
-      step.finalize({
-        status: res.status,
-        data: res.data,
-        headers: res.config.headers,
-        method: res.config.method,
-        url,
-      })
-      if (res.status === 200) {
-        return res.data
-      }
-
-      throw res
-    } catch (error) {
-      let errorData
-      if (error.status === 401) {
-        errorData = new ClientServerAuthError('Not authorized', {
-          client: url,
-          errors: error.data,
-        })
-      } else {
-        errorData = new ClientServerError('Something went wrong', {
-          client: url,
-          errors: error.data,
-        })
-      }
-      step.finalize({ body, url, errorData })
-      throw errorData
-    }
+  personalDataUpdate = async (body) => {
+    return await this.PersonalDataUpdate.request(body)
   }
 
   getDadosPagamento = async (businessKey) => {
