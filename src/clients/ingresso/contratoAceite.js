@@ -1,4 +1,4 @@
-const axios = require('axios').create({ timeout: 1000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
@@ -19,8 +19,8 @@ class ContratoAceite {
     this.LoggerService = LoggerService
   }
 
-  main = async ({ contractId, body }) => {
-    const step = this.LoggerService.addStep('ContratoAceitoModule')
+  request = async ({ contractId, body }) => {
+    const step = this.LoggerService.addStep('IngressoClientContratoAceitoRequest')
     try {
       const token = await getToken()
       const res = await axios
@@ -31,7 +31,6 @@ class ContratoAceite {
           },
         })
         .catch(function (error) {
-          step.finalize(contractId, body, error)
           return error.response
         })
 
@@ -40,11 +39,8 @@ class ContratoAceite {
         // const businessKey = res.inscricao.businessKey
         this.LoggerService.setIndex({ system: system, contratoId: contractId })
         step.finalize({
-          status: res.status,
-          data: res.data,
-          headers: res.config.headers,
-          method: res.config.method,
-          url,
+          request: res.config,
+          response: res,
         })
         return res.data
       }
@@ -60,14 +56,14 @@ class ContratoAceite {
         step.finalize({ contractId, url, error })
         throw new ClientServerAuthError('Something went wrong', {
           client: url,
-          ...error.data,
+          errors: error.data,
         })
       }
 
       step.finalize({ contractId, url, error })
       throw new ClientServerError('Something went wrong', {
         client: url,
-        ...error.data,
+        errors: error.data,
       })
     }
   }

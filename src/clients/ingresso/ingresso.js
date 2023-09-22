@@ -19,10 +19,12 @@ module.exports = class Ingresso {
     LoggerService,
     IngressoGetDadosPagamento,
     InscricaoPorIdOrigin,
+    ContratoAceite    
   }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
     this.InscricaoPorIdOrigin = InscricaoPorIdOrigin
+    this.ContratoAceite = ContratoAceite
   }
 
   getPersonalData = async (cpf) => {
@@ -123,5 +125,9 @@ module.exports = class Ingresso {
 
   inscricaoPorIdOrigin = async (idOrigin) => {
     return await this.InscricaoPorIdOrigin.request(idOrigin)
+  }
+
+  contratoAceite = async ({contractId, body}) => {
+    return await this.ContratoAceite.request({ contractId, body })
   }
 }

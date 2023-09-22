@@ -1,37 +1,35 @@
 const retry = require('../../utils/retry')
 const { ClientServerError } = require('../../utils/errors')
 const { ContractDto } = require('../../dto/enrollment')
-const ContratoAceite = require('../../clients/ingresso/contratoAceite')
 
 module.exports = class ContractAcceptedService {
-  constructor ({ LoggerService }) {
+  constructor ({ IngressoClient, LoggerService }) {
     this.LoggerService = LoggerService
+    this.IngressoClient = IngressoClient
   }
 
   contractAccepted = async (contractId, clientIp) => {
     const body = { opcao: 1, ip: clientIp }
-    const stepContractAccepted = this.LoggerService.addStep('ContractAcceptedServiceContractAccepted')
-    const contratoAceiteInstance = new ContratoAceite({ LoggerService: this.LoggerService })
+    const step = this.LoggerService.addStepStepTrace(
+      'ContractAcceptedServiceContractAccepted'
+    )
 
     try {
-      const res = await retry(contratoAceiteInstance.main, { contractId, body })
+      const res = await retry(this.IngressoClient.contratoAceite, { contractId, body })
       if (!res || !res.dadosAceite) {
         const error = new ClientServerError('Something went wrong', [{ contractId, body }])
-        stepContractAccepted.finalize({ contractId, body, error })
         throw error
       }
       const contract = new ContractDto(res)
 
       if (contract.status === 'ERROR') {
         const error = new ClientServerError('Something went wrong', [{ contractId, body }])
-        stepContractAccepted.finalize({ contractId, body, error })
         throw error
       }
 
-      stepContractAccepted.finalize({ contract })
+      this.LoggerService.finalizeStep(step.value, step.key, { contract })
       return contract
     } catch (error) {
-      stepContractAccepted.finalize({ contractId, body, error })
       throw error
     }
   }

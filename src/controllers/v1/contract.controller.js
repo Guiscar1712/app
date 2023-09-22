@@ -42,7 +42,7 @@ module.exports = class NotificationController {
   }
 
   accepted = async (request, response, next) => {
-    const stepAccepted = this.LoggerService.addStep('Accepted')
+    const step = this.LoggerService.addStepStepTrace('ContractControllerAccepted')
 
     try {
       if (!request.params.contractId) {
@@ -52,10 +52,11 @@ module.exports = class NotificationController {
       const { ipAddress } = request.body
 
       const data = await this.ContractService.contractAccepted(request.params.contractId, ipAddress)
-      stepAccepted.finalize({ contratoAceito: data.response })
+      this.LoggerService.finalizeStep(step.value, step.key, {
+        contratoAceito: data.response,
+      })
       next(data)
     } catch (error) {
-      stepAccepted.finalize({ errorAccepted: error })
       next(error)
     }
   }
