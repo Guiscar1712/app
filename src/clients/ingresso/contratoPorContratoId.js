@@ -1,4 +1,4 @@
-const axios = require('axios').create({ timeout: 1000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
@@ -19,8 +19,8 @@ class ContratoPorContratoId {
     this.LoggerService = LoggerService
   }
 
-  main = async (contratoId) => {
-    const step = this.LoggerService.addStep('ContratoPorContratoIdModule')
+  request = async (contratoId) => {
+    const step = this.LoggerService.addStep('IngressoClientContratoPorContratoIdRequest')
     try {
       const token = await getToken()
 
@@ -35,7 +35,6 @@ class ContratoPorContratoId {
           }
         }
       ).catch(function (error) {
-        step.finalize(contratoId, error)
         return error.response
       })
 
@@ -49,16 +48,13 @@ class ContratoPorContratoId {
       throw res
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize({ contratoId, url, error })
         throw error
       }
 
       if (error.status === 401) {
-        step.finalize({ contratoId, url, error })
         throw new ClientServerAuthError('Algo deu errado', { client: url, ...error.data })
       }
 
-      step.finalize({ contratoId, url, error })
       throw new ClientServerError('Algo deu errado', { client: url, ...error.data })
     }
   }

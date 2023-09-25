@@ -9,19 +9,19 @@ module.exports = class NotificationController {
   }
 
   getContracts = async (request, response, next) => {
-    const stepGetContracts = this.LoggerService.addStep('GetContracts')
+    const step = this.LoggerService.addStepStepTrace('ContractControllerContracts')
     try {
       if (!request.query || !request.query.idOrigin) {
-        stepGetContracts.finalize({ errorGetContracts: `Parâmetros inválidos -> request.query: ${request.query}  ---  request.query.idOrigin: ${request.query.idOrigin}` })
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
       const data = await this.ContractListService.contracts(request.query.idOrigin)
 
-      stepGetContracts.finalize({ getContracts: data.length })
+      this.LoggerService.finalizeStep(step.value, step.key, {
+        contratoAceito: data.response,
+      })
 
       next(data)
     } catch (error) {
-      stepGetContracts.finalize({ errorGetContracts: error })
       next(error)
     }
   }

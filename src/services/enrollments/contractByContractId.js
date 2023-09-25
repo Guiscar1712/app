@@ -12,7 +12,7 @@ module.exports = class EnrollmentDetailsService {
 
     try {
       const contratoPorId = new ContratoPorId({ LoggerService: this.LoggerService })
-      const res = await retry(contratoPorId.main, contractId)
+      const res = await retry(contratoPorId.request, contractId)
 
       if (!res || !res.arquivo) {
         const error = new ClientServerError('Não foi possível obter o contrato', [{ contractId }])

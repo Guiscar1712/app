@@ -14,9 +14,6 @@ class ContractsService {
   }
 
   async contracts(idOrigin) {
-    const stepContractList = this.LoggerService.addStep(
-      'ContractListServiceContracts'
-    )
 
     const enrollment = await retry(
       this.IngressoClient.inscricaoPorIdOrigin,
@@ -26,9 +23,6 @@ class ContractsService {
     const enrollmentsDto = new EnrollmentsDto(enrollment)
 
     if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
-      stepContractList.finalize({
-        errorGetContractsServiceContracts: enrollmentsDto,
-      })
       throw new Error('Error ao processar ao consultar inscricão')
     }
 
@@ -37,12 +31,12 @@ class ContractsService {
       enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
       businessKey: enrollmentsDto.businessKey,
     }
-
+    
     return await this.fetchContracts(queryFetch)
   }
 
   async fetchContracts({ system, enrollmentId, businessKey }) {
-    const step = this.LoggerService.addStep('ContractListServiceFetchContracts')
+    const step = this.LoggerService.addStepStepTrace('ServicesEnrollmentsContractListFetchContracts')
 
     try {
       let data
@@ -54,7 +48,6 @@ class ContractsService {
       }
 
       if (!data || data.length <= 0) {
-        step.finalize({ system, enrollmentId, businessKey, data: [] })
         return []
       }
 
@@ -67,7 +60,7 @@ class ContractsService {
         contracts.push(contract)
       })
 
-      step.finalize({ system, enrollmentId, businessKey, data })
+      this.LoggerService.finalizeStep(step.value, step.key, {contracts})
       return contracts
     } catch (error) {
       if (error instanceof BaseError) {
