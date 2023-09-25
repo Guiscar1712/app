@@ -8,11 +8,12 @@ module.exports = class UserController {
   }
 
   login = async (request, response, next) => {
-    const { email, password } = request.body
+    let { email, password } = request.body
     this.LoggerService.setIndex({ email })
     const stepUserControllerLogin = this.LoggerService.addStep('UserControllerLogin')
 
     try {
+      email = email.trim()
       this.validateLogin(email, password)
 
       const data = await this.UserService.login(email, password)
