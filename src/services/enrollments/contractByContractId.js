@@ -3,8 +3,9 @@ const { ClientServerError } = require('../../utils/errors')
 const ContratoPorId = require('./../../clients/ingresso/contratoPorContratoId')
 
 module.exports = class EnrollmentDetailsService {
-  constructor ({ LoggerService }) {
+  constructor ({ IngressoClient, LoggerService }) {
     this.LoggerService = LoggerService
+    this.IngressoClient = IngressoClient
   }
 
   async enrollmentDetails (contractId) {

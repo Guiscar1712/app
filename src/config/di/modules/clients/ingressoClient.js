@@ -6,6 +6,7 @@ const InscricaoPorIdOrigin = require('../../../../clients/ingresso/inscricaoPorI
 const PersonalData = require('../../../../clients/ingresso/personalDataRequest')
 const PersonalDataUpdate = require('../../../../clients/ingresso/personalDataUpdate')
 const ContratoAceite = require('../../../../clients/ingresso/contratoAceite')
+const ContratoPorContratoId = require('../../../../clients/ingresso/contratoPorContratoId')
 
 module.exports = {
   IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento).scoped(),
@@ -14,4 +15,5 @@ module.exports = {
   PersonalData: asClass(PersonalData).scoped(),
   PersonalDataUpdate: asClass(PersonalDataUpdate).scoped(),
   ContratoAceite: asClass(ContratoAceite).scoped(),
+  ContratoPorContratoId: asClass(ContratoPorContratoId).scoped(),
 }

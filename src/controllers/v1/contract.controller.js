@@ -27,14 +27,16 @@ module.exports = class NotificationController {
   }
 
   getByContractId = async (request, response, next) => {
-    const stepContractDetails = this.LoggerService.addStep('ContractDetails')
+    const step = this.LoggerService.addStepStepTrace('ContractControllerContractById')
     try {
       if (!request.params.contractId) {
-        stepContractDetails.finalize({ ParamsError: 'Parâmetros inválidos' })
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
       const data = await this.ContractDetailService.enrollmentDetails(request.params.contractId)
-      stepContractDetails.finalize({ ContractDetails: data })
+
+      this.LoggerService.finalizeStep(step.value, step.key, {
+        ContractDetails: data,
+      })
       next(data)
     } catch (error) {
       next(error)
