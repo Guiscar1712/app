@@ -1,13 +1,13 @@
 const cheerio = require('cheerio')
 
-function htmlExtractItem (htmlText) {
+function htmlExtractItem(htmlText) {
   if (!htmlText) return htmlText
 
   const $ = cheerio.load(htmlText)
 
   $('p').each(function () {
     const pContent = $(this).text()
-    $(this).replaceWith(pContent + ' \n')
+    $(this).replaceWith(pContent + ' \n\n')
   })
 
   $('li').each(function () {
@@ -19,9 +19,7 @@ function htmlExtractItem (htmlText) {
     $(this).replaceWith(liContent + ' \n')
   })
 
-  const plainText = $.text().replace(/R\$/g, 'R\\$').trim()
-
-  return plainText
+  return $.text()
 }
 
 module.exports = htmlExtractItem

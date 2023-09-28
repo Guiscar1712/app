@@ -1,6 +1,10 @@
-const { htmlExtractItem, htmltoList } = require('../../extensions')
+const {
+  htmlExtractItem,
+  htmltoList,
+  htmlExtractMarketDescription,
+} = require('../../extensions')
 
-module.exports = item => ({
+module.exports = (item) => ({
   identifier: item.Identifier,
   type: item.Type,
   name: item.Name,
@@ -16,19 +20,19 @@ module.exports = item => ({
   courseSubjectsCall: htmlExtractItem(item.CourseSubjectsCall),
   courseSubjectsDescription: htmltoList(item.CourseSubjectsDescription),
   marketCall: item.MarketCall || '',
-  marketDescription: htmlExtractItem(item.MarketDescription),
+  marketDescription: item.MarketDescription,
   relatedCourses: item.RelatedCourses.length
-    ? item.RelatedCourses.map(r => ({
-      identifier: r.Identifier,
-      name: r.Name,
-      type: r.Type,
-      semesters: r.Semesters,
-      image: r.Image,
-      score: r.Score,
-      priceFrom: r.PriceFrom,
-      priceTo: r.PriceTo,
-      averageSalary: r.AverageSalary
-    }))
+    ? item.RelatedCourses.map((r) => ({
+        identifier: r.Identifier,
+        name: r.Name,
+        type: r.Type,
+        semesters: r.Semesters,
+        image: r.Image,
+        score: r.Score,
+        priceFrom: r.PriceFrom,
+        priceTo: r.PriceTo,
+        averageSalary: r.AverageSalary,
+      }))
     : [],
-  averageSalaries: item.AverageSalaries || []
+  averageSalaries: item.AverageSalaries || [],
 })
