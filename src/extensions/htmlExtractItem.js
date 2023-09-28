@@ -1,7 +1,17 @@
 const cheerio = require('cheerio')
 
-module.exports = function htmlExtractItem (html, tag) {
-  if (!html) return ''
-  const $ = cheerio.load(html)
-  return $(tag).text() || html
+function htmlExtractItem (htmlText) {
+  if (!htmlText) return htmlText
+
+  const $ = cheerio.load(htmlText)
+
+  $('li').each(function () {
+    const liContent = $(this).text().replace('.', '').trim()
+    $(this).replaceWith(liContent + '; ')
+  })
+
+  const plainText = $.text().trim()
+  return plainText
 }
+
+module.exports = htmlExtractItem

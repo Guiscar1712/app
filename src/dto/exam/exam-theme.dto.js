@@ -9,7 +9,7 @@ function toDto (item) {
 
   return {
     id: theme.id,
-    description: htmlExtractItem(theme.descricao, 'p')
+    description: htmlExtractItem(theme.descricao)
   }
 }
 
