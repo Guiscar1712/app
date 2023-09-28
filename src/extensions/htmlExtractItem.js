@@ -5,12 +5,22 @@ function htmlExtractItem (htmlText) {
 
   const $ = cheerio.load(htmlText)
 
-  $('li').each(function () {
-    const liContent = $(this).text().replace('.', '').trim()
-    $(this).replaceWith(liContent + '; ')
+  $('p').each(function () {
+    const pContent = $(this).text()
+    $(this).replaceWith(pContent + ' \n')
   })
 
-  const plainText = $.text().trim()
+  $('li').each(function () {
+    $('br').each(function () {
+      const pContent = $(this).text()
+      $(this).replaceWith(pContent + ' ')
+    })
+    const liContent = $(this).text().replace('.', '').trim()
+    $(this).replaceWith(liContent + ' \n')
+  })
+
+  const plainText = $.text().replace(/R\$/g, 'R\\$').trim()
+
   return plainText
 }
 
