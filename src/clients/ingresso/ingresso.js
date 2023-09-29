@@ -9,89 +9,51 @@ const ingresso = {
   client_id: config.kroton.ingresso.client_id,
   client_secret: config.kroton.ingresso.client_secret,
   base_uri: config.kroton.ingresso.url,
-  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
+  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey,
 }
 
 const urlBase = ingresso.base_uri
 
 module.exports = class Ingresso {
-  constructor ({ LoggerService, IngressoGetDadosPagamento }) {
+  constructor({
+    LoggerService,
+    IngressoGetDadosPagamento,
+    InscricaoPorIdOrigin,
+    PersonalData,
+    PersonalDataUpdate,
+    ContratoAceite,
+    ContratoPorContratoId,
+  }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
+    this.InscricaoPorIdOrigin = InscricaoPorIdOrigin
+    this.ContratoAceite = ContratoAceite
+    this.PersonalData = PersonalData
+    this.PersonalDataUpdate = PersonalDataUpdate
+    this.ContratoPorContratoId = ContratoPorContratoId
   }
 
-  getPersonalData = async (cpf) => {
-    const step = this.LoggerService.addStep('IngressoClientGetPersonalData')
-    const url = `${urlBase}/ms/dadospessoais/captacao/v1/dadospessoais/${cpf}`
-    try {
-      const token = await getToken()
-      const res = await axios.get(
-        url,
-        {
-          headers: {
-            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
-        }
-      ).catch(function (error) {
-        return error.response
-      })
-
-      step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: res.config.method, url })
-      if (res.status === 200) {
-        return res.data
-      }
-
-      throw res
-    } catch (error) {
-      let errorData
-      if (error.status === 401) {
-        errorData = new ClientServerAuthError('Not authorized', { client: url, errors: error.data })
-      } else {
-        errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
-      }
-      step.finalize({ cpf, url, errorData })
-      throw errorData
-    }
+  personalDataGet = async (cpf) => {
+    return await this.PersonalData.request(cpf)
   }
 
-  updatePersonalData = async (body) => {
-    const step = this.LoggerService.addStep('IngressoClientUpdatePersonalData')
-    const url = `${urlBase}/ms/dadospessoais/captacao/v1/dadospessoais`
-    try {
-      const token = await getToken()
-      const res = await axios.post(
-        url,
-        body,
-        {
-          headers: {
-            'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
-        }
-      ).catch(function (error) {
-        return error.response
-      })
-
-      step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: res.config.method, url })
-      if (res.status === 200) {
-        return res.data
-      }
-
-      throw res
-    } catch (error) {
-      let errorData
-      if (error.status === 401) {
-        errorData = new ClientServerAuthError('Not authorized', { client: url, errors: error.data })
-      } else {
-        errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
-      }
-      step.finalize({ body, url, errorData })
-      throw errorData
-    }
+  personalDataUpdate = async (body) => {
+    return await this.PersonalDataUpdate.request(body)
   }
 
   getDadosPagamento = async (businessKey) => {
-    return await this.IngressoGetDadosPagamento.get(businessKey)
+    return await this.IngressoGetDadosPagamento.request(businessKey)
+  }
+
+  inscricaoPorIdOrigin = async (idOrigin) => {
+    return await this.InscricaoPorIdOrigin.request(idOrigin)
+  }
+
+  contratoAceite = async ({contractId, body}) => {
+    return await this.ContratoAceite.request({ contractId, body })
+  }
+
+  contratoPorContratoId  = async ({contractId, body}) => {
+    return await this.ContratoPorContratoId.request({ contractId, body })
   }
 }

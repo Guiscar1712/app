@@ -1,4 +1,4 @@
-const axios = require('axios').create({ timeout: 1000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
@@ -14,13 +14,19 @@ const ingresso = {
 
 const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato`
 
-async function main (contratoId) {
-  try {
-    const token = await getToken()
+class ContratoPorContratoId {
+  constructor ({ LoggerService }) {
+    this.LoggerService = LoggerService
+  }
 
-    const param = `${contratoId}/html`
+  request = async (contratoId) => {
+    const step = this.LoggerService.addStep('IngressoClientContratoPorContratoIdRequest')
+    try {
+      const token = await getToken()
 
-    const res = await axios.get(
+      const param = `${contratoId}/html`
+
+      const res = await axios.get(
         `${url}/${param}`,
         {
           headers: {
@@ -28,26 +34,30 @@ async function main (contratoId) {
             Authorization: 'Bearer ' + token
           }
         }
-    ).catch(function (error) {
-      return error.response
-    })
+      ).catch(function (error) {
+        return error.response
+      })
 
-    if (res.status === 200) {
-      return res.data
+      if (res.status === 200) {
+        this.LoggerService.setIndex({ contratoId })
+
+        step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: 'GET', url })
+        return res.data
+      }
+
+      throw res
+    } catch (error) {
+      if (error instanceof ClientServerError) {
+        throw error
+      }
+
+      if (error.status === 401) {
+        throw new ClientServerAuthError('Algo deu errado', { client: url, ...error.data })
+      }
+
+      throw new ClientServerError('Algo deu errado', { client: url, ...error.data })
     }
-
-    throw res
-  } catch (error) {
-    if (error instanceof ClientServerError) {
-      throw error
-    }
-
-    if (error.status === 401) {
-      throw new ClientServerAuthError('Something went wrong', { client: url, ...error.data })
-    }
-
-    throw new ClientServerError('Something went wrong', { client: url, ...error.data })
   }
 }
 
-module.exports = main
+module.exports = ContratoPorContratoId

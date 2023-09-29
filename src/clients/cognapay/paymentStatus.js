@@ -1,57 +1,67 @@
-const axios = require('axios').create({ timeout: 6000000 })
+const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
-const { ClientServerError, ClientServerAuthError } = require('../../utils/errors')
+const {
+  ClientServerError,
+  ClientServerAuthError,
+} = require('../../utils/errors')
 
 const cognaPayConfig = { ...config.kroton.cognapay }
 
 const urlBase = `${cognaPayConfig.url}/api/payment/GetPaymentByOrderReference?orderReference=`
 
 module.exports = class PaymentPixStatus {
-  constructor ({ LoggerService, CognaPayGetToken }) {
+  constructor({ LoggerService, CognaPayGetToken }) {
     this.LoggerService = LoggerService
     this.CognaPayGetToken = CognaPayGetToken
   }
 
-  get = async (orderReference, system) => {
-    const step = this.LoggerService.addStep('CognaPayClientGetStatus')
+  request = async (orderReference, system) => {
+    const token = await this.CognaPayGetToken.request(system)
+    const step = this.LoggerService.addStep('CognaPayClientStatusRequest')
     const url = `${urlBase}${orderReference}`
     try {
-      const token = await this.CognaPayGetToken.get(system)
-
-      const res = await axios.get(
-        url,
-        {
+      const res = await axios
+        .get(url, {
           headers: {
-            Authorization: 'Bearer ' + token
-          }
-        }
-      ).catch(function (error) {
-        return error.response
-      })
+            Authorization: 'Bearer ' + token,
+          },
+        })
+        .catch(function (error) {
+          step.finalize({
+            request: error.config,
+            response: error.response,
+          })
+          return error.response
+        })
 
+      step.finalize({
+        request: res.config,
+        response: res,
+      })
       if (res.status === 200) {
-        step.finalize({ url, orderReference, system, data: res.data })
         return res.data
       } else if (res.status === 404) {
-        step.finalize({ url, orderReference, system, data: res })
         return null
       } else {
         throw res
       }
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize({ url, orderReference, system, error })
         throw error
       }
 
       if (error.status === 401) {
-        const errorData = new ClientServerAuthError('Something went wrong', { client: url, errors: error.data })
-        step.finalize({ orderReference, system, errorData })
+        const errorData = new ClientServerAuthError('Something went wrong', {
+          client: url,
+          errors: error.data,
+        })
         throw errorData
       }
 
-      const errorData = new ClientServerError('Something went wrong', { client: url, errors: error.data })
-      step.finalize({ orderReference, system, errorData })
+      const errorData = new ClientServerError('Something went wrong', {
+        client: url,
+        errors: error.data,
+      })
       throw errorData
     }
   }

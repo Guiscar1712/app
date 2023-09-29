@@ -1,4 +1,5 @@
 const BaseError = require('./BaseError')
+const MessageRequest = require('./../../dto/logger/MessageRequest')
 
 class ClientServerAuthError extends BaseError {
   statusCode = 500
@@ -8,14 +9,22 @@ class ClientServerAuthError extends BaseError {
   errors
   stack
 
-  constructor (message, errors) {
+  constructor(message, errors) {
     super(message)
     this.errors = errors
     this.type = this.constructor.name
     Error.captureStackTrace(this, this.constructor)
+    this.serializeErrorsRequest()
   }
 
-  serializeErrors () {
+  serializeErrors() {
+    return this.errors
+  }
+
+  serializeErrorsRequest() {
+    if (this.errors?.request) {
+      this.errors.request = new MessageRequest(this.errors.request)
+    }
     return this.errors
   }
 }

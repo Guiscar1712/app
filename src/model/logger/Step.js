@@ -1,16 +1,33 @@
 const moment = require('moment')
 const obscureSensitiveData = require('./../../extensions/obscureSensitiveData')
+const MessageRequest = require('../../dto/logger/MessageRequest')
+const MessageResponse = require('../../dto/logger/MessageResponse')
 class Step {
-  constructor () {
+  constructor() {
     this.date = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
   }
 
-  finalize (data) {
+  finalize(data) {
     if (data instanceof Error) {
       let { code, message, stack, errors, type, functionError } = data
       code = code ?? -1
-      this.data = obscureSensitiveData({ code, message, stack, errors, type, functionError })
+      this.data = obscureSensitiveData({
+        code,
+        message,
+        stack,
+        errors,
+        type,
+        functionError,
+      })
     } else {
+      if (data.request) {
+        data.request = new MessageRequest(data.request)
+      }
+
+      if (data.response) {
+        data.response = new MessageResponse(data.response)
+      }
+
       this.data = obscureSensitiveData(data)
     }
 
@@ -19,7 +36,7 @@ class Step {
     this.duration = moment.duration(endDate.diff(entryDate)).asMilliseconds()
   }
 
-  finalizeTrace (data, startDateTrace) {
+  finalizeTrace(data, startDateTrace) {
     if (data instanceof Error) {
       let { code, message, stack, errors, type } = data
       code = code ?? -1

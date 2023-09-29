@@ -1,5 +1,10 @@
 module.exports = class CognaPayClient {
-  constructor ({ LoggerService, CognaPayGetToken, CognaPayPaymentPix, CognaPayPaymentPixStatus }) {
+  constructor({
+    LoggerService,
+    CognaPayGetToken,
+    CognaPayPaymentPix,
+    CognaPayPaymentPixStatus,
+  }) {
     this.LoggerService = LoggerService
     this.CognaPayGetToken = CognaPayGetToken
     this.CognaPayPaymentPix = CognaPayPaymentPix
@@ -7,14 +12,14 @@ module.exports = class CognaPayClient {
   }
 
   getToken = async ({ system }) => {
-    return await this.CognaPayGetToken.get(system)
+    return await this.CognaPayGetToken.request(system)
   }
 
   payForPix = async ({ body, system }) => {
-    return await this.CognaPayPaymentPix.get(body, system)
+    return await this.CognaPayPaymentPix.request(body, system)
   }
 
   getPaymentStatus = async ({ orderReference, system }) => {
-    return await this.CognaPayPaymentPixStatus.get(orderReference, system)
+    return await this.CognaPayPaymentPixStatus.request(orderReference, system)
   }
 }
