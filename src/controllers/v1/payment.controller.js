@@ -7,7 +7,7 @@ module.exports = class PaymentController {
   }
 
   paymentPix = async (request, response, next) => {
-    const step = this.LoggerService.addStep('PaymentControllerPaymentPix')
+    const step = this.LoggerService.addStepStepTrace('PaymentControllerPaymentPix')
     try {
       const originId = request.params.originId
       const contract = ApplyValidate(originId)
@@ -16,16 +16,15 @@ module.exports = class PaymentController {
       }
 
       const data = await this.PaymentService.paymentForPix(originId, request.user.id)
-      step.finalize(data)
+      this.LoggerService.finalizeStep(step.value, step.key, data)
       next(data)
-    } catch (error) {
-      step.finalize()
+    } catch (error) {      
       next(error)
     }
   }
 
   paymentStatus = async (request, response, next) => {
-    const step = this.LoggerService.addStep('PaymentControllerPaymentPix')
+    const step = this.LoggerService.addStepStepTrace('PaymentControllerPaymentPix')
     try {
       const originId = request.params.originId
       const contract = ApplyValidate(originId)
@@ -36,13 +35,12 @@ module.exports = class PaymentController {
       const data = await this.PaymentService.paymentStatus(originId)
 
       if (!data) {
-        throw new NotFoundError('Registro não encontrato', [{ originId }])
+        throw new NotFoundError('Registro não encontrato', [{ message: 'Registro não encontrato', originId }])
       }
 
-      step.finalize(data)
+      this.LoggerService.finalizeStep(step.value, step.key, data)
       next(data)
-    } catch (error) {
-      step.finalize()
+    } catch (error) {    
       next(error)
     }
   }

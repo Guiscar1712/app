@@ -4,7 +4,7 @@ const { EnrollmentsDto } = require('../../dto/enrollment')
 const retry = require('../../utils/retry')
 const Util = require('../../utils/util')
 
-async function searchForEnrollments (document) {
+async function searchForEnrollments(document) {
   document = Util.formatCpf(document)
 
   const data = await retry(inscricoesPorCpf, document)
@@ -15,13 +15,14 @@ async function searchForEnrollments (document) {
 
   const enrollments = []
 
-  data.forEach(element => {
+  data.forEach((element) => {
     if (!validateEnrollmentsDate(element)) {
       return
     }
 
     const enrollmentsDto = new EnrollmentsDto(element)
     if (enrollmentsDto.status !== 'ERROR') {
+      delete enrollmentsDto.contract
       enrollments.push(enrollmentsDto)
     }
   })
@@ -29,7 +30,7 @@ async function searchForEnrollments (document) {
   return enrollments
 }
 
-function validateEnrollmentsDate (element) {
+function validateEnrollmentsDate(element) {
   const dateNow = moment()
   const monthsAgo = parseInt(process.env.KROTON_INGRESSO_SEARCH_MONTHS_AGO)
 

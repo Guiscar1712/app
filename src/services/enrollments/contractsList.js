@@ -1,7 +1,6 @@
 const {
   contratosPorMatricula,
-  inscricaoPorIdOrigin,
-  contratosPorBusinessKey
+  contratosPorBusinessKey,
 } = require('../../clients/ingresso/')
 const retry = require('../../utils/retry')
 const { ContractDto, EnrollmentsDto } = require('../../dto/enrollment')
@@ -9,35 +8,35 @@ const BaseError = require('../../utils/errors/BaseError')
 const { ServerError } = require('../../utils/errors')
 
 class ContractsService {
-  constructor ({ LoggerService }) {
+  constructor({ IngressoClient, LoggerService }) {
     this.LoggerService = LoggerService
+    this.IngressoClient = IngressoClient
   }
 
-  async contracts (idOrigin) {
-    const stepContractList = this.LoggerService.addStep(
-      'ContractListServiceContracts'
+  async contracts(idOrigin) {
+
+    const enrollment = await retry(
+      this.IngressoClient.inscricaoPorIdOrigin,
+      idOrigin
     )
-    const enrollment = await retry(inscricaoPorIdOrigin, idOrigin)
+
     const enrollmentsDto = new EnrollmentsDto(enrollment)
 
     if (!enrollmentsDto || enrollmentsDto.status === 'ERROR') {
-      stepContractList.finalize({
-        errorGetContractsServiceContracts: enrollmentsDto
-      })
       throw new Error('Error ao processar ao consultar inscricão')
     }
 
     const queryFetch = {
       system: enrollment.sistema,
       enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
-      businessKey: enrollmentsDto.businessKey
+      businessKey: enrollmentsDto.businessKey,
     }
-
+    
     return await this.fetchContracts(queryFetch)
   }
 
-  async fetchContracts ({ system, enrollmentId, businessKey }) {
-    const step = this.LoggerService.addStep('ContractListServiceFetchContracts')
+  async fetchContracts({ system, enrollmentId, businessKey }) {
+    const step = this.LoggerService.addStepStepTrace('ServicesEnrollmentsContractListFetchContracts')
 
     try {
       let data
@@ -49,7 +48,6 @@ class ContractsService {
       }
 
       if (!data || data.length <= 0) {
-        step.finalize({ system, enrollmentId, businessKey, data: [] })
         return []
       }
 
@@ -62,7 +60,7 @@ class ContractsService {
         contracts.push(contract)
       })
 
-      step.finalize({ system, enrollmentId, businessKey, data })
+      this.LoggerService.finalizeStep(step.value, step.key, {contracts})
       return contracts
     } catch (error) {
       if (error instanceof BaseError) {

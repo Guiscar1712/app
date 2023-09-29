@@ -2,7 +2,7 @@ const SimpleQuery = require('../../database/queries/v1/simpleQuery')
 const table = 'Payment'
 
 module.exports = class PaymentRepository {
-  constructor ({ LoggerService }) {
+  constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
@@ -45,7 +45,7 @@ module.exports = class PaymentRepository {
   }
 
   insert = async (entity, transaction) => {
-    const step = this.LoggerService.addStep('PaymentRepositoryInsertBy')
+    const step = this.LoggerService.addStep('PaymentRepositoryInsert')
     try {
       const row = await SimpleQuery.insert(entity, table, transaction)
       const data = format(row)
@@ -58,7 +58,7 @@ module.exports = class PaymentRepository {
   }
 
   update = async (id, entity, transaction) => {
-    const step = this.LoggerService.addStep('PaymentRepositoryUpdateBy')
+    const step = this.LoggerService.addStep('PaymentRepositoryUpdate')
     try {
       return await SimpleQuery.update({ id }, entity, table, transaction)
     } catch (error) {
@@ -68,7 +68,7 @@ module.exports = class PaymentRepository {
   }
 }
 
-function format (row) {
+function format(row) {
   if (!row) {
     return null
   }
@@ -86,6 +86,6 @@ function format (row) {
     invoiceType: row.InvoiceType,
     paymentType: row.PaymentType,
     paymentStatus: row.PaymentStatus,
-    totalAmount: row.TotalAmount
+    totalAmount: row.TotalAmount,
   }
 }

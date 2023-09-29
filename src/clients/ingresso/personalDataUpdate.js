@@ -12,46 +12,38 @@ const ingresso = {
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey,
 }
 
-const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao`
+const url = `${ingresso.base_uri}/ms/dadospessoais/captacao/v1/dadospessoais`
 
-class InscricaoPorIdOrigin {
+class PersonalDataUpdate {
   constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
-  request = async (idOrigin) => {
-    const step = this.LoggerService.addStep(
-      'IngressoClientInscricaoPorIdOriginRequest'
-    )
+  request = async (body) => {
+    const step = this.LoggerService.addStep('IngressoClientPersonalDataRequest')
     try {
       const token = await getToken()
 
       const res = await axios
-        .get(`${url}/${idOrigin}`, {
+        .post(`${url}/${cpf}`, body, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
             Authorization: 'Bearer ' + token,
           },
         })
         .catch(function (error) {
-          throw new ClientServerError(error.message, {
+          step.finalize({
             request: error.config,
+            response: error.response,
           })
+          return error.response
         })
 
       if (res.status === 200) {
-        const system = res.data.sistema.toUpperCase()
-        const bk = res.data.inscricao.ofertas.primeiraOpcao.businessKey
-        this.LoggerService.setIndex({
-          system: system,
-          idOrigin,
-          businessKey: bk,
-        })
         step.finalize({
           request: res.config,
           response: res,
         })
-
         return res.data
       }
 
@@ -62,18 +54,20 @@ class InscricaoPorIdOrigin {
       }
 
       if (error.status === 401) {
-        throw new ClientServerAuthError('Something went wrong', {
+        const errorData = new ClientServerAuthError('Something went wrong', {
           client: url,
-          ...error.data,
+          errors: error.data,
         })
+        throw errorData
       }
 
-      throw new ClientServerError('Something went wrong', {
+      const errorData = new ClientServerError('Something went wrong', {
         client: url,
-        ...error.data,
+        errors: error.data,
       })
+      throw errorData
     }
   }
 }
 
-module.exports = InscricaoPorIdOrigin
+module.exports = PersonalDataUpdate

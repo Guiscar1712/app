@@ -1,12 +1,13 @@
 module.exports = class TrackMiddleware {
-  constructor ({ LoggerService }) {
+  constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
   tracking = (typeLog) => {
     return async (req, res, next) => {
       const indexLog = {
-        remoteAddress: req.connection.remoteAddress
+        remoteAddress:
+          req.headers['x-forwarded-for'] || req.socket.remoteAddress || null,
       }
       this.LoggerService.newLog(indexLog, typeLog, req)
       const step = this.LoggerService.addStep('TrackMiddleware')
@@ -24,7 +25,7 @@ module.exports = class TrackMiddleware {
   }
 }
 
-function RemoveCommands (container) {
+function RemoveCommands(container) {
   if (container) {
     const commands = [
       'select ',
@@ -37,7 +38,7 @@ function RemoveCommands (container) {
       'drop ',
       'truncate ',
       '*',
-      '+'
+      '+',
     ]
     const cols = Object.getOwnPropertyNames(container)
     for (const col of cols) {
@@ -58,18 +59,18 @@ function RemoveCommands (container) {
   return container
 }
 
-function addLog (req, res) {
-  const ip = req.connection.remoteAddress
+function addLog(req, res) {
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || null
   const id = res.user ? res.user.id : 0
 
   const log = {
     Method: req.method,
     URL: req.originalUrl,
-    Params: JSON.stringify(req.params),
-    Body: JSON.stringify(req.body),
+    Params: req.params,
+    Body: req.body,
     Created: new Date(),
     Ip: ip,
-    UserId: id
+    UserId: id,
   }
 
   return log
