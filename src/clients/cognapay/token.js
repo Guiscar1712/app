@@ -29,7 +29,7 @@ module.exports = class CognaPayToken {
         return token
       }
 
-      this.LoggerService.finalizeStep({
+      this.LoggerService.finalizeStep(step.value, step.key, {
         system,
         token: tokenCognapay,
         tokenInMemory: true,
