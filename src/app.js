@@ -21,6 +21,7 @@ app.use(cookieParser())
 
 app.use(require('./routes'))
 app.use('/api/v1', require('./routes/v1'))
+app.use('/api/v2', require('./routes/v2'))
 
 // app.use(errorHandler)
 

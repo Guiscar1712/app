@@ -6,9 +6,26 @@ const authMiddleware = require('../../middlewares/authMiddleware')
 const trackMiddleware = require('../../middlewares/trackMiddleware')
 const errorHandler = require('../../middlewares/errorHandler')
 
-module.exports = ({ AuthMiddleware, TrackMiddleware, EnrollmentsController, ResponseMiddleware }) => {
-  router.get('/:document', trackMiddleware.tracking, authMiddleware.isAuthenticated, enrollmentsController.get, errorHandler)
-  router.get('/:idOrigin/details', TrackMiddleware.tracking('ENROLLMENTS_DETAILS'), AuthMiddleware.isAuthenticated, EnrollmentsController.getDetails, ResponseMiddleware.Handler)
+module.exports = ({
+  AuthMiddleware,
+  TrackMiddleware,
+  EnrollmentsController,
+  ResponseMiddleware,
+}) => {
+  router.get(
+    '/:document',
+    trackMiddleware.tracking,
+    authMiddleware.isAuthenticated,
+    enrollmentsController.get,
+    errorHandler
+  )
+  router.get(
+    '/:idOrigin/details',
+    TrackMiddleware.tracking('ENROLLMENTS_DETAILS'),
+    AuthMiddleware.isAuthenticated,
+    EnrollmentsController.getDetails,
+    errorHandler
+  )
 
   return router
 }
