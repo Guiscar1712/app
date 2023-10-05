@@ -10,7 +10,8 @@ const moment = require('moment-timezone')
 const fusoHorarioGlobal = 'America/Sao_Paulo'
 moment.tz.setDefault(fusoHorarioGlobal)
 
-const { container } = require('./config/di')
+const { asClass } = require('awilix')
+const container = require('./config/di')
 const app = express()
 
 app.use(morgan)
@@ -24,6 +25,14 @@ app.use(require('./routes'))
 
 app.use((req, res, next) => {
   req.container = container.createScope()
+
+  //   const { initLogger } = req.container.cradle
+  //   req.container.LoggerService = initLogger()
+
+  //   req.container.register({
+  //     LoggerService: asClass(req.container.LoggerService).scoped(),
+  //   })
+
   next()
 })
 

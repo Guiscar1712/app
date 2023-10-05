@@ -25,5 +25,5 @@ container.register(contract)
 container.register(cognaPayClient)
 container.register(ingressoClient)
 
-module.exports = { container }
-// module.exports.cradle = container.cradle
+module.exports = container
+//module.exports.cradle = container.cradle

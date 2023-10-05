@@ -7,16 +7,16 @@ router.use('/enrollment', (req, res, next) =>
   require('./enrollment.route')(req.container.cradle)(req, res, next)
 )
 router.use('/user', (req, res, next) =>
-  require('./user.route')(cradle)(req.container.cradle)(req, res, next)
+  require('./user.route')(req.container.cradle)(req, res, next)
 )
 router.use('/enrollment', (req, res, next) =>
-  require('./enrollment.route')(cradle)(req.container.cradle)(req, res, next)
+  require('./enrollment.route')(req.container.cradle)(req, res, next)
 )
 router.use('/payment', (req, res, next) =>
-  require('./payment.route')(cradle)(req.container.cradle)(req, res, next)
+  require('./payment.route')(req.container.cradle)(req, res, next)
 )
 router.use('/contract', (req, res, next) =>
-  require('./contract.route')(cradle)(req.container.cradle)(req, res, next)
+  require('./contract.route')(req.container.cradle)(req, res, next)
 )
 
 router.use('/notification', require('./notification.route'), errorHandler)

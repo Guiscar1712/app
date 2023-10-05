@@ -8,7 +8,9 @@ const Util = require('../../utils/util')
 
 module.exports = class LoggerService {
   Log = {}
-  constructor() {}
+  constructor() {
+    this.Log = {}
+  }
 
   newLog = (indexs, type, request) => {
     this.Log = new Log({
