@@ -1,12 +1,11 @@
 const BaseError = require('../../utils/errors/BaseError')
 
 module.exports = class ResponseMiddleware {
-  constructor ({ LoggerService }) {
+  constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
   Handler = (data, req, res, next) => {
-    // const step = this.LoggerService.newStep()
     try {
       if (data instanceof Error) {
         const send = { success: false }
@@ -14,26 +13,20 @@ module.exports = class ResponseMiddleware {
         const error = data
         this.LoggerService.setError(error)
 
-        setErrorResponse(error, send, res)
+        this.setErrorResponse(error, send, res)
 
         this.LoggerService.setResponse({
           statusCode: res.statusCode,
           statusMessage: res.statusMessage,
-          ...send
+          ...send,
         })
-
-        // this.LoggerService.finalizeStep(step, 'ResponseMiddlewareHandler', {
-        //   statusCode: res.statusCode,
-        //   statusMessage: res.statusMessage,
-        //   ...send
-        // })
 
         return res
       }
 
       const sendData = {
         success: true,
-        data
+        data,
       }
 
       let status = 200
@@ -58,40 +51,37 @@ module.exports = class ResponseMiddleware {
       this.LoggerService.setResponse({
         statusCode: res.statusCode,
         statusMessage: res.statusMessage,
-        ...sendData
+        ...sendData,
       })
 
-      // this.LoggerService.finalizeStep(step, 'ResponseMiddlewareHandler', {
-      //   statusCode: res.statusCode,
-      //   statusMessage: res.statusMessage,
-      //   ...sendData
-      // })
       return response
     } catch (error) {
-      // this.LoggerService.finalizeStep(step, 'ResponseMiddlewareHandler', error)
     } finally {
       this.LoggerService.finalize()
+      req.container.dispose().then(() => {
+        console.log('All dependencies disposed, you can exit now. :)')
+      })
     }
   }
-}
 
-function setErrorResponse (error, send, res) {
-  if (error instanceof BaseError) {
+  setErrorResponse(error, send, res) {
+    if (error instanceof BaseError) {
+      send.error = {
+        type: error.type,
+        code: error.code,
+        message: error.message,
+        errors: error.serializeErrors(),
+      }
+      return res.status(error.statusCode).json(send)
+    }
+
     send.error = {
-      type: error.type,
-      code: error.code,
+      type: error.name,
+      code: -1,
       message: error.message,
-      errors: error.serializeErrors()
+      stack: error.stack,
     }
-    return res.status(error.statusCode).json(send)
-  }
 
-  send.error = {
-    type: error.name,
-    code: -1,
-    message: error.message,
-    stack: error.stack
+    return res.status(500).send(send)
   }
-
-  return res.status(500).send(send)
 }

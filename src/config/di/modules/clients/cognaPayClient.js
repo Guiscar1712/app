@@ -6,8 +6,8 @@ const CognaPayPaymentPix = require('../../../../clients/cognapay/pix')
 const CognaPayPaymentPixStatus = require('../../../../clients/cognapay/paymentStatus')
 
 module.exports = {
-  CognaPayGetToken: asClass(CognaPayGetToken).scoped(),
-  CognaPayPaymentPix: asClass(CognaPayPaymentPix).scoped(),
-  CognaPayPaymentPixStatus: asClass(CognaPayPaymentPixStatus).scoped(),
-  CognaPayClient: asClass(CognaPayClient).scoped()
+  CognaPayGetToken: asClass(CognaPayGetToken),
+  CognaPayPaymentPix: asClass(CognaPayPaymentPix),
+  CognaPayPaymentPixStatus: asClass(CognaPayPaymentPixStatus),
+  CognaPayClient: asClass(CognaPayClient),
 }

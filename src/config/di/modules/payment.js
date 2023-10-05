@@ -11,11 +11,11 @@ const PaymentPixUpdateService = require('../../../services/payment/paymentPixUpd
 const PaymentController = require('../../../controllers/v1/payment.controller')
 
 module.exports = {
-  PaymentController: asClass(PaymentController).scoped(),
-  PaymentService: asClass(PaymentService).scoped(),
-  PaymentPixService: asClass(PaymentPixService).scoped(),
-  PaymentPixSaveService: asClass(PaymentPixSaveService).scoped(),
-  PaymentPixStatusService: asClass(PaymentPixStatusService).scoped(),
-  PaymentPixUpdateService: asClass(PaymentPixUpdateService).scoped(),
-  PaymentRepository: asClass(PaymentRepository).scoped()
+  PaymentController: asClass(PaymentController),
+  PaymentService: asClass(PaymentService),
+  PaymentPixService: asClass(PaymentPixService),
+  PaymentPixSaveService: asClass(PaymentPixSaveService),
+  PaymentPixStatusService: asClass(PaymentPixStatusService),
+  PaymentPixUpdateService: asClass(PaymentPixUpdateService),
+  PaymentRepository: asClass(PaymentRepository),
 }

@@ -7,9 +7,9 @@ const UserService = require('../../../services/user')
 const UserController = require('../../../controllers/v1/user.controller')
 
 module.exports = {
-  MembershipRepository: asClass(MembershipRepository).scoped(),
-  UserRepository: asClass(UserRepository).scoped(),
-  UserFirebaseRepository: asClass(UserFirebaseRepository).scoped(),
-  UserService: asClass(UserService).scoped(),
-  UserController: asClass(UserController).scoped()
+  MembershipRepository: asClass(MembershipRepository),
+  UserRepository: asClass(UserRepository),
+  UserFirebaseRepository: asClass(UserFirebaseRepository),
+  UserService: asClass(UserService),
+  UserController: asClass(UserController),
 }

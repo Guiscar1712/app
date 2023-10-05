@@ -4,6 +4,6 @@ const EnrollmentDetails = require('../../../services/enrollments/enrollmentDetai
 const EnrollmentsController = require('../../../controllers/v1/enrollments.controller')
 
 module.exports = {
-  EnrollmentDetails: asClass(EnrollmentDetails).scoped(),
-  EnrollmentsController: asClass(EnrollmentsController).scoped()
+  EnrollmentDetails: asClass(EnrollmentDetails),
+  EnrollmentsController: asClass(EnrollmentsController),
 }

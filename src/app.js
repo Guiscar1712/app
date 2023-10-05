@@ -10,6 +10,7 @@ const moment = require('moment-timezone')
 const fusoHorarioGlobal = 'America/Sao_Paulo'
 moment.tz.setDefault(fusoHorarioGlobal)
 
+const { container } = require('./config/di')
 const app = express()
 
 app.use(morgan)
@@ -20,9 +21,13 @@ app.use(express.json({ limit: '50mb' }))
 app.use(cookieParser())
 
 app.use(require('./routes'))
+
+app.use((req, res, next) => {
+  req.container = container.createScope()
+  next()
+})
+
 app.use('/api/v1', require('./routes/v1'))
 app.use('/api/v2', require('./routes/v2'))
-
-// app.use(errorHandler)
 
 module.exports = app

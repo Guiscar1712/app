@@ -1,4 +1,5 @@
 require('dotenv').config()
+const { v4: uuidv4 } = require('uuid')
 const logger = require('../../utils/logger.util.datadog')
 const Log = require('../../model/logger/Log')
 const Content = require('../../model/logger/Content')
@@ -6,6 +7,9 @@ const Step = require('../../model/logger/Step')
 const Util = require('../../utils/util')
 
 module.exports = class LoggerService {
+  Log = {}
+  constructor() {}
+
   newLog = (indexs, type, request) => {
     this.Log = new Log({
       service: process.env.SERVICE_NAME,

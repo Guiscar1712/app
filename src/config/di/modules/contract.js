@@ -6,8 +6,8 @@ const ContractListService = require('../../../services/enrollments/contractsList
 const ContractDetailService = require('../../../services/enrollments/contractByContractId')
 
 module.exports = {
-  ContractController: asClass(ContractController).scoped(),
-  ContractService: asClass(ContractAcceptedService).scoped(),
-  ContractListService: asClass(ContractListService).scoped(),
-  ContractDetailService: asClass(ContractDetailService).scoped()
+  ContractController: asClass(ContractController),
+  ContractService: asClass(ContractAcceptedService),
+  ContractListService: asClass(ContractListService),
+  ContractDetailService: asClass(ContractDetailService),
 }

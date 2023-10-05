@@ -9,11 +9,11 @@ const ContratoAceite = require('../../../../clients/ingresso/contratoAceite')
 const ContratoPorContratoId = require('../../../../clients/ingresso/contratoPorContratoId')
 
 module.exports = {
-  IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento).scoped(),
-  IngressoClient: asClass(IngressoClient).scoped(),
-  InscricaoPorIdOrigin: asClass(InscricaoPorIdOrigin).scoped(),
-  PersonalData: asClass(PersonalData).scoped(),
-  PersonalDataUpdate: asClass(PersonalDataUpdate).scoped(),
-  ContratoAceite: asClass(ContratoAceite).scoped(),
-  ContratoPorContratoId: asClass(ContratoPorContratoId).scoped(),
+  IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento),
+  IngressoClient: asClass(IngressoClient),
+  InscricaoPorIdOrigin: asClass(InscricaoPorIdOrigin),
+  PersonalData: asClass(PersonalData),
+  PersonalDataUpdate: asClass(PersonalDataUpdate),
+  ContratoAceite: asClass(ContratoAceite),
+  ContratoPorContratoId: asClass(ContratoPorContratoId),
 }
