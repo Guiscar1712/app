@@ -1,7 +1,6 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('./middlewares/morgan.middleware')
-// const errorHandler = require('./middlewares/errorHandler')
 const cookieParser = require('cookie-parser')
 const dotenv = require('dotenv')
 dotenv.config()
@@ -25,14 +24,6 @@ app.use(require('./routes'))
 
 app.use((req, res, next) => {
   req.container = container.createScope()
-
-  //   const { initLogger } = req.container.cradle
-  //   req.container.LoggerService = initLogger()
-
-  //   req.container.register({
-  //     LoggerService: asClass(req.container.LoggerService).scoped(),
-  //   })
-
   next()
 })
 
