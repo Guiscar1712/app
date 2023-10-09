@@ -1,10 +1,64 @@
 const express = require('express')
 const router = express.Router()
 
-module.exports = ({ ContractController, AuthMiddleware, TrackMiddleware, ResponseMiddleware }) => {
-  router.get('/', TrackMiddleware.tracking('CONTRACT_LIST'), AuthMiddleware.isAuthenticated, ContractController.getContracts, ResponseMiddleware.Handler)
-  router.get('/:contractId', TrackMiddleware.tracking('CONTRACT_DETAIL'), AuthMiddleware.isAuthenticated, ContractController.getByContractId, ResponseMiddleware.Handler)
-  router.put('/:contractId', TrackMiddleware.tracking('CONTRACT_ACCEPT'), AuthMiddleware.isAuthenticated, ContractController.accepted, ResponseMiddleware.Handler)
+router.get(
+  '/',
+  (req, res, next) => {
+    const { TrackMiddleware } = req.container.cradle
+    TrackMiddleware.tracking('CONTRACT_LIST', req, res, next)
+  },
+  (req, res, next) => {
+    const { AuthMiddleware } = req.container.cradle
+    AuthMiddleware.isAuthenticated(req, res, next)
+  },
+  (req, res, next) => {
+    const { ContractController } = req.container.cradle
+    ContractController.getContracts(req, res, next)
+  },
+  (data, req, res, next) => {
+    const { ResponseMiddleware } = req.container.cradle
+    ResponseMiddleware.Handler(data, req, res, next)
+  }
+)
 
-  return router
-}
+router.get(
+  '/:contractId',
+  (req, res, next) => {
+    const { TrackMiddleware } = req.container.cradle
+    TrackMiddleware.tracking('CONTRACT_DETAIL', req, res, next)
+  },
+  (req, res, next) => {
+    const { AuthMiddleware } = req.container.cradle
+    AuthMiddleware.isAuthenticated(req, res, next)
+  },
+  (req, res, next) => {
+    const { ContractController } = req.container.cradle
+    ContractController.getByContractId(req, res, next)
+  },
+  (data, req, res, next) => {
+    const { ResponseMiddleware } = req.container.cradle
+    ResponseMiddleware.Handler(data, req, res, next)
+  }
+)
+
+router.put(
+  '/:contractId',
+  (req, res, next) => {
+    const { TrackMiddleware } = req.container.cradle
+    TrackMiddleware.tracking('CONTRACT_ACCEPT', req, res, next)
+  },
+  (req, res, next) => {
+    const { AuthMiddleware } = req.container.cradle
+    AuthMiddleware.isAuthenticated(req, res, next)
+  },
+  (req, res, next) => {
+    const { ContractController } = req.container.cradle
+    ContractController.accepted(req, res, next)
+  },
+  (data, req, res, next) => {
+    const { ResponseMiddleware } = req.container.cradle
+    ResponseMiddleware.Handler(data, req, res, next)
+  }
+)
+
+module.exports = router

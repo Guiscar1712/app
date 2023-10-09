@@ -58,9 +58,7 @@ module.exports = class ResponseMiddleware {
     } catch (error) {
     } finally {
       this.LoggerService.finalize()
-      req.container.dispose().then(() => {
-        console.log('All dependencies disposed, you can exit now. :)')
-      })
+      req.container.dispose().then()
     }
   }
 
