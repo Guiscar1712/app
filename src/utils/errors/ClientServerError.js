@@ -24,6 +24,8 @@ class ClientServerError extends BaseError {
   serializeErrorsRequest() {
     if (this.errors?.request) {
       this.errors.request = new MessageRequest(this.errors.request)
+    }
+    if (this.errors?.response) {
       this.errors.response = new MessageResponse(this.errors.response)
     }
     return this.errors

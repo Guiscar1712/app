@@ -1,19 +1,3 @@
-const axios = require('axios').create({ timeout: 1000000 })
-const config = require('../../utils/config')
-const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
-const ClientServerError = require('../../utils/errors/ClientServerError')
-const getToken = require('./token')
-
-const ingresso = {
-  grant_type: 'client_credentials',
-  client_id: config.kroton.ingresso.client_id,
-  client_secret: config.kroton.ingresso.client_secret,
-  base_uri: config.kroton.ingresso.url,
-  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey,
-}
-
-const urlBase = ingresso.base_uri
-
 module.exports = class Ingresso {
   constructor({
     LoggerService,
@@ -23,6 +7,7 @@ module.exports = class Ingresso {
     PersonalDataUpdate,
     ContratoAceite,
     ContratoPorContratoId,
+    ProvaIniciar,
   }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
@@ -31,6 +16,7 @@ module.exports = class Ingresso {
     this.PersonalData = PersonalData
     this.PersonalDataUpdate = PersonalDataUpdate
     this.ContratoPorContratoId = ContratoPorContratoId
+    this.ProvaIniciar = ProvaIniciar
   }
 
   personalDataGet = async (cpf) => {
@@ -49,11 +35,15 @@ module.exports = class Ingresso {
     return await this.InscricaoPorIdOrigin.request(idOrigin)
   }
 
-  contratoAceite = async ({contractId, body}) => {
+  contratoAceite = async ({ contractId, body }) => {
     return await this.ContratoAceite.request({ contractId, body })
   }
 
-  contratoPorContratoId  = async ({contractId, body}) => {
+  contratoPorContratoId = async ({ contractId, body }) => {
     return await this.ContratoPorContratoId.request({ contractId, body })
+  }
+
+  provaInicar = async (subscriptionKeyEncode) => {
+    return await this.ProvaIniciar.request(subscriptionKeyEncode)
   }
 }
