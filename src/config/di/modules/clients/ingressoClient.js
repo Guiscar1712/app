@@ -8,6 +8,9 @@ const PersonalDataUpdate = require('../../../../clients/ingresso/personalDataUpd
 const ContratoAceite = require('../../../../clients/ingresso/contratoAceite')
 const ContratoPorContratoId = require('../../../../clients/ingresso/contratoPorContratoId')
 const ProvaIniciar = require('../../../../clients/ingresso/iniciarProva')
+const ProvaFinalizar = require('../../../../clients/ingresso/finalizarProva')
+const ProvaElegibilidade = require('../../../../clients/ingresso/elegibilidadeProva')
+const ProvaConsulta = require('../../../../clients/ingresso/consultaProva')
 
 module.exports = {
   IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento),
@@ -18,4 +21,7 @@ module.exports = {
   ContratoAceite: asClass(ContratoAceite),
   ContratoPorContratoId: asClass(ContratoPorContratoId),
   ProvaIniciar: asClass(ProvaIniciar),
+  ProvaFinalizar: asClass(ProvaFinalizar),
+  ProvaElegibilidade: asClass(ProvaElegibilidade),
+  ProvaConsulta: asClass(ProvaConsulta),
 }

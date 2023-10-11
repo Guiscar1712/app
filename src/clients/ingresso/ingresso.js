@@ -8,6 +8,9 @@ module.exports = class Ingresso {
     ContratoAceite,
     ContratoPorContratoId,
     ProvaIniciar,
+    ProvaFinalizar,
+    ProvaElegibilidade,
+    ProvaConsulta,
   }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
@@ -17,6 +20,9 @@ module.exports = class Ingresso {
     this.PersonalDataUpdate = PersonalDataUpdate
     this.ContratoPorContratoId = ContratoPorContratoId
     this.ProvaIniciar = ProvaIniciar
+    this.ProvaFinalizar = ProvaFinalizar
+    this.ProvaElegibilidade = ProvaElegibilidade
+    this.ProvaConsulta = ProvaConsulta
   }
 
   personalDataGet = async (cpf) => {
@@ -45,5 +51,17 @@ module.exports = class Ingresso {
 
   provaInicar = async (subscriptionKeyEncode) => {
     return await this.ProvaIniciar.request(subscriptionKeyEncode)
+  }
+
+  provaFinalizar = async (subscriptionKeyEncode, model) => {
+    return await this.ProvaFinalizar.request(subscriptionKeyEncode, model)
+  }
+
+  provaElegibilidade = async (subscriptionKey) => {
+    return await this.ProvaElegibilidade.request(subscriptionKey)
+  }
+
+  provaConsulta = async (subscriptionKey) => {
+    return await this.ProvaConsulta.request(subscriptionKey)
   }
 }
