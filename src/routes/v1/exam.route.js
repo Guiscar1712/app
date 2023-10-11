@@ -5,7 +5,7 @@ router.post(
   '/start/:subscriptionKey',
   (req, res, next) => {
     const { TrackMiddleware } = req.container.cradle
-    TrackMiddleware.tracking('ENROLLMENTS_DETAILS', req, res, next)
+    TrackMiddleware.tracking('ADMISSION_TEST_BEGIN', req, res, next)
   },
   (req, res, next) => {
     const { AuthMiddleware } = req.container.cradle
