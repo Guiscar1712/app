@@ -25,7 +25,7 @@ class PersonalDataUpdate {
       const token = await getToken()
 
       const res = await axios
-        .post(`${url}/${cpf}`, body, {
+        .post(`${url}`, body, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
             Authorization: 'Bearer ' + token,
@@ -39,12 +39,13 @@ class PersonalDataUpdate {
           return error.response
         })
 
-      if (res.status === 200) {
+      if (res.status === 201) {
         step.finalize({
           request: res.config,
           response: res,
         })
-        return res.data
+        const { status, statusText } = { ...res }
+        return { status, statusText }
       }
 
       throw res

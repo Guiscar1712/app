@@ -92,12 +92,14 @@ module.exports = class UserController {
       'UserControllerPersonalDataUpdate'
     )
     const body = request.body
-    this.LoggerService.setIndex({ cpf: body.cpf })
     try {
       this.validateUpdatePersonalData(request.user, body)
-      const data = await this.UserService.PersonalDataUpdate(body)
+      const data = await this.UserService.personalDataUpdate(body)
       this.LoggerService.finalizeStep(step.value, step.key, data)
-      next(data)
+      next({
+        code: 200,
+        message: 'Solicitação de alteração de dados enviada com sucesso.',
+      })
     } catch (error) {
       next(error)
     }
@@ -168,7 +170,7 @@ module.exports = class UserController {
 
   validateUpdatePersonalData(user, model) {
     const stepLoginValidate = this.LoggerService.addStep('PersonalDataValidate')
-    const cpfClean = Util.getNumbers(model.cpf)
+    const cpfClean = Util.getNumbers(model.documentCpf)
 
     if (user.cpf !== cpfClean) {
       const error = [

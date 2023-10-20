@@ -297,15 +297,16 @@ module.exports = class UserService {
     }
   }
 
-  personalDataUpdate = async (model) => {
+  personalDataUpdate = async (data) => {
     const step = this.LoggerService.addStepStepTrace(
       'UserServerPersonalDataUpdate'
     )
     try {
-      const model = new personalDataUpdate(model)
+      const model = new personalDataUpdate(data)
+      console.log(JSON.stringify(model))
       const personalData = await this.IngressoClient.personalDataUpdate(model)
       this.LoggerService.finalizeStep(step.value, step.key, personalData)
-      return personalDataResponse
+      return personalData
     } catch (error) {
       throw error
     }
