@@ -302,8 +302,7 @@ module.exports = class UserService {
       'UserServerPersonalDataUpdate'
     )
     try {
-      const model = new personalDataUpdate(data)
-      console.log(JSON.stringify(model))
+      const model = new personalDataUpdate(data)      
       const personalData = await this.IngressoClient.personalDataUpdate(model)
       this.LoggerService.finalizeStep(step.value, step.key, personalData)
       return personalData
