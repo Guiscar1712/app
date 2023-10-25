@@ -23,7 +23,7 @@ module.exports = class PaymentForPix {
   }
 
   get = async (originId, userId) => {
-    const step = this.LoggerService.addStepStepTrace('PaymentServicePaymentPix')
+    const step = this.LoggerService.addStep('PaymentServicePaymentPix')
     try {
       const status = await this.PaymentPixStatusService.get(originId)
       if (status?.status === 'PAID') {
@@ -38,10 +38,6 @@ module.exports = class PaymentForPix {
       )
       const system = enrollment.sistema.toUpperCase()
       const businessKey = enrollment.inscricao.businessKey
-      this.LoggerService.addStepTrace(
-        'EnrollmentForIdoriginRequest',
-        enrollment
-      )
 
       if (!businessKey) {
         this.LoggerService.setIndex({ system, businessKey, originId })
@@ -97,13 +93,15 @@ module.exports = class PaymentForPix {
           orderReference: order.orderReference,
         })
 
-        this.LoggerService.finalizeStep(step.value, step.key, res)
+        step.value.addData(res)
         return res
       }
 
       throw new ServerError('Solicitação da chave Pix falhou', data.error)
     } catch (error) {
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

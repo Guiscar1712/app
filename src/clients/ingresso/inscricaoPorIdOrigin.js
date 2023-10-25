@@ -19,7 +19,7 @@ class InscricaoPorIdOrigin {
     this.LoggerService = LoggerService
   }
 
-  request = async (idOrigin) => {
+  request = async (originId) => {
     const step = this.LoggerService.addStep(
       'IngressoClientInscricaoPorIdOriginRequest'
     )
@@ -27,29 +27,32 @@ class InscricaoPorIdOrigin {
       const token = await getToken()
 
       const res = await axios
-        .get(`${url}/${idOrigin}`, {
+        .get(`${url}/${originId}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
             Authorization: 'Bearer ' + token,
           },
         })
         .catch(function (error) {
-          throw new ClientServerError(error.message, {
+          step.value.addData({
             request: error.config,
+            response: error.response,
           })
+
+          return error.response
         })
 
+      step.value.addData({ request: res.config, response: res })
+      const system = res.data?.sistema?.toUpperCase()
+      this.LoggerService.setIndex({
+        system: system,
+        originId,
+      })
+
       if (res.status === 200) {
-        const system = res.data.sistema.toUpperCase()
         const bk = res.data.inscricao.ofertas.primeiraOpcao.businessKey
         this.LoggerService.setIndex({
-          system: system,
-          idOrigin,
           businessKey: bk,
-        })
-        step.finalize({
-          request: res.config,
-          response: res,
         })
 
         return res.data
@@ -72,6 +75,8 @@ class InscricaoPorIdOrigin {
         client: url,
         ...error.data,
       })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

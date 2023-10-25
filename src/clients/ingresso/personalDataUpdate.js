@@ -32,18 +32,19 @@ class PersonalDataUpdate {
           },
         })
         .catch(function (error) {
-          step.finalize({
+          step.value.addData({
             request: error.config,
             response: error.response,
           })
           return error.response
         })
 
+      step.value.addData({
+        request: res.config,
+        response: res,
+      })
+
       if (res.status === 200) {
-        step.finalize({
-          request: res.config,
-          response: res,
-        })
         return res.data
       }
 
@@ -66,6 +67,8 @@ class PersonalDataUpdate {
         errors: error.data,
       })
       throw errorData
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

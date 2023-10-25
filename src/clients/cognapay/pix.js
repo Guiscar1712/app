@@ -13,8 +13,8 @@ module.exports = class PaymentPix {
   }
 
   request = async (body, system) => {
-    const token = await this.CognaPayGetToken.request(system)
     const step = this.LoggerService.addStep('CognaPayClientCheckoutRequest')
+    const token = await this.CognaPayGetToken.request(system)
     try {
       const res = await axios
         .post(`${url}`, body, {
@@ -23,22 +23,23 @@ module.exports = class PaymentPix {
           },
         })
         .catch(function (error) {
-          step.finalize({
+          step.value.addData({
             request: error.config,
             response: error.response,
           })
           return error.response
         })
 
+      step.value.addData({
+        request: res.config,
+        response: res,
+      })
+
       if (res.status === 201) {
-        step.finalize({
-          request: res.config,
-          response: res,
-        })
         return res.data
-      } else {
-        throw res
       }
+
+      throw res
     } catch (error) {
       if (error instanceof ClientServerError) {
         throw error
@@ -57,6 +58,8 @@ module.exports = class PaymentPix {
         errors: error.data,
       })
       throw errorData
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

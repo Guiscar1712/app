@@ -14,16 +14,13 @@ module.exports = class PaymentStatus {
   }
 
   get = async (originId) => {
-    const step = this.LoggerService.addStepStepTrace('PaymentServicePixStatus')
+    const step = this.LoggerService.addStep('PaymentServicePixStatus')
     try {
       const paymentData = await this.PaymentRepository.findBy({ originId })
 
       if (!paymentData) {
         // Se não tiver registro de pagamento na base de dados. não é realizada a busca no cogna pay.
-        this.LoggerService.finalizeStep(step.value, step.key, {
-          originId,
-          paymentData,
-        })
+        step.value.addData({ originId, paymentData })
         return null
       }
 
@@ -42,10 +39,8 @@ module.exports = class PaymentStatus {
           paymentData.paymentDate,
           paymentData.paymentType
         )
-        this.LoggerService.finalizeStep(step.value, step.key, {
-          originId,
-          status,
-        })
+        step.value.addData({ originId, status })
+        this.LoggerService.finalizeStep(step)
         return status
       }
 
@@ -57,10 +52,8 @@ module.exports = class PaymentStatus {
       )
 
       if (!order) {
-        this.LoggerService.finalizeStep(step.value, step.key, {
-          originId,
-          paymentData,
-        })
+        step.value.addData({ originId, paymentData })
+        this.LoggerService.finalizeStep(step)
         return null
       }
 
@@ -73,10 +66,8 @@ module.exports = class PaymentStatus {
         type
       )
 
-      this.LoggerService.finalizeStep(step.value, step.key, {
-        originId,
-        status,
-      })
+      step.value.addData({ originId, status })
+      this.LoggerService.finalizeStep(step)
       return status
     } catch (error) {
       throw error

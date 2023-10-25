@@ -1,7 +1,12 @@
 const { ValidationError } = require('../../utils/errors')
 
 module.exports = class NotificationController {
-  constructor ({ ContractService, ContractListService, ContractDetailService, LoggerService }) {
+  constructor({
+    ContractService,
+    ContractListService,
+    ContractDetailService,
+    LoggerService,
+  }) {
     this.ContractService = ContractService
     this.ContractListService = ContractListService
     this.ContractDetailService = ContractDetailService
@@ -9,16 +14,17 @@ module.exports = class NotificationController {
   }
 
   getContracts = async (request, response, next) => {
-    const step = this.LoggerService.addStepStepTrace('ContractControllerContracts')
+    const step = this.LoggerService.addStep('ContractControllerContracts')
     try {
       if (!request.query || !request.query.idOrigin) {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
-      const data = await this.ContractListService.contracts(request.query.idOrigin)
+      const data = await this.ContractListService.contracts(
+        request.query.idOrigin
+      )
 
-      this.LoggerService.finalizeStep(step.value, step.key, {
-        contratoAceito: data.response,
-      })
+      step.value.addData({ contratoAceito: data.response })
+      this.LoggerService.finalizeStep(step)
 
       next(data)
     } catch (error) {
@@ -27,16 +33,18 @@ module.exports = class NotificationController {
   }
 
   getByContractId = async (request, response, next) => {
-    const step = this.LoggerService.addStepStepTrace('ContractControllerContractById')
+    const step = this.LoggerService.addStep('ContractControllerContractById')
     try {
       if (!request.params.contractId) {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
-      const data = await this.ContractDetailService.enrollmentDetails(request.params.contractId)
+      const data = await this.ContractDetailService.enrollmentDetails(
+        request.params.contractId
+      )
 
-      this.LoggerService.finalizeStep(step.value, step.key, {
-        ContractDetails: data,
-      })
+      step.value.addData({ ContractDetails: data })
+      this.LoggerService.finalizeStep(step)
+
       next(data)
     } catch (error) {
       next(error)
@@ -44,7 +52,7 @@ module.exports = class NotificationController {
   }
 
   accepted = async (request, response, next) => {
-    const step = this.LoggerService.addStepStepTrace('ContractControllerAccepted')
+    const step = this.LoggerService.addStep('ContractControllerAccepted')
 
     try {
       if (!request.params.contractId) {
@@ -53,10 +61,14 @@ module.exports = class NotificationController {
 
       const { ipAddress } = request.body
 
-      const data = await this.ContractService.contractAccepted(request.params.contractId, ipAddress)
-      this.LoggerService.finalizeStep(step.value, step.key, {
-        contratoAceito: data.response,
-      })
+      const data = await this.ContractService.contractAccepted(
+        request.params.contractId,
+        ipAddress
+      )
+
+      step.value.addData({ contratoAceito: data.response })
+      this.LoggerService.finalizeStep(step)
+
       next(data)
     } catch (error) {
       next(error)

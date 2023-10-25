@@ -16,29 +16,26 @@ module.exports = class AuthMiddleware {
             userId: decoded.id,
             email: decoded.email,
           })
-          step.finalize({ isAuthenticated: true, decoded })
+          step.value.addData({ isAuthenticated: true, decoded })
           next()
         })
         .catch((err) => {
-          step.finalize({ isAuthenticated: false, err })
+          step.value.addData({ isAuthenticated: false, err })
           res.status(401).send(err)
         })
     } catch (error) {
-      step.finalize(error)
       next(error)
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   isLocalhost = (req, res, next) => {
-    const step = this.LoggerService.addStep('AuthMiddlewareIsLocalhost')
     if (
       req.connection.remoteAddress === '::ffff:127.0.0.1' ||
       req.connection.remoteAddress === '::1'
     ) {
-      step.finalize({ localhost: true })
       next()
-    } else {
-      step.finalize({ localhost: false })
     }
   }
 

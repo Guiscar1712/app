@@ -18,9 +18,7 @@ module.exports = class CognaPayToken {
   }
 
   request = async (system) => {
-    const step = this.LoggerService.addStepStepTrace(
-      'CognaPayClientTokenRequest'
-    )
+    const step = this.LoggerService.addStep('CognaPayClientTokenRequest')
 
     try {
       const tokenCognapay = this.getTokenEnv(system)
@@ -29,7 +27,7 @@ module.exports = class CognaPayToken {
         return token
       }
 
-      this.LoggerService.finalizeStep(step.value, step.key, {
+      step.value.addData({
         system,
         token: tokenCognapay,
         tokenInMemory: true,
@@ -53,6 +51,8 @@ module.exports = class CognaPayToken {
         errors: error.data,
       })
       throw errorData
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
