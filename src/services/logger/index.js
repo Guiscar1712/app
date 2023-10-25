@@ -1,5 +1,4 @@
 require('dotenv').config()
-const { v4: uuidv4 } = require('uuid')
 const logger = require('../../utils/logger.util.datadog')
 const Log = require('../../model/logger/Log')
 const Content = require('../../model/logger/Content')
