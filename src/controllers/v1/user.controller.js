@@ -1,4 +1,6 @@
 const { ValidationError } = require('../../utils/errors')
+const constants = require('../../constants/user.constants')
+
 const {
   LoginValidate,
   ApplyValidate,
@@ -111,7 +113,11 @@ module.exports = class UserController {
         message: 'Parâmetros inválidos',
         errors: contract.errors(),
       })
-      throw new ValidationError('Parâmetros inválidos', contract.errors())
+      throw new ValidationError(
+        'Parâmetros inválidos',
+        contract.errors(),
+        constants.CODE
+      )
     }
 
     stepRegisterValidate.finalize({ isValid: contract.isValid() })
@@ -125,7 +131,11 @@ module.exports = class UserController {
         message: 'Parâmetros inválidos',
         errors: contract.errors(),
       })
-      throw new ValidationError('Parâmetros inválidos', contract.errors())
+      throw new ValidationError(
+        'Parâmetros inválidos',
+        contract.errors(),
+        constants.CODE
+      )
     }
     stepLoginValidate.finalize({ isValid: contract.isValid() })
   }
@@ -133,7 +143,7 @@ module.exports = class UserController {
   validateLoginFirebase(token) {
     const stepLoginValidate = this.LoggerService.addStep('LoginValidate')
     if (!token) {
-      const errors = [{ message: 'token é obrigatorio' }]
+      const errors = [constants.REQUIRED_TOKEN_FIREBASE]
       stepLoginValidate.finalize({ message: 'Parâmetros inválidos', errors })
       throw new ValidationError('Parâmetros inválidos', errors)
     }

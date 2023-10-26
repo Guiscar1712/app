@@ -6,18 +6,19 @@ class BaseError extends Error {
   stack
   functionError
 
-  constructor (message, errors) {
+  constructor(message, errors, code = 500) {
     super(message)
+    this.code = code
     this.type = this.constructor.name
     Error.captureStackTrace(this, this.constructor)
     this.extractFunctionName()
   }
 
-  serializeErrors () {
+  serializeErrors() {
     throw new Error('Method must be implemented')
   }
 
-  extractFunctionName () {
+  extractFunctionName() {
     const stackLines = this.stack.split('\n')
     if (stackLines.length >= 3) {
       const callerInfo = stackLines[1].trim()

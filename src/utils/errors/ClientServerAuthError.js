@@ -3,14 +3,15 @@ const MessageRequest = require('./../../dto/logger/MessageRequest')
 
 class ClientServerAuthError extends BaseError {
   statusCode = 500
-  code = 401
+  code
   level = 'ERROR'
   type
   errors
   stack
 
-  constructor(message, errors) {
+  constructor(message, errors, code = 500) {
     super(message)
+    this.code = code
     this.errors = errors
     this.type = this.constructor.name
     Error.captureStackTrace(this, this.constructor)

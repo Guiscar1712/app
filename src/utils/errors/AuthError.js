@@ -2,14 +2,15 @@ const BaseError = require('./BaseError')
 
 class AuthError extends BaseError {
   statusCode = 401
-  code = 100
+  code
   level = 'WARN'
   type
   errors
   stack
 
-  constructor (errors) {
+  constructor(errors, code = 401) {
     super('Usuário não Authenticado')
+    this.code = code
     this.errors = errors
 
     Object.setPrototypeOf(this, AuthError.prototype)
@@ -18,7 +19,7 @@ class AuthError extends BaseError {
     Error.captureStackTrace(this, this.constructor)
   }
 
-  serializeErrors () {
+  serializeErrors() {
     return this.errors
   }
 }

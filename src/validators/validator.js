@@ -1,6 +1,8 @@
+const UTIL = require('../utils/util')
+
 let errors = []
 
-function ValidationContract () {
+function ValidationContract() {
   errors = []
 }
 
@@ -54,10 +56,8 @@ ValidationContract.prototype.duplicateRegister = (value, code, message) => {
   }
 }
 
-ValidationContract.prototype.cpf = (value, code, message) => {
-  const cnpjCpf = value.replace(/\D/g, '')
-
-  if (cnpjCpf.length !== 11) {
+ValidationContract.prototype.isValidCpf = (value, code, message) => {
+  if (!UTIL.isValidCpf(value)) {
     errors.push({ code, message })
   }
 }
@@ -80,7 +80,12 @@ ValidationContract.prototype.isDateValid = (value, code, message) => {
   }
 }
 
-ValidationContract.prototype.containsInArray = (value, array, code, message) => {
+ValidationContract.prototype.containsInArray = (
+  value,
+  array,
+  code,
+  message
+) => {
   if (!value || !array.includes(value)) {
     errors.push({ code, message })
   }

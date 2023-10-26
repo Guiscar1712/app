@@ -9,6 +9,7 @@ const { getRecoverKey } = require('../../utils/auth')
 const { DuplicateRegister } = require('../../validators/user')
 const PersonalDataResponse = require('../../dto/personalData/personalDataResponse.Dto')
 const personalDataUpdate = require('../../dto/personalData/personalDataUpdate.Dto')
+const constants = require('../../constants/user.constants')
 
 module.exports = class UserService {
   constructor({
@@ -43,13 +44,11 @@ module.exports = class UserService {
     const stepUser = this.LoggerService.addStep('UserServerLoginUserFindBy')
     const user = await this.UserRepository.findBy({ Email: email })
     if (!user) {
-      const error = new ValidationError('Login falhou!', [
-        {
-          code: 404,
-          message:
-            'O email que você inseriu não está cadastrado no nosso APP. Crie uma nova conta do zero, e comece a aproveitar!',
-        },
-      ])
+      const error = new ValidationError(
+        'Login falhou!',
+        [constants.NOT_REGISTER_EMAIL],
+        constants.CODE
+      )
       stepUser.finalize({ user, error })
       throw error
     }
@@ -66,9 +65,11 @@ module.exports = class UserService {
     })
 
     if (!membership.password) {
-      const error = new ValidationError('Login falhou!', [
-        { code: 404, message: 'Senha Inválida' },
-      ])
+      const error = new ValidationError(
+        'Login falhou!',
+        [constants.INVALID_PASSWORD],
+        constants.CODE
+      )
       stepMembership.finalize({ membership, error })
       throw error
     }
@@ -82,9 +83,11 @@ module.exports = class UserService {
     )
     const passwordIsValid = comparePassword(password, membership.password)
     if (!passwordIsValid) {
-      const error = new ValidationError('Login falhou!', [
-        { code: 404, message: 'Senha Inválida' },
-      ])
+      const error = new ValidationError(
+        'Login falhou!',
+        [constants.INVALID_PASSWORD],
+        constants.CODE
+      )
       stepComparePassword.finalize({ passwordIsValid, error })
       throw error
     }
@@ -129,7 +132,11 @@ module.exports = class UserService {
 
       stepCreatedUserFirebase.finalize(userFirebase)
     } catch (error) {
-      const dataError = new RepositoryError('Error Insert UserFirebase', error)
+      const dataError = new RepositoryError(
+        'Error Insert UserFirebase',
+        error,
+        constants.CODE
+      )
       stepCreatedUserFirebase.finalize(dataError)
       throw dataError
     }
@@ -163,7 +170,11 @@ module.exports = class UserService {
       return user
     } catch (error) {
       await transaction.rollback()
-      const dataError = new RepositoryError('Error Insert Membership', error)
+      const dataError = new RepositoryError(
+        'Error Insert Membership',
+        error,
+        constants.CODE
+      )
       stepCreatedUser.finalize(dataError)
       throw dataError
     }
@@ -201,7 +212,11 @@ module.exports = class UserService {
       const contract = DuplicateRegister(user)
 
       if (!contract.isValid()) {
-        throw new ValidationError('Dados já cadastrados', contract.errors())
+        throw new ValidationError(
+          'Dados já cadastrados',
+          contract.errors(),
+          constants.CODE
+        )
       }
 
       stepValidateDataEntity.finalize({
@@ -315,9 +330,11 @@ module.exports = class UserService {
     const stepUser = this.LoggerService.addStep('UserServerUserFindByCpf')
     const user = await this.UserRepository.findBy({ Cpf: cpf })
     if (!user) {
-      const error = new ValidationError('Login falhou!', [
-        { code: 404, message: 'Email não cadastrado!' },
-      ])
+      const error = new ValidationError(
+        'Login falhou!',
+        [constants.NOT_REGISTER_CPF],
+        constants.CODE
+      )
       stepUser.finalize({ user, error })
       throw error
     }
