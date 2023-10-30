@@ -86,10 +86,9 @@ module.exports = class UserController {
   personalDataUpdate = async (request, response, next) => {
     const step = this.LoggerService.addStep('UserControllerPersonalDataUpdate')
     const body = request.body
-    this.LoggerService.setIndex({ cpf: body.cpf })
     try {
       this.validateUpdatePersonalData(request.user, body)
-      const data = await this.UserService.PersonalDataUpdate(body)
+      const data = await this.UserService.personalDataUpdate(body)
 
       step.value.addData(data)
       this.LoggerService.finalizeStep(step)
@@ -168,7 +167,7 @@ module.exports = class UserController {
   validateUpdatePersonalData(user, model) {
     const step = this.LoggerService.addStep('PersonalDataValidate')
     try {
-      const cpfClean = Util.getNumbers(model.cpf)
+      const cpfClean = Util.getNumbers(model.documentCpf)
 
       step.value.addData({ cpfFromUser: user.cpf === cpfClean })
 

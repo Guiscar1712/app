@@ -1,3 +1,4 @@
+const Util = require('./../../utils/util')
 class PersonalData {
   constructor(data) {
     this.cpf = data.documentCpf
@@ -14,14 +15,12 @@ class PersonalData {
     this.sexoBiologico = data.biologicalSex
     this.escolaConclusao = data.schoolConclusion
     this.anoConclusaoEnsinoMedio = data.yearCompletionOfHighSchool
-    this.documentosValidados = data.validatedDocuments
     this.setEmails(data.emails)
     this.setTelephones(data.telephones)
-    this.setAddresses(data.anddresses)
+    this.setAddresses(data.addresses)
     this.setSpecialNeeds(data.specialNeeds)
     this.setCommunicationChannels(data.communicationChannels)
     this.setResponsible(data.responsible)
-    // this.setValidatedData(data.ValidateData)
   }
 
   setEmails(emails) {
@@ -60,7 +59,7 @@ class PersonalData {
     }
   }
 
-  setChannelCommunication(communicationChannels) {
+  setCommunicationChannels(communicationChannels) {
     if (communicationChannels) {
       this.canalComunicacao = new CommunicationChannel(communicationChannels)
     }
@@ -69,12 +68,6 @@ class PersonalData {
   setResponsible(responsible) {
     if (responsible) {
       this.reponsavel = new Responsible(responsible)
-    }
-  }
-
-  setValidatedData(validatedData) {
-    if (validatedData) {
-      this.dadosValidados = new ValidatedData(validatedData)
     }
   }
 }
@@ -88,9 +81,17 @@ class Email {
 
 class Telephone {
   constructor(data) {
-    this.tipo = data.type
-    this.numero = data.number
     this.principal = data.main
+    this.setNumber(data.number)
+    this.setType()
+  }
+
+  setNumber = (number) => {
+    this.numero = Util.formatTelephone(number)
+  }
+
+  setType = () => {
+    this.tipo = this.numero.length === 15 ? 'MOVEL' : 'FIXO'
   }
 }
 
@@ -152,12 +153,5 @@ class Responsible {
     this.email = new Email(email)
   }
 }
-
-// class ValidatedData {
-//   constructor(data) {
-//     this.tipo = data.type
-//     this.camposValidados = data.ValidatedFields
-//   }
-// }
 
 module.exports = PersonalData

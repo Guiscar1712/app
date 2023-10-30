@@ -309,13 +309,13 @@ module.exports = class UserService {
     }
   }
 
-  personalDataUpdate = async (model) => {
+  personalDataUpdate = async (data) => {
     const step = this.LoggerService.addStep('UserServerPersonalDataUpdate')
     try {
-      const model = new personalDataUpdate(model)
+      const model = new personalDataUpdate(data)      
       const personalData = await this.IngressoClient.personalDataUpdate(model)
       step.value.addData(personalData)
-      return personalDataResponse
+      return personalData
     } catch (error) {
       throw error
     } finally {
