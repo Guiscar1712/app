@@ -81,7 +81,7 @@ module.exports = class UserService {
       step.value.addData(membership)
       return membership
     } catch (error) {
-      step.value.addData({ user, error })
+      throw error    
     } finally {
       this.LoggerService.finalizeStep(step)
     }
