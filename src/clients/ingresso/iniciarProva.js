@@ -5,54 +5,39 @@ const ClientServerError = require('../../utils/errors/ClientServerError')
 const getToken = require('./token')
 
 const ingresso = {
-  grant_type: 'client_credentials',
-  client_id: config.kroton.ingresso.client_id,
-  client_secret: config.kroton.ingresso.client_secret,
   base_uri: config.kroton.ingresso.url,
   OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey,
 }
 
-const url = `${ingresso.base_uri}/ms/inscricaocqrs/captacao/v5/inscricao`
+const url = `${ingresso.base_uri}/captacao/salva/captacao/v1/salva-provaonline/iniciarProva`
 
-class InscricaoPorIdOrigin {
+class InciaProva {
   constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
-  request = async (originId) => {
-    const step = this.LoggerService.addStep(
-      'IngressoClientInscricaoPorIdOriginRequest'
-    )
+  request = async (subscriptionKeyEncode) => {
+    const step = this.LoggerService.addStep('IngressoClientInciaProvaRequest')
     try {
       const token = await getToken()
 
       const res = await axios
-        .get(`${url}/${originId}`, {
+        .post(`${url}/${subscriptionKeyEncode}`, null, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
             Authorization: 'Bearer ' + token,
           },
         })
         .catch(function (error) {
-          step.value.addData({
+          throw new ClientServerError(error.message, {
             request: error.config,
-            response: error.response,
           })
-
-          return error.response
         })
 
-      step.value.addData({ request: res.config, response: res })
-      const system = res.data?.sistema?.toUpperCase()
-      this.LoggerService.setIndex({
-        system: system,
-        originId,
-      })
-
       if (res.status === 200) {
-        const bk = res.data.inscricao.ofertas.primeiraOpcao.businessKey
-        this.LoggerService.setIndex({
-          businessKey: bk,
+        step.finalize({
+          request: res.config,
+          response: res,
         })
 
         return res.data
@@ -65,7 +50,7 @@ class InscricaoPorIdOrigin {
       }
 
       if (error.status === 401) {
-        throw new ClientServerAuthError('Something went wrong', {
+        throw new ClientServerAuthError('Access Denied', {
           client: url,
           ...error.data,
         })
@@ -75,10 +60,8 @@ class InscricaoPorIdOrigin {
         client: url,
         ...error.data,
       })
-    } finally {
-      this.LoggerService.finalizeStep(step)
     }
   }
 }
 
-module.exports = InscricaoPorIdOrigin
+module.exports = InciaProva

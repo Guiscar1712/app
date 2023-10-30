@@ -14,7 +14,6 @@ class ContractsService {
   }
 
   async contracts(idOrigin) {
-
     const enrollment = await retry(
       this.IngressoClient.inscricaoPorIdOrigin,
       idOrigin
@@ -31,12 +30,14 @@ class ContractsService {
       enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
       businessKey: enrollmentsDto.businessKey,
     }
-    
+
     return await this.fetchContracts(queryFetch)
   }
 
   async fetchContracts({ system, enrollmentId, businessKey }) {
-    const step = this.LoggerService.addStepStepTrace('ServicesEnrollmentsContractListFetchContracts')
+    const step = this.LoggerService.addStep(
+      'ServicesEnrollmentsContractListFetchContracts'
+    )
 
     try {
       let data
@@ -60,15 +61,14 @@ class ContractsService {
         contracts.push(contract)
       })
 
-      this.LoggerService.finalizeStep(step.value, step.key, {contracts})
+      step.value.addData({ contracts })
+      this.LoggerService.finalizeStep(step)
       return contracts
     } catch (error) {
       if (error instanceof BaseError) {
-        step.finalize({ system, enrollmentId, businessKey, error })
         throw error
       }
       const errorData = new ServerError('Error consulting contracts.', error)
-      step.finalize({ system, enrollmentId, businessKey, error: errorData })
       throw errorData
     }
   }

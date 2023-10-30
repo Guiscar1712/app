@@ -35,6 +35,27 @@ module.exports = class Util {
     return null
   }
 
+  static formatTelephone(telephone) {
+    const numeroLimpo = telephone.replace(/\D/g, '')
+
+    let numeroFormatado
+    if (numeroLimpo.length === 10) {
+      numeroFormatado = numeroLimpo.replace(
+        /(\d{2})(\d{4})(\d{4})/,
+        '($1) $2-$3'
+      )
+    } else if (numeroLimpo.length === 11) {
+      numeroFormatado = numeroLimpo.replace(
+        /(\d{2})(\d{5})(\d{4})/,
+        '($1) $2-$3'
+      )
+    } else {
+      throw new Error('Numero de telefone inválido')
+    }
+
+    return numeroFormatado
+  }
+
   static formatCpf(cpf) {
     const cnpjCpf = cpf.replace(/\D/g, '')
 

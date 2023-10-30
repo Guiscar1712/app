@@ -4,7 +4,7 @@ const SimpleQuery = require('../../database/queries/v1/simpleQuery')
 const table = 'User'
 
 module.exports = class UserRepository {
-  constructor ({ LoggerService }) {
+  constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
@@ -13,11 +13,13 @@ module.exports = class UserRepository {
     try {
       const row = await SimpleQuery.findBy(query, table, transaction)
       const data = format(row)
-      step.finalize({ query, data, transaction })
+      step.value.addData({ query, data, transaction })
       return data
     } catch (error) {
-      step.finalize({ inputData: { query, transaction }, error })
+      step.value.addData({ inputData: { query, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
@@ -26,16 +28,20 @@ module.exports = class UserRepository {
     try {
       const row = await SimpleQuery.insert(entity, table, transaction)
       const data = format(row)
-      step.finalize(data)
+      step.value.addData(data)
       return data
     } catch (error) {
-      step.finalize({ inputData: { entity, transaction }, error })
+      step.value.addData({ inputData: { entity, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   findByCpfOrEmailOrPhone = async (cpf, email, phone, transaction) => {
-    const step = this.LoggerService.addStep('UserRepositoryFindByCpfOrEmailOrPhone')
+    const step = this.LoggerService.addStep(
+      'UserRepositoryFindByCpfOrEmailOrPhone'
+    )
     try {
       const result = await (transaction || database)(table)
         .where(cpf)
@@ -46,16 +52,21 @@ module.exports = class UserRepository {
       for (const row of result) {
         items.push(format(row))
       }
-      step.finalize(items)
+      step.value.addData(items)
       return items
     } catch (error) {
-      step.finalize({ inputData: { cpf, email, phone, transaction }, error })
+      step.value.addData({
+        inputData: { cpf, email, phone, transaction },
+        error,
+      })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }
 
-function format (row) {
+function format(row) {
   if (!row) {
     return null
   }
@@ -79,6 +90,6 @@ function format (row) {
     alertWarnings: row.AlertWarnings,
     alertTeatchers: row.AlertTeatchers,
     zipcode: row.Zipcode,
-    state: row.State
+    state: row.State,
   }
 }

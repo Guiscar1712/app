@@ -14,34 +14,15 @@ module.exports = class TrackMiddleware {
       req.body = this.RemoveCommands(req.body)
       req.params = this.RemoveCommands(req.params)
       const log = this.addLog(req, res)
-      step.finalize(log)
+      step.value.addData(log)
     } catch (err) {
-      step.finalize(err)
+      step.value.addData(err)
       next(err)
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
     next()
   }
-
-  // tracking = (typeLog) => {
-  //   return async (req, res, next) => {
-  //     const indexLog = {
-  //       remoteAddress:
-  //         req.headers['x-forwarded-for'] || req.socket.remoteAddress || null,
-  //     }
-  //     this.LoggerService.newLog(indexLog, typeLog, req)
-  //     const step = this.LoggerService.addStep('TrackMiddleware')
-  //     try {
-  //       req.body = this.RemoveCommands(req.body)
-  //       req.params = this.RemoveCommands(req.params)
-  //       const log = this.addLog(req, res)
-  //       step.finalize(log)
-  //     } catch (err) {
-  //       step.finalize(err)
-  //       next(err)
-  //     }
-  //     next()
-  //   }
-  // }
 
   RemoveCommands(container) {
     if (container) {

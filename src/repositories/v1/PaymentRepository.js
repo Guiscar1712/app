@@ -11,27 +11,34 @@ module.exports = class PaymentRepository {
     try {
       const row = await SimpleQuery.findBy(query, table, transaction)
       const data = format(row)
-      step.finalize({ query, data, transaction })
+      step.value.addData({ query, data, transaction })
       return data
     } catch (error) {
-      step.finalize({ inputData: { query, transaction }, error })
+      step.value.addData({ inputData: { query, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   deleteBy = async (query, transaction) => {
     const step = this.LoggerService.addStep('PaymentRepositoryDeleteBy')
     try {
-      return await SimpleQuery.deleteBy(query, table, transaction)
+      const res = await SimpleQuery.deleteBy(query, table, transaction)
+      step.value.addData({ query, transaction })
+      return res
     } catch (error) {
-      step.finalize({ inputData: { query, transaction }, error })
+      step.value.addData({ inputData: { query, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   filterBy = async (query, transaction) => {
     const step = this.LoggerService.addStep('PaymentRepositoryFilterBy')
     try {
+      step.value.addData({ query, transaction })
       const rows = await SimpleQuery.filterBy(query, table, transaction)
       const items = []
       for (const row of rows) {
@@ -39,8 +46,10 @@ module.exports = class PaymentRepository {
       }
       return items
     } catch (error) {
-      step.finalize({ inputData: { query, transaction }, error })
+      step.value.addData({ inputData: { query, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
@@ -49,21 +58,26 @@ module.exports = class PaymentRepository {
     try {
       const row = await SimpleQuery.insert(entity, table, transaction)
       const data = format(row)
-      step.finalize(data)
+      step.value.addData(data)
       return data
     } catch (error) {
-      step.finalize({ inputData: { entity, transaction }, error })
+      step.value.addData({ inputData: { entity, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   update = async (id, entity, transaction) => {
     const step = this.LoggerService.addStep('PaymentRepositoryUpdate')
     try {
+      step.value.addData({ id, entity, transaction })
       return await SimpleQuery.update({ id }, entity, table, transaction)
     } catch (error) {
-      step.finalize({ inputData: { entity, transaction }, error })
+      step.value.addData({ inputData: { entity, transaction }, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

@@ -9,39 +9,47 @@ const ingresso = {
   client_id: config.kroton.ingresso.client_id,
   client_secret: config.kroton.ingresso.client_secret,
   base_uri: config.kroton.ingresso.url,
-  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey
+  OcpApimSubscriptionKey: config.kroton.ingresso.OcpApimSubscriptionKey,
 }
 
 const url = `${ingresso.base_uri}/documento/geracaocontrato/v1/contrato`
 
 class ContratoPorContratoId {
-  constructor ({ LoggerService }) {
+  constructor({ LoggerService }) {
     this.LoggerService = LoggerService
   }
 
   request = async (contratoId) => {
-    const step = this.LoggerService.addStep('IngressoClientContratoPorContratoIdRequest')
+    const step = this.LoggerService.addStep(
+      'IngressoClientContratoPorContratoIdRequest'
+    )
     try {
       const token = await getToken()
 
       const param = `${contratoId}/html`
 
-      const res = await axios.get(
-        `${url}/${param}`,
-        {
+      const res = await axios
+        .get(`${url}/${param}`, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
-            Authorization: 'Bearer ' + token
-          }
-        }
-      ).catch(function (error) {
-        return error.response
+            Authorization: 'Bearer ' + token,
+          },
+        })
+        .catch(function (error) {
+          step.value.addData({
+            request: error.config,
+            response: error.response,
+          })
+          return error.response
+        })
+
+      step.value.addData({
+        request: res.config,
+        response: res,
       })
 
       if (res.status === 200) {
         this.LoggerService.setIndex({ contratoId })
-
-        step.finalize({ status: res.status, data: res.data, headers: res.config.headers, method: 'GET', url })
         return res.data
       }
 
@@ -52,10 +60,18 @@ class ContratoPorContratoId {
       }
 
       if (error.status === 401) {
-        throw new ClientServerAuthError('Algo deu errado', { client: url, ...error.data })
+        throw new ClientServerAuthError('Algo deu errado', {
+          client: url,
+          ...error.data,
+        })
       }
 
-      throw new ClientServerError('Algo deu errado', { client: url, ...error.data })
+      throw new ClientServerError('Algo deu errado', {
+        client: url,
+        ...error.data,
+      })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

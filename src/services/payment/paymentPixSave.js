@@ -5,7 +5,7 @@ module.exports = class PaymentPixSave {
   }
 
   save = async (userId, originId, businessKey, system, payDto) => {
-    const step = this.LoggerService.addStepStepTrace('PaymentServicePixSave')
+    const step = this.LoggerService.addStep('PaymentServicePixSave')
     try {
       let paymentData = await this.PaymentRepository.findBy({
         orderReference: payDto.orderReference,
@@ -26,7 +26,7 @@ module.exports = class PaymentPixSave {
         }
 
         const data = await this.PaymentRepository.insert(paymentData)
-        this.LoggerService.finalizeStep(step.value, step.key, {
+        step.value.addData({
           userId,
           originId,
           businessKey,
@@ -36,13 +36,14 @@ module.exports = class PaymentPixSave {
         })
         return data
       }
-      this.LoggerService.finalizeStep(step.value, step.key, {
+      step.value.addData({
         userId,
         originId,
         businessKey,
         system,
         payDto,
       })
+      this.LoggerService.finalizeStep(step)
       return paymentData
     } catch (error) {
       throw error

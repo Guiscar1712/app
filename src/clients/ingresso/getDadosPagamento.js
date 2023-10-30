@@ -35,12 +35,16 @@ module.exports = class DadosPagamento {
           },
         })
         .catch(function (error) {
-          step.finalize({ request: error.config, response: error.response })
+          step.value.addData({
+            request: error.config,
+            response: error.response,
+          })
           return error.response
         })
 
+      step.value.addData({ request: res.config, response: res })
+
       if (res.status === 200) {
-        step.finalize({ request: res.config, response: res })
         return res.data
       }
 
@@ -59,6 +63,8 @@ module.exports = class DadosPagamento {
         })
       }
       throw errorData
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

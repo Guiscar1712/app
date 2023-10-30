@@ -41,58 +41,72 @@ module.exports = class UserService {
   }
 
   async loginFindUser(email) {
-    const stepUser = this.LoggerService.addStep('UserServerLoginUserFindBy')
-    const user = await this.UserRepository.findBy({ Email: email })
-    if (!user) {
-      const error = new ValidationError(
-        'Login falhou!',
-        [constants.NOT_REGISTER_EMAIL],
-        constants.CODE
-      )
-      stepUser.finalize({ user, error })
-      throw error
+    const step = this.LoggerService.addStep('UserServerLoginUserFindBy')
+    try {
+      const user = await this.UserRepository.findBy({ Email: email })
+      if (!user) {
+        const error = new ValidationError(
+          'Login falhou!',
+          [constants.NOT_REGISTER_EMAIL],
+          constants.CODE
+        )
+
+        throw error
+      }
+      step.value.addData(user)
+      return user
+    } catch (error) {
+      step.value.addData({ email, error })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
-    stepUser.finalize(user)
-    return user
   }
 
   async loginFindMembership(user) {
-    const stepMembership = this.LoggerService.addStep(
-      'UserServerLoginMembershipFindBy'
-    )
-    const membership = await this.MembershipRepository.findBy({
-      UserId: user.id,
-    })
+    const step = this.LoggerService.addStep('UserServerLoginMembershipFindBy')
+    try {
+      const membership = await this.MembershipRepository.findBy({
+        UserId: user.id,
+      })
 
-    if (!membership.password) {
-      const error = new ValidationError(
-        'Login falhou!',
-        [constants.INVALID_PASSWORD],
-        constants.CODE
-      )
-      stepMembership.finalize({ membership, error })
-      throw error
+      if (!membership.password) {
+        const error = new ValidationError(
+          'Login falhou!',
+          [constants.INVALID_PASSWORD],
+          constants.CODE
+        )
+
+        throw error
+      }
+      step.value.addData(membership)
+      return membership
+    } catch (error) {
+      step.value.addData({ user, error })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
-    stepMembership.finalize(membership)
-    return membership
   }
 
   loginComparePassword(password, membership, user) {
-    const stepComparePassword = this.LoggerService.addStep(
-      'UserServerLoginComparePassword'
-    )
-    const passwordIsValid = comparePassword(password, membership.password)
-    if (!passwordIsValid) {
-      const error = new ValidationError(
-        'Login falhou!',
-        [constants.INVALID_PASSWORD],
-        constants.CODE
-      )
-      stepComparePassword.finalize({ passwordIsValid, error })
-      throw error
+    const step = this.LoggerService.addStep('UserServerLoginComparePassword')
+    try {
+      const passwordIsValid = comparePassword(password, membership.password)
+      if (!passwordIsValid) {
+        const error = new ValidationError(
+          'Login falhou!',
+          [constants.INVALID_PASSWORD],
+          constants.CODE
+        )
+
+        throw error
+      }
+      this.LoggerService.setUserId(membership.userId)
+      step.value.addData({ passwordIsValid })
+    } catch (error) {
+      step.data.finalize({ membership, user, error })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
-    this.LoggerService.setUserId(membership.userId)
-    stepComparePassword.finalize({ passwordIsValid })
   }
 
   loginFirebase = async (token) => {
@@ -114,9 +128,7 @@ module.exports = class UserService {
   }
 
   async createdUserFirebase(decoded, user) {
-    const stepCreatedUserFirebase = this.LoggerService.addStep(
-      'UserServerCreatedUserFirebase'
-    )
+    const step = this.LoggerService.addStep('UserServerCreatedUserFirebase')
     try {
       let userFirebase = await this.UserFirebaseRepository.findByUid(
         decoded.uid
@@ -130,20 +142,22 @@ module.exports = class UserService {
         })
       }
 
-      stepCreatedUserFirebase.finalize(userFirebase)
+      step.value.addData(userFirebase)
     } catch (error) {
       const dataError = new RepositoryError(
         'Error Insert UserFirebase',
         error,
         constants.CODE
       )
-      stepCreatedUserFirebase.finalize(dataError)
+      step.value.addData(dataError)
       throw dataError
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   async createdUser(entity) {
-    const stepCreatedUser = this.LoggerService.addStep('UserServerCreatedUser')
+    const step = this.LoggerService.addStep('UserServerCreatedUser')
     const transaction = await database.transaction()
     try {
       entity = prepare(entity)
@@ -162,7 +176,7 @@ module.exports = class UserService {
       await transaction.commit()
 
       this.LoggerService.setIndex({ userId: user.id, newUser: true })
-      stepCreatedUser.finalize({
+      step.value.addData({
         model,
         insertedUser: !!user,
         insertedMembership: !!membership,
@@ -175,8 +189,10 @@ module.exports = class UserService {
         error,
         constants.CODE
       )
-      stepCreatedUser.finalize(dataError)
+      step.value.addData(dataError)
       throw dataError
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
@@ -191,9 +207,7 @@ module.exports = class UserService {
   }
 
   async validateDataEntity(entity, userId) {
-    const stepValidateDataEntity = this.LoggerService.addStep(
-      'UserServerValidateDataEntity'
-    )
+    const step = this.LoggerService.addStep('UserServerValidateDataEntity')
     try {
       entity.cpf = Util.getNumbers(entity.cpf)
       entity.phone = Util.getNumbers(entity.phone)
@@ -219,21 +233,21 @@ module.exports = class UserService {
         )
       }
 
-      stepValidateDataEntity.finalize({
+      step.value.addData({
         entity,
         userId,
         isValid: contract.isValid(),
       })
     } catch (error) {
-      stepValidateDataEntity.finalize(error)
+      step.value.addData(error)
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   async getRecoveryKey(userId) {
-    const stepGetRecoveryKey = this.LoggerService.addStep(
-      'UserServerGetRecoveryKey'
-    )
+    const step = this.LoggerService.addStep('UserServerGetRecoveryKey')
     try {
       const recoveryKey = await getRecoverKey()
 
@@ -244,18 +258,18 @@ module.exports = class UserService {
       await this.MembershipRepository.update(membership.id, {
         RecoveryKey: recoveryKey,
       })
-      stepGetRecoveryKey.finalize({ recoveryKey })
+      step.value.addData({ recoveryKey })
       return recoveryKey
     } catch (error) {
-      stepGetRecoveryKey.finalize({ userId, error })
+      step.value.addData({ userId, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   async sendVerificationCode(userId, name, email) {
-    const stepSendVerificationCode = this.LoggerService.addStep(
-      'SendVerificationCode'
-    )
+    const step = this.LoggerService.addStep('SendVerificationCode')
 
     try {
       const recoverKey = await this.getRecoveryKey(userId)
@@ -280,7 +294,7 @@ module.exports = class UserService {
         templateName,
         templateTitle
       )
-      stepSendVerificationCode.finalize({
+      step.value.addData({
         email,
         templateName,
         templateTitle,
@@ -288,58 +302,62 @@ module.exports = class UserService {
       })
       return result
     } catch (error) {
-      stepSendVerificationCode.finalize({ userId, name, email, error })
+      step.value.addData({ userId, name, email, error })
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   personalDataGet = async (cpf) => {
-    const step = this.LoggerService.addStepStepTrace(
-      'UserServerPersonalDataGet'
-    )
+    const step = this.LoggerService.addStep('UserServerPersonalDataGet')
     try {
       const cpfFormat = Util.formatCpf(cpf)
       const personalData = await this.IngressoClient.personalDataGet(cpfFormat)
       const personalDataResponse = new PersonalDataResponse(personalData)
-      this.LoggerService.finalizeStep(
-        step.value,
-        step.key,
-        personalDataResponse
-      )
+      step.value.addData(personalDataResponse)
       return personalDataResponse
     } catch (error) {
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
-  personalDataUpdate = async (model) => {
-    const step = this.LoggerService.addStepStepTrace(
-      'UserServerPersonalDataUpdate'
-    )
+  personalDataUpdate = async (data) => {
+    const step = this.LoggerService.addStep('UserServerPersonalDataUpdate')
     try {
-      const model = new personalDataUpdate(model)
+      const model = new personalDataUpdate(data)
       const personalData = await this.IngressoClient.personalDataUpdate(model)
-      this.LoggerService.finalizeStep(step.value, step.key, personalData)
-      return personalDataResponse
+      step.value.addData(personalData)
+      return personalData
     } catch (error) {
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 
   async findUserByCpf(cpf) {
-    const stepUser = this.LoggerService.addStep('UserServerUserFindByCpf')
-    const user = await this.UserRepository.findBy({ Cpf: cpf })
-    if (!user) {
-      const error = new ValidationError(
-        'Login falhou!',
-        [constants.NOT_REGISTER_CPF],
-        constants.CODE
-      )
-      stepUser.finalize({ user, error })
+    const step = this.LoggerService.addStep('UserServerUserFindByCpf')
+    try {
+      const user = await this.UserRepository.findBy({ Cpf: cpf })
+      if (!user) {
+        const error = new ValidationError(
+          'Login falhou!',
+          [constants.NOT_REGISTER_CPF],
+          constants.CODE
+        )
+        step.value.addData({ user, error })
+        throw error
+      }
+      step.value.addData({ cpf, user })
+      return user
+    } catch (error) {
       throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
-    stepUser.finalize({ cpf, user })
-    return user
   }
 }
 

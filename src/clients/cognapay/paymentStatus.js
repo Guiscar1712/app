@@ -27,24 +27,25 @@ module.exports = class PaymentPixStatus {
           },
         })
         .catch(function (error) {
-          step.finalize({
+          step.value.addData({
             request: error.config,
             response: error.response,
           })
+
           return error.response
         })
 
-      step.finalize({
+      step.value.addData({
         request: res.config,
         response: res,
       })
+
       if (res.status === 200) {
         return res.data
       } else if (res.status === 404) {
         return null
-      } else {
-        throw res
       }
+      throw res
     } catch (error) {
       if (error instanceof ClientServerError) {
         throw error
@@ -63,6 +64,8 @@ module.exports = class PaymentPixStatus {
         errors: error.data,
       })
       throw errorData
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

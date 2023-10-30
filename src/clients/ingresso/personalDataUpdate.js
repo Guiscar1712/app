@@ -25,26 +25,28 @@ class PersonalDataUpdate {
       const token = await getToken()
 
       const res = await axios
-        .post(`${url}/${cpf}`, body, {
+        .post(`${url}`, body, {
           headers: {
             'Ocp-Apim-Subscription-Key': ingresso.OcpApimSubscriptionKey,
             Authorization: 'Bearer ' + token,
           },
         })
         .catch(function (error) {
-          step.finalize({
+          step.value.addData({
             request: error.config,
             response: error.response,
           })
           return error.response
         })
 
-      if (res.status === 200) {
-        step.finalize({
+        step.value.addData({
           request: res.config,
           response: res,
         })
-        return res.data
+        
+        if (res.status === 201) {
+        const { status, statusText } = { ...res }
+        return { status, statusText }
       }
 
       throw res
@@ -66,6 +68,8 @@ class PersonalDataUpdate {
         errors: error.data,
       })
       throw errorData
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }
