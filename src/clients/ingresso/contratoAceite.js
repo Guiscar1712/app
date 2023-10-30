@@ -20,7 +20,9 @@ class ContratoAceite {
   }
 
   request = async ({ contractId, body }) => {
-    const step = this.LoggerService.addStep('IngressoClientContratoAceitoRequest')
+    const step = this.LoggerService.addStep(
+      'IngressoClientContratoAceitoRequest'
+    )
     try {
       const token = await getToken()
       const res = await axios
@@ -31,40 +33,43 @@ class ContratoAceite {
           },
         })
         .catch(function (error) {
+          step.value.addData({
+            request: error.config,
+            response: error.response,
+          })
           return error.response
         })
 
+      step.value.addData({
+        request: res.config,
+        response: res,
+      })
+
       if (res.status === 200) {
         const system = res.data.labels.sistema.toUpperCase()
-        // const businessKey = res.inscricao.businessKey
         this.LoggerService.setIndex({ system: system, contratoId: contractId })
-        step.finalize({
-          request: res.config,
-          response: res,
-        })
         return res.data
       }
 
       throw res
     } catch (error) {
       if (error instanceof ClientServerError) {
-        step.finalize({ contractId, url, error })
         throw error
       }
 
       if (error.status === 401) {
-        step.finalize({ contractId, url, error })
         throw new ClientServerAuthError('Something went wrong', {
           client: url,
           errors: error.data,
         })
       }
 
-      step.finalize({ contractId, url, error })
       throw new ClientServerError('Something went wrong', {
         client: url,
         errors: error.data,
       })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }

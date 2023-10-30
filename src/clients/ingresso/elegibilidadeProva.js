@@ -32,17 +32,19 @@ class ElegibilidadeProva {
           },
         })
         .catch(function (error) {
-          throw new ClientServerError(error.message, {
+          step.value.addData({
             request: error.config,
+            response: error.response,
           })
+          return error.response
         })
+
+      step.value.addData({
+        request: res.config,
+        response: res,
+      })
 
       if (res.status === 200) {
-        step.finalize({
-          request: res.config,
-          response: res,
-        })
-
         return res.data
       }
 
@@ -63,6 +65,8 @@ class ElegibilidadeProva {
         client: url,
         ...error.data,
       })
+    } finally {
+      this.LoggerService.finalizeStep(step)
     }
   }
 }
