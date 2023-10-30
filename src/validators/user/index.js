@@ -77,7 +77,7 @@ module.exports = {
 
     contract.isRequired(model.telephones, '40003', 'Telefone é Obrigatório')
     if (model.telephones && model.telephones.length > 0) {
-      const tipo = ['MOVEL', 'FIXO']
+      const type = ['MOVEL', 'FIXO']
       model.telephones.forEach((element) => {
         contract.isRequired(
           element.number,
@@ -95,7 +95,7 @@ module.exports = {
 
     contract.isRequired(model.addresses, '40003', 'Endereço é obrigatório')
     if (model.addresses && model.addresses.length > 0) {
-      const tipo = ['PRINCIPAL', 'COBRANCA', 'RESPONSAVEL']
+      const type = ['PRINCIPAL', 'COBRANCA', 'RESPONSAVEL']
       const uf = [
         'AC',
         'AL',
@@ -128,7 +128,7 @@ module.exports = {
       model.addresses.forEach((element) => {
         contract.containsInArray(
           element.type,
-          tipo,
+          type,
           '40003',
           'Tipo de endereço é inválido'
         )
