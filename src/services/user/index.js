@@ -103,7 +103,7 @@ module.exports = class UserService {
       this.LoggerService.setUserId(membership.userId)
       step.value.addData({ passwordIsValid })
     } catch (error) {
-      step.data.finalize({ membership, user, error })
+      throw error
     } finally {
       this.LoggerService.finalizeStep(step)
     }
