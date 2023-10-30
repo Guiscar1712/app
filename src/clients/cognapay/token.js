@@ -64,14 +64,15 @@ module.exports = class CognaPayToken {
         auth,
       })
       .catch(function (error) {
-        this.LoggerService.finalizeStep(step.value, step.key, {
+        step.value.addData({
           request: error.config,
           response: error.response,
         })
+
         return error.response
       })
 
-    this.LoggerService.finalizeStep(step.value, step.key, {
+    step.value.addData({
       request: res.config,
       response: res,
     })

@@ -9,7 +9,7 @@ module.exports = class ExamController {
   }
 
   start = async (request, response, next) => {
-    const step = this.LoggerService.addStepStepTrace('ExamControllerStart')
+    const step = this.LoggerService.addStep('ExamControllerStart')
     try {
       const subscriptionKey = request.params.subscriptionKey
       const contract = SubscriptionValidate(subscriptionKey)
@@ -20,7 +20,8 @@ module.exports = class ExamController {
 
       const data = await this.ExamService.start(subscriptionKey)
 
-      this.LoggerService.finalizeStep(step.value, step.key, data)
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {
       next(error)
@@ -28,7 +29,7 @@ module.exports = class ExamController {
   }
 
   finalize = async (request, response, next) => {
-    const step = this.LoggerService.addStepStepTrace('ExamControllerStart')
+    const step = this.LoggerService.addStep('ExamControllerStart')
     try {
       const subscriptionKey = request.params.subscriptionKey
       const contract = ApplyValidate(request.body)
@@ -42,7 +43,8 @@ module.exports = class ExamController {
         request.body
       )
 
-      this.LoggerService.finalizeStep(step.value, step.key, data)
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {
       console.log(error)

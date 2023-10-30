@@ -7,13 +7,15 @@ module.exports = class ExamStartService {
   }
 
   start = async (subscriptionKey) => {
-    const step = this.LoggerService.addStepStepTrace('ExamServiceStart')
+    const step = this.LoggerService.addStep('ExamServiceStart')
     const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString(
       'base64'
     )
     const data = await this.IngressoClient.provaInicar(subscriptionKeyEncode)
     const dataDto = getTheme(data)
-    this.LoggerService.finalizeStep(step.value, step.key, dataDto)
+
+    step.value.addData(dataDto)
+    this.LoggerService.finalizeStep(step)
     return dataDto
   }
 }

@@ -7,7 +7,7 @@ module.exports = class ExamFinilizeService {
   }
 
   finalize = async (subscriptionKey, model) => {
-    const step = this.LoggerService.addStepStepTrace('ExamServiceFinalize')
+    const step = this.LoggerService.addStep('ExamServiceFinalize')
 
     const subscriptionKeyEncode = Buffer.from(subscriptionKey, 'utf8').toString(
       'base64'
@@ -20,7 +20,8 @@ module.exports = class ExamFinilizeService {
     const data = await this.IngressoClient.provaConsulta(subscriptionKeyEncode)
     const dataDto = getExamInfo(data)
 
-    this.LoggerService.finalizeStep(step.value, step.key, data)
+    step.value.addData(data)
+    this.LoggerService.finalizeStep(step)
     return dataDto
   }
 }
