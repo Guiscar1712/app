@@ -31,10 +31,10 @@ module.exports = class LoggerService {
     return { key: keyName, value: step }
   }
 
-  addStepTrace = (name, data) => {
+  addStepTrace = (name, data = null) => {
     const step = new Step()
     const key = this.getStepKey(name)
-    step.value.addData(data)
+    step.addData(data)
     step.finalize()
     this.addStepContent(key, step)
     return step

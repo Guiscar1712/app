@@ -8,6 +8,9 @@ class Step {
   }
 
   addData(data) {
+    if (!data) {
+      return this
+    }
     if (data instanceof Error) {
       let { code, message, stack, errors, type, functionError } = data
       code = code ?? -1
