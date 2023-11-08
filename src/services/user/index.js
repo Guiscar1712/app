@@ -48,7 +48,7 @@ module.exports = class UserService {
         const error = new ValidationError(
           'Login falhou!',
           [constants.NOT_REGISTER_EMAIL],
-          constants.CODE
+          constants.code
         )
 
         throw error
@@ -73,7 +73,7 @@ module.exports = class UserService {
         const error = new ValidationError(
           'Login falhou!',
           [constants.INVALID_PASSWORD],
-          constants.CODE
+          constants.code
         )
 
         throw error
@@ -95,7 +95,7 @@ module.exports = class UserService {
         const error = new ValidationError(
           'Login falhou!',
           [constants.INVALID_PASSWORD],
-          constants.CODE
+          constants.code
         )
 
         throw error
@@ -147,7 +147,7 @@ module.exports = class UserService {
       const dataError = new RepositoryError(
         'Error Insert UserFirebase',
         error,
-        constants.CODE
+        constants.code
       )
       step.value.addData(dataError)
       throw dataError
@@ -187,7 +187,7 @@ module.exports = class UserService {
       const dataError = new RepositoryError(
         'Error Insert Membership',
         error,
-        constants.CODE
+        constants.code
       )
       step.value.addData(dataError)
       throw dataError
@@ -229,7 +229,7 @@ module.exports = class UserService {
         throw new ValidationError(
           'Dados já cadastrados',
           contract.errors(),
-          constants.CODE
+          constants.code
         )
       }
 
@@ -346,7 +346,7 @@ module.exports = class UserService {
         const error = new ValidationError(
           'Login falhou!',
           [constants.NOT_REGISTER_CPF],
-          constants.CODE
+          constants.code
         )
         step.value.addData({ user, error })
         throw error

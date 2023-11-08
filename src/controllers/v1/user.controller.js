@@ -112,7 +112,7 @@ module.exports = class UserController {
       throw new ValidationError(
         'Parâmetros inválidos',
         contract.errors(),
-        constants.CODE
+        constants.code
       )
     }
   }
@@ -128,7 +128,7 @@ module.exports = class UserController {
       throw new ValidationError(
         'Parâmetros inválidos',
         contract.errors(),
-        constants.CODE
+        constants.code
       )
     }
   }

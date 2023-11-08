@@ -8,25 +8,25 @@ module.exports = {
 
     contract.isRequired(
       Util.getNumbers(model.cpf),
-      constants.REQUIRED_CPF.CODE,
-      constants.REQUIRED_CPF.MESSAGE
+      constants.REQUIRED_CPF.code,
+      constants.REQUIRED_CPF.message
     )
 
     contract.isValidCpf(
       Util.getNumbers(model.cpf),
-      constants.INVALID_CPF.CODE,
-      constants.INVALID_CPF.MESSAGE
+      constants.INVALID_CPF.code,
+      constants.INVALID_CPF.message
     )
 
     contract.isRequired(
       model.name,
-      constants.REQUIRED_NAME.CODE,
-      constants.REQUIRED_NAME.MESSAGE
+      constants.REQUIRED_NAME.code,
+      constants.REQUIRED_NAME.message
     )
     contract.isEmail(
       model.email,
-      constants.INVALID_EMAIL.CODE,
-      constants.INVALID_EMAIL.MESSAGE
+      constants.INVALID_EMAIL.code,
+      constants.INVALID_EMAIL.message
     )
 
     return contract
@@ -37,14 +37,14 @@ module.exports = {
 
     contract.isRequired(
       Util.getNumbers(model.cpf),
-      constants.REQUIRED_CPF.CODE,
-      constants.REQUIRED_CPF.MESSAGE
+      constants.REQUIRED_CPF.code,
+      constants.REQUIRED_CPF.message
     )
 
     contract.isValidCpf(
       Util.getNumbers(model.cpf),
-      constants.INVALID_CPF.CODE,
-      constants.INVALID_CPF.MESSAGE
+      constants.INVALID_CPF.code,
+      constants.INVALID_CPF.message
     )
 
     return contract
@@ -141,7 +141,7 @@ module.exports = {
           'Uf é invalido'
         )
 
-        const cep = Util.getNumbers(element.zipCode)
+        const cep = Util.getNumbers(element.zipcode)
         contract.isFixedLen(cep, 8, '40003', 'CEP é inválido')
       })
     }
@@ -154,13 +154,13 @@ module.exports = {
 
     contract.isRequired(
       model.password,
-      constants.REQUIRED_PASSWORD.CODE,
-      constants.REQUIRED_PASSWORD.MESSAGE
+      constants.REQUIRED_PASSWORD.code,
+      constants.REQUIRED_PASSWORD.message
     )
     contract.isEmail(
       model.email,
-      constants.INVALID_EMAIL.CODE,
-      constants.INVALID_EMAIL.MESSAGE
+      constants.INVALID_EMAIL.code,
+      constants.INVALID_EMAIL.message
     )
 
     return contract
@@ -170,18 +170,18 @@ module.exports = {
     const contract = new Validator()
     contract.duplicateRegister(
       model.cpf,
-      constants.REGISTERED_CPF.CODE,
-      constants.REGISTERED_CPF.MESSAGE
+      constants.REGISTERED_CPF.code,
+      constants.REGISTERED_CPF.message
     )
     contract.duplicateRegister(
       model.email,
-      constants.NOT_REGISTER_EMAIL.CODE,
-      constants.REGISTERED_EMAIL.MESSAGE
+      constants.NOT_REGISTER_EMAIL.code,
+      constants.REGISTERED_EMAIL.message
     )
     contract.duplicateRegister(
       model.phone,
-      constants.REGISTERED_CELLPHONE.CODE,
-      constants.REGISTERED_CELLPHONE.MESSAGE
+      constants.REGISTERED_CELLPHONE.code,
+      constants.REGISTERED_CELLPHONE.message
     )
 
     return contract
