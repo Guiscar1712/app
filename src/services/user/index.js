@@ -312,9 +312,11 @@ module.exports = class UserService {
   personalDataGet = async (cpf) => {
     const step = this.LoggerService.addStep('UserServerPersonalDataGet')
     try {
-      const cpfFormat = Util.formatCpf(cpf)
-      const personalData = await this.IngressoClient.personalDataGet(cpfFormat)
-      const personalDataResponse = new PersonalDataResponse(personalData)
+      // const cpfFormat = Util.formatCpf(cpf)
+      // const personalData = await this.IngressoClient.personalDataGet(cpfFormat)
+      // const personalDataResponse = new PersonalDataResponse(personalData)
+
+       const personalDataResponse = mockUser()
       step.value.addData(personalDataResponse)
       return personalDataResponse
     } catch (error) {
@@ -338,7 +340,7 @@ module.exports = class UserService {
     }
   }
 
-  async findUserByCpf(cpf) {
+  findUserByCpf = async (cpf) => {
     const step = this.LoggerService.addStep('UserServerUserFindByCpf')
     try {
       const user = await this.UserRepository.findBy({ Cpf: cpf })
@@ -389,3 +391,48 @@ function getModel(entity) {
   })
   return model
 }
+
+
+function mockUser() { return new PersonalDataResponse({
+	"cpf": "141.338.669-59",
+	"nome": "HEITOR F NETO",
+	"sexo": "NI",
+	"rg": "1234567899",
+	"dataNascimento": "1990-06-28",
+	"emails": [
+		{
+			"email": "heitor.fernandes@bluecore.it",
+			"principal": true
+		}
+	],
+	"telefones": [
+		{
+			"tipo": "MOVEL",
+			"numero": "(11) 92345-6789",
+			"principal": true
+		},
+		{
+			"tipo": "FIXO",
+			"numero": "(11) 9234-5678",
+			"principal": false
+		}
+	],
+	"enderecos": [
+		{
+			"tipo": "PRINCIPAL",
+			"logradouro": "TESTE TESTE",
+			"numero": "123",
+			"bairro": "-",
+			"cep": "48970-000",
+			"municipio": "SENHOR DO BONFIM",
+			"uf": "BA"
+		}
+	],
+	"necessidadesEspeciais": [],
+	"canalComunicacao": {
+		"email": false,
+		"sms": false,
+		"whatsApp": false
+	},
+	"documentosValidados": false
+})}

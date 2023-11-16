@@ -132,4 +132,14 @@ module.exports = class Util {
     }
     return true
   }
+
+  static obfuscateEmail(email) {
+    const [user, provider] = email.split('@')
+    const userLength =  Math.floor(user.length / 3)
+    const userOfuscado = user.slice(0, userLength) + '*'.repeat(userLength) + user.slice((userLength*2), user.length)
+    
+    const providerLength =  Math.floor(provider.length / 3)
+    const providerOfuscado = provider.slice(0, providerLength) + '*'.repeat(providerLength)+ provider.slice((providerLength*2), provider.length)
+    return `${userOfuscado}@${providerOfuscado}`
+  }
 }

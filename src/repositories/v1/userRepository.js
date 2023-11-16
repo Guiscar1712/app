@@ -38,6 +38,19 @@ module.exports = class UserRepository {
     }
   }
 
+    update = async (id, entity, transaction) => {
+    const step = this.LoggerService.addStep('UserRepositoryUpdate')
+    try {
+      step.value.addData({ id, entity, transaction })
+      return await SimpleQuery.update({ id }, entity, table, transaction)
+    } catch (error) {
+      step.value.addData({ inputData: { entity, transaction }, error })
+      throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
+    }
+  }
+
   findByCpfOrEmailOrPhone = async (cpf, email, phone, transaction) => {
     const step = this.LoggerService.addStep(
       'UserRepositoryFindByCpfOrEmailOrPhone'

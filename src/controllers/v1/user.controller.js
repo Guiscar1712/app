@@ -149,7 +149,7 @@ module.exports = class UserController {
     const step = this.LoggerService.addStep('PersonalDataValidate')
 
     try {
-      const contract = CpfValidate({ cpf })
+      const contract = CpfValidate(cpf)
 
       step.value.addData({ cpfIsValid: contract.isValid() })
 

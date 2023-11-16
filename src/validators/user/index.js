@@ -32,17 +32,17 @@ module.exports = {
     return contract
   },
 
-  CpfValidate(model) {
+  CpfValidate(cpf) {
     const contract = new Validator()
 
     contract.isRequired(
-      Util.getNumbers(model.cpf),
+      cpf,
       constants.REQUIRED_CPF.code,
       constants.REQUIRED_CPF.message
     )
 
     contract.isValidCpf(
-      Util.getNumbers(model.cpf),
+      Util.getNumbers(cpf),
       constants.INVALID_CPF.code,
       constants.INVALID_CPF.message
     )

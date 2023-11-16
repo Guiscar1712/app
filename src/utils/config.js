@@ -47,5 +47,10 @@ module.exports = {
         password: process.env.COGNAPAY_AUTH_PASSWORD_SAP
       }
     }
+  },
+  providerValidator:{
+    email: process.env.PROVIDER_VALIDATION_EMAIL === 'true' ?? false,
+    sms: process.env.PROVIDER_VALIDATION_SMS === 'true' ?? false,
+    social: process.env.PROVIDER_VALIDATION_SOCIAL === 'true' ?? false,
   }
 }
