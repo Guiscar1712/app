@@ -1,39 +1,41 @@
 const moment = require('moment')
 class AdmissionsTest {
-  constructor (data) {
-    if (!data || !data.prova) {
+  constructor(data) {
+    if (!data) {
       this.status = 'ERROR'
       return
     }
 
-    this.status = data.prova.provastatus
-    this.maxAttempts = data.prova.quantidadeMaximaTentativas
-    this.numberAttempts = data.prova.quantidadeTentativas
-    this.startDate = data.prova.dataInicio
-    this.endDate = data.prova.dataFim
-    this.finishedOnline = data.prova.provaOnlineFinalizada
+    this.status = data.provastatus
+    this.maxAttempts = data.quantidadeMaximaTentativas
+    this.numberAttempts = data.quantidadeTentativas
+    this.startDate = data.dataInicio
+    this.endDate = data.dataFim
+    this.finishedOnline = data.provaOnlineFinalizada
 
-    this.setEligible(data.prova.elegivelProvaOnline)
+    this.setEligible(data.elegivelProvaOnline)
     this.setDuration()
   }
 
-  setEligible (eligibleProvaOnline) {
+  setEligible(eligibleProvaOnline) {
     if (this.finishedOnline) {
       this.eligible = 'DONE'
-    } else if (this.maxAttempts === this.numberAttempts) {
-      this.eligible = 'EXCEED_ATTEMPTS'
     } else if (eligibleProvaOnline) {
       this.eligible = 'ELIGIBLE'
     } else if (!eligibleProvaOnline) {
       this.eligible = 'NOT_ELIGIBLE'
+    } else if (this.maxAttempts === this.numberAttempts) {
+      this.eligible = 'EXCEED_ATTEMPTS'
     }
   }
 
-  setDuration () {
+  setDuration() {
     if (this.startDate && this.endDate) {
       const startDate = moment(this.startDate, 'YYYY-MM-DD HH:mm:ss')
       const endDate = moment(this.endDate, 'YYYY-MM-DD HH:mm:ss')
-      const duration = Math.ceil(moment.duration(endDate.diff(startDate)).asMinutes())
+      const duration = Math.ceil(
+        moment.duration(endDate.diff(startDate)).asMinutes()
+      )
 
       this.duration = duration
     }
