@@ -17,4 +17,21 @@ router.post(
   }
 )
 
+
+router.post(
+  '/request',
+  (req, res, next) => {
+    const { TrackMiddleware } = req.container.cradle
+    TrackMiddleware.tracking('AUTH_VERIFICATION_CODE_REQUEST', req, res, next)
+  },
+  (req, res, next) => {
+    const { AuthController } = req.container.cradle
+    AuthController.request(req, res, next)
+  },
+  (data, req, res, next) => {
+    const { ResponseMiddleware } = req.container.cradle
+    ResponseMiddleware.Handler(data, req, res, next)
+  }
+)
+
 module.exports = router

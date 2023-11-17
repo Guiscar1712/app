@@ -31,6 +31,11 @@ const NOT_REGISTER_CPF = {
   message: 'CPF não esta cadastrado!',
 }
 
+const NOT_FOUND = {
+  code: 1114,
+  message: 'Usuario não encontrado!',
+}
+
 module.exports = {
   code,
   REQUIRED_EMAIL,
@@ -46,4 +51,5 @@ module.exports = {
   REGISTERED_CELLPHONE,
   NOT_REGISTER_EMAIL,
   NOT_REGISTER_CPF,
+  NOT_FOUND
 }

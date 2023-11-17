@@ -108,4 +108,36 @@ module.exports = class AuthService {
 
         return providers
     }
+
+    request = async({ receiver, userId }) => {
+
+        if(receiver == 'EMAIL' && !config.providerValidator.email){
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_EMAIL])
+        }
+
+        if(receiver == 'SMS' && !config.providerValidator.sms){
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SMS])
+        }
+
+        if(receiver == 'SOCIAL' && !config.providerValidator.social){
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SOCIAL])
+        }
+
+        if(receiver == 'EMAIL'){
+            const userData =  await this.UserRepository.findBy({ id: userId })
+            
+            if(!userData){
+                throw new NotFoundError(`Usuario não encontrato`, [constantUser.NOT_FOUND])
+            }
+
+            await this.UserService.sendVerificationCode(userId, userData.name, userData.email)
+        
+            return {
+                provider: `VERIFICATRION_CODE`,
+                receiver: `EMAIL`,
+                identifier: Util.obfuscateEmail(userData.email)
+            }
+        }
+
+    }
 }
