@@ -34,4 +34,21 @@ router.post(
   }
 )
 
+
+router.post(
+  '/login',
+  (req, res, next) => {
+    const { TrackMiddleware } = req.container.cradle
+    TrackMiddleware.tracking('AUTH_LOGIN', req, res, next)
+  },
+  (req, res, next) => {
+    const { AuthController } = req.container.cradle
+    AuthController.login(req, res, next)
+  },
+  (data, req, res, next) => {
+    const { ResponseMiddleware } = req.container.cradle
+    ResponseMiddleware.Handler(data, req, res, next)
+  }
+)
+
 module.exports = router

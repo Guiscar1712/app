@@ -2,6 +2,7 @@ const Util = require('../../utils/util')
 const { NotFoundError,ValidationError } = require('../../utils/errors')
 const constantUser = require(`../../constants/user.constants`)
 const constantAuth = require(`../../constants/auth.constants`)
+const jwt = require('jsonwebtoken')
 const config = require('../../utils/config')
 const database = require('../../database/config.database')
 
@@ -27,7 +28,7 @@ module.exports = class AuthService {
     const personalData = await this.UserService.personalDataGet(document)
 
     if(!personalData){
-        throw new NotFoundError(`Usuario não encontrato`, [constantUser.NOT_REGISTER_CPF])
+        throw new NotFoundError(`Usuario não encontrato`, [constantUser.NOT_REGISTER_CPF], constantAuth.code)
     }
 
     if(!userData){
@@ -35,7 +36,7 @@ module.exports = class AuthService {
         userData =  await this.UserRepository.findBy({ Email: personalEmail.email })
 
         if(userData){
-            throw new ValidationError(`Cadastro com divergência`, [constantAuth.DIVERGENT_REGISTRATION])
+            throw new ValidationError(`Cadastro com divergência`, [constantAuth.DIVERGENT_REGISTRATION], constantAuth.code)
         }
     }
     
@@ -95,7 +96,7 @@ module.exports = class AuthService {
         }
 
         if (config.providerValidator.sms) {
-            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SMS])
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SMS], constantAuth.code)
         }
 
         if (config.providerValidator.social) {
@@ -112,22 +113,22 @@ module.exports = class AuthService {
     request = async({ receiver, userId }) => {
 
         if(receiver == 'EMAIL' && !config.providerValidator.email){
-            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_EMAIL])
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_EMAIL], constantAuth.code)
         }
 
         if(receiver == 'SMS' && !config.providerValidator.sms){
-            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SMS])
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SMS], constantAuth.code)
         }
 
         if(receiver == 'SOCIAL' && !config.providerValidator.social){
-            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SOCIAL])
+            throw new ServerError(`Serviço não implementado`, [constantAuth.NOT_IMPLEMENTED_SOCIAL], constantAuth.code)
         }
 
         if(receiver == 'EMAIL'){
             const userData =  await this.UserRepository.findBy({ id: userId })
             
             if(!userData){
-                throw new NotFoundError(`Usuario não encontrato`, [constantUser.NOT_FOUND])
+                throw new NotFoundError(`Usuario não encontrato`, [constantUser.NOT_FOUND], constantAuth.code)
             }
 
             await this.UserService.sendVerificationCode(userId, userData.name, userData.email)
@@ -139,5 +140,19 @@ module.exports = class AuthService {
             }
         }
 
+    }
+
+    login = async({ provider, userId, key }) => {
+        const user = await this.UserRepository.findBy({ id: userId })
+        if (!user) {
+            throw new NotFoundError(`Usuario não encontrato`, [constantUser.NOT_FOUND], constantAuth.code)
+        }
+        
+        const membership = await this.MembershipRepository.findBy({ UserId: user.id })
+        if (key !== membership.recoveryKey) {
+            throw new ValidationError(`Parâmetros inválidos`, [constantAuth.INVALID_KEY], constantAuth.code)
+        }
+        
+        return { token : jwt.sign(user, config.jwtSecret)}
     }
 }
