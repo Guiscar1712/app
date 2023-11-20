@@ -29,22 +29,9 @@ module.exports = class ResponseMiddleware {
         data,
       }
 
-      let status = 200
 
-      switch (req.method) {
-        case 'GET':
-          status = 200
-          break
-        case 'POST':
-          status = 201
-          break
-        case 'PUT':
-          status = 202
-          break
-        default:
-          status = 200
-          break
-      }
+
+      let status = this.getStatus(req, res)
 
       const response = res.status(status).send(sendData)
 
@@ -60,6 +47,30 @@ module.exports = class ResponseMiddleware {
       this.LoggerService.finalize()
       req.container.dispose().then()
     }
+  }
+
+  getStatus(req, res) {
+    let status = res.code ?? 200
+    
+    if(res.code){
+      return status
+    }
+
+    switch (req.method) {
+      case 'GET':
+        status = 200
+        break
+      case 'POST':
+        status = 201
+        break
+      case 'PUT':
+        status = 202
+        break
+      default:
+        status = 200
+        break
+    }
+    return status
   }
 
   setErrorResponse(error, send, res) {

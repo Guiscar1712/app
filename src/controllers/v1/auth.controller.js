@@ -28,6 +28,7 @@ module.exports = class UserController {
      
       const data = await this.AuthService.validator(document)
 
+      response.code = 200
       next(data)
     } catch (error) {
       next(error)
@@ -48,6 +49,7 @@ module.exports = class UserController {
      
       const data = await this.AuthService.request({ receiver, userId })
 
+      response.code = 200
       next(data)
     } catch (error) {
       next(error)
@@ -68,6 +70,7 @@ module.exports = class UserController {
      
       const data = await this.AuthService.login({ provider, userId, key })
 
+      response.code = 200
       next(data)
     } catch (error) {
       next(error)
