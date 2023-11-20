@@ -1,12 +1,6 @@
-const {
-    CpfValidate
-} = require('../../validators/user')
+const { CpfValidate } = require('../../validators/user')
 
-const {
-    requestValidate,
-    loginValidate
-} = require('../../validators/auth')
-
+const { requestValidate, loginValidate } = require('../../validators/auth')
 
 module.exports = class UserController {
   constructor({ AuthService, LoggerService }) {
@@ -20,15 +14,16 @@ module.exports = class UserController {
     const step = this.LoggerService.addStep('AuthControllerLogin')
 
     try {
-      
       const contract = CpfValidate(document)
       if (!contract.isValid()) {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
-      }            
-     
+      }
+
       const data = await this.AuthService.validator(document)
 
       response.code = 200
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {
       next(error)
@@ -41,36 +36,38 @@ module.exports = class UserController {
     const step = this.LoggerService.addStep('AuthControllerRequest')
 
     try {
-      
       const contract = requestValidate({ receiver, userId })
       if (!contract.isValid()) {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
-      }            
-     
+      }
+
       const data = await this.AuthService.request({ receiver, userId })
 
       response.code = 200
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {
       next(error)
     }
   }
 
-   login = async (request, response, next) => {
+  login = async (request, response, next) => {
     let { provider, userId, key } = request.body
     this.LoggerService.setIndex({ userId })
     const step = this.LoggerService.addStep('AuthControllerLogin')
 
     try {
-      
       const contract = loginValidate({ provider, userId, key })
       if (!contract.isValid()) {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
-      }            
-     
+      }
+
       const data = await this.AuthService.login({ provider, userId, key })
 
       response.code = 200
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {
       next(error)

@@ -17,7 +17,6 @@ router.post(
   }
 )
 
-
 router.post(
   '/request',
   (req, res, next) => {
@@ -33,7 +32,6 @@ router.post(
     ResponseMiddleware.Handler(data, req, res, next)
   }
 )
-
 
 router.post(
   '/login',
