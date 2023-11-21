@@ -11,7 +11,7 @@ module.exports = class AuthRequestService {
     this.LoggerService = LoggerService
   }
 
-  request = async ({ receiver, userId }) => {
+  request = async (receiver, userId) => {
     const step = this.LoggerService.addStep('AuthRequestService')
     try {
       if (receiver == 'EMAIL' && !config.providerValidator.email) {

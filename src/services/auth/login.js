@@ -11,7 +11,7 @@ module.exports = class AuthLoginService {
     this.LoggerService = LoggerService
   }
 
-  request = async ({ provider, userId, key }) => {
+  request = async (provider, userId, key) => {
     const step = this.LoggerService.addStep('AuthLoginService')
     try {
       const user = await this.UserRepository.findBy({ id: userId })
