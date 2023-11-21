@@ -1,5 +1,6 @@
 const Util = require('../../utils/util')
 const { NotFoundError, ValidationError } = require('../../utils/errors')
+const ClientServerNotFoundError = require('../../utils/errors/ClientServerNotFoundError')
 const constantUser = require(`../../constants/user.constants`)
 const constantAuth = require(`../../constants/auth.constants`)
 const config = require('../../utils/config')
@@ -25,14 +26,6 @@ module.exports = class AuthValidatorService {
       let userData = await this.UserRepository.findBy({ Cpf: document })
       const personalData = await this.UserService.personalDataGet(document)
 
-      if (!personalData) {
-        throw new NotFoundError(
-          `Usuario não encontrato`,
-          [constantUser.NOT_REGISTER_CPF],
-          constantAuth.code
-        )
-      }
-
       if (!userData) {
         const personalEmail = personalData.emails.find((f) => f.main)
         userData = await this.UserRepository.findBy({
@@ -57,11 +50,19 @@ module.exports = class AuthValidatorService {
         name: userData.name,
         providers,
       }
-      
+
       step.value.addData(data)
 
       return data
     } catch (error) {
+      if (error instanceof ClientServerNotFoundError) {
+        throw new NotFoundError(
+          `Usuario não encontrato`,
+          [constantUser.NOT_REGISTER_CPF],
+          constantAuth.code
+        )
+      }
+
       throw error
     } finally {
       this.LoggerService.finalizeStep(step)

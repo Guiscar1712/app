@@ -2,6 +2,7 @@ const axios = require('../../config/axiosConfig')
 const config = require('../../utils/config')
 const ClientServerAuthError = require('../../utils/errors/ClientServerAuthError')
 const ClientServerError = require('../../utils/errors/ClientServerError')
+const ClientServerNotFoundError = require('../../utils/errors/ClientServerNotFoundError')
 const getToken = require('./token')
 
 const ingresso = {
@@ -56,6 +57,14 @@ class PersonalData {
 
       if (error.status === 401) {
         const errorData = new ClientServerAuthError('Something went wrong', {
+          client: url,
+          errors: error.data,
+        })
+        throw errorData
+      }
+
+      if (error.status === 404) {
+        const errorData = new ClientServerNotFoundError('Something went wrong', {
           client: url,
           errors: error.data,
         })
