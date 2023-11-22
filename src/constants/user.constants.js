@@ -31,6 +31,8 @@ const NOT_REGISTER_CPF = {
   message: 'CPF não esta cadastrado!',
 }
 
+const REQUIRED_CELLPHONE = { code: 1115, message: 'Telefone é obrigatório' }
+
 module.exports = {
   code,
   REQUIRED_EMAIL,
@@ -46,4 +48,5 @@ module.exports = {
   REGISTERED_CELLPHONE,
   NOT_REGISTER_EMAIL,
   NOT_REGISTER_CPF,
+  REQUIRED_CELLPHONE,
 }
