@@ -81,7 +81,7 @@ module.exports = class UserService {
       step.value.addData(membership)
       return membership
     } catch (error) {
-      throw error    
+      throw error
     } finally {
       this.LoggerService.finalizeStep(step)
     }
@@ -383,7 +383,7 @@ function getModel(entity) {
 
   const model = {}
   keys.forEach((key) => {
-    if (entity[key]) {
+    if (entity[key] || key === 'name') {
       model[key] = entity[key]
     }
   })
