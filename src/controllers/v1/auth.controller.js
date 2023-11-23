@@ -1,6 +1,7 @@
 const { CpfValidate } = require('../../validators/user')
-
 const { requestValidate, loginValidate } = require('../../validators/auth')
+const { ValidationError } = require('../../utils/errors')
+
 
 module.exports = class UserController {
   constructor({ AuthService, LoggerService }) {
