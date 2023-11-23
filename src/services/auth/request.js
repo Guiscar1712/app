@@ -43,7 +43,7 @@ module.exports = class AuthRequestService {
 
         if (!userData) {
           throw new NotFoundError(
-            `Usuario não encontrato`,
+            `Registro não encontrado`,
             [constantUser.NOT_FOUND],
             constantAuth.code
           )

@@ -17,7 +17,7 @@ module.exports = class AuthLoginService {
       const user = await this.UserRepository.findBy({ id: userId })
       if (!user) {
         throw new NotFoundError(
-          `Usuario não encontrato`,
+          `Registro não encontrado`,
           [constantUser.NOT_FOUND],
           constantAuth.code
         )

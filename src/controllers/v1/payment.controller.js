@@ -39,8 +39,8 @@ module.exports = class PaymentController {
       const data = await this.PaymentService.paymentStatus(originId)
 
       if (!data) {
-        throw new NotFoundError('Registro não encontrato', [
-          { message: 'Registro não encontrato', originId },
+        throw new NotFoundError('Registro não encontrado', [
+          { message: 'Registro não encontrado', originId },
         ])
       }
 

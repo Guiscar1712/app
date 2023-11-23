@@ -57,7 +57,7 @@ module.exports = class AuthValidatorService {
     } catch (error) {
       if (error instanceof ClientServerNotFoundError) {
         throw new NotFoundError(
-          `Usuario não encontrato`,
+          `Registro não encontrado`,
           [constantUser.NOT_REGISTER_CPF],
           constantAuth.code
         )

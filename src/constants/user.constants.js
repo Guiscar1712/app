@@ -33,7 +33,7 @@ const NOT_REGISTER_CPF = {
 
 const NOT_FOUND = {
   code: 1114,
-  message: 'Usuario não encontrado!',
+  message: 'Usuário não encontrado!',
 }
 
 module.exports = {
