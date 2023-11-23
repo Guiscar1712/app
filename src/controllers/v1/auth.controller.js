@@ -1,7 +1,7 @@
 const { CpfValidate } = require('../../validators/user')
 const { requestValidate, loginValidate } = require('../../validators/auth')
 const { ValidationError } = require('../../utils/errors')
-
+const constants = require('../../constants/auth.constants')
 
 module.exports = class UserController {
   constructor({ AuthService, LoggerService }) {
@@ -17,7 +17,7 @@ module.exports = class UserController {
     try {
       const contract = CpfValidate(document)
       if (!contract.isValid()) {
-        throw new ValidationError('Parâmetros inválidos', contract.errors())
+        throw new ValidationError('Parâmetros inválidos', contract.errors(), constants.code)
       }
 
       const data = await this.AuthService.validator(document)
