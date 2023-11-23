@@ -268,10 +268,12 @@ module.exports = class UserService {
 
       const userSearch = search.find((f) => f.cpf === null && f.phone === null)
 
-      const membership = await this.MembershipRepository.findBy({
-        UserId: userSearchEmail.id,
-        Password: null,
-      })
+      const membership = userSearchEmail
+        ? await this.MembershipRepository.findBy({
+            UserId: userSearchEmail.id,
+            Password: null,
+          })
+        : null
 
       const userSearchIsValid = userSearch || membership
 
