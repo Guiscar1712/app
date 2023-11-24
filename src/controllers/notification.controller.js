@@ -2,14 +2,6 @@ const NotificationService = require('../services/notification.service')
 const NotificationFirebaseService = require('../services/notificationFirebase.service')
 
 const crypto = require('crypto')
-const cryptoKey = 'IkRhP+XZVoSUG9If6SeZ7Y7fmr2bFux8Un2jyOnGYFc='
-const cryptoIV = 'i40wEHvc5BKAef0+0dho4MHGnw3rYK7J5WeqD8NESCo='
-
-// const cryptoKey = 'IkRhP+XZVoSUG9If6SeZ7Y7fmr2bFux8Un2jyOnGYFc='
-// const cryptoIV = 'i40wEHvc5BKAef0+0dho4MHGnw3rYK7J5WeqD8NESCo='
-
-// const cryptoKey = 'R4ZGSI/ZprsO4LUZwXy2wZjawB9WTv+XJhRGmzcvWfQ='
-// const cryptoIV = '2Z/rf728AawiBmViYy4/7+1NJAQXPaLbiRt7SLJcw+8='
 
 const CIPHERS = {
   AES_128: 'aes128', //requires 16 byte key
@@ -179,31 +171,43 @@ module.exports = class NotificationPreferenceController {
 
 function decodeBase64(data) {
   let buff = Buffer.from(data, 'base64')
-  let text = buff.toString('ascii')
-  return text
+  return buff
 }
 
-function encrypt(dataStr) {
-  const key = decodeBase64(cryptoKey)
-  const iv = decodeBase64(cryptoIV)
+function encodeBase64(data) {
+  let buff = Buffer.from(data, 'utf8', 'base64')
+  return buff
+}
 
-  // Defining key
+// "chaveSistema" : { "$binary" : "IkRhP+XZVoSUG9If6SeZ7Y7fmr2bFux8Un2jyOnGYFc=", "$type" : "00" },
+// "ivSistema" : { "$binary" : "i40wEHvc5BKAef0+0dho4MHGnw3rYK7J5WeqD8NESCo=", "$type" : "00" },
+
+function encrypt(dataStr) {
+  // const key = decodeBase64(cryptoKey)
+  // const iv = decodeBase64(cryptoIV)
+
+  const key = encodeBase64('mMZcNau282ADS387')
+  const iv = encodeBase64('2643467916947424')
+
+  // const key = Buffer.from(cryptoKey)
+  // const iv = Buffer.from(cryptoIV)
+
+  // // Defining key
   // const key = crypto.randomBytes(32)
-  // // Defining iv
+  // // // Defining iv
   // const iv = crypto.randomBytes(16)
 
   // Creating Cipheriv with its parameter
-  let cipher = crypto.createCipheriv(CIPHERS.AES_128_CBC, Buffer.from(key), iv)
+
+  let cipher = crypto.createCipheriv(CIPHERS.AES_128_CBC, key, iv)
 
   // Updating text
-  let encrypted = cipher.update(dataStr)
+  let encrypted =
+    cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64')
 
   // Using concatenation
-  encrypted = Buffer.concat([encrypted, cipher.final()])
+  // encrypted = Buffer.concat([encrypted, cipher.final('base64')])
 
   // Returning iv and encrypted data
-  return {
-    iv: iv.toString('hex'),
-    encryptedData: encrypted.toString('hex'),
-  }
+  return { encrypted }
 }
