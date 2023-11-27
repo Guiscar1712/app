@@ -67,30 +67,31 @@ module.exports = class EnrollmentDetails {
 }
 
 async function getAdmissionsTest(enrollmentsDto, data) {
-  // Verificar implementadação - no ambiente de homologção os dados do exame só ficaram disponives após executar essa chamada.
-  const res = await retry(
+  let exam = await retry(
     consultaProvaOnlinePorBusinesskey,
     enrollmentsDto.businessKey
   )
-  if (!res) {
+  if (!exam) {
     throw new ClientServerError('Unexpected Content', {
       method: 'AdmissionsTest',
-      errors: [data, enrollmentsDto, res],
+      errors: [data, enrollmentsDto, exam],
     })
   }
-  //
 
-  const exam = await retry(consultaProvaOnline, enrollmentsDto.businessKey)
+  if (exam.elegivelProvaOnline) {
+    const data = await retry(consultaProvaOnline, enrollmentsDto.businessKey)
+    exam = data?.prova
+  }
+
   enrollmentsDto.admissionsTest = new AdmissionsTest(exam)
 
-  // Revisa tratamento de erro quando inscrição não tem dados de elegibiliade
   if (
     !enrollmentsDto.admissionsTest ||
     enrollmentsDto.admissionsTest.status === 'ERROR'
   ) {
     throw new ClientServerError('Unexpected Content', {
       method: 'AdmissionsTest',
-      errors: [data, enrollmentsDto, res, exam],
+      errors: [data, enrollmentsDto, exam],
     })
   }
 }

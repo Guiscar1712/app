@@ -1,7 +1,11 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const database = require('../../database/config.database')
-const { ValidationError, RepositoryError } = require('../../utils/errors')
+const {
+  ValidationError,
+  RepositoryError,
+  ServerError,
+} = require('../../utils/errors')
 const config = require('../../utils/config')
 const { comparePassword } = require('../../utils/auth')
 const Util = require('../../utils/util')
@@ -81,7 +85,7 @@ module.exports = class UserService {
       step.value.addData(membership)
       return membership
     } catch (error) {
-      throw error    
+      throw error
     } finally {
       this.LoggerService.finalizeStep(step)
     }
@@ -185,7 +189,7 @@ module.exports = class UserService {
     } catch (error) {
       await transaction.rollback()
       const dataError = new RepositoryError(
-        'Error Insert Membership',
+        'Error Insert User',
         error,
         constants.code
       )
@@ -196,11 +200,52 @@ module.exports = class UserService {
     }
   }
 
+  async updateUser(id, entity) {
+    const step = this.LoggerService.addStep('UserServerUpdateUser')
+    const transaction = await database.transaction()
+    try {
+      entity = prepare(entity)
+
+      const model = getModel(entity)
+
+      const user = await this.UserRepository.update(id, model, transaction)
+
+      await transaction.commit()
+
+      this.LoggerService.setIndex({ userId: user.id, newUser: false })
+      step.value.addData({
+        model,
+        updatedUser: !!user,
+      })
+      return user
+    } catch (error) {
+      await transaction.rollback()
+      step.value.addData(dataError)
+      throw dataError
+    } finally {
+      this.LoggerService.finalizeStep(step)
+    }
+  }
+
   register = async (entity) => {
-    await this.validateDataEntity(entity)
+    const userSearch = await this.validateDataEntity(entity)
 
-    const user = await this.createdUser(entity)
+    let user
+    if (!userSearch) {
+      user = await this.createdUser(entity)
+    } else {
+      user = await this.updateUser(userSearch.id, entity)
+    }
 
+    if (!user) {
+      throw ServerError(
+        'Something went wrong',
+        {
+          data: entity,
+        },
+        constants.code
+      )
+    }
     await this.sendVerificationCode(user.id, user.name, user.email)
 
     return user
@@ -211,33 +256,56 @@ module.exports = class UserService {
     try {
       entity.cpf = Util.getNumbers(entity.cpf)
       entity.phone = Util.getNumbers(entity.phone)
+      entity.email = entity.email.toLowerCase().trim()
 
       const search = await this.UserRepository.findByCpfOrEmailOrPhone(
-        { CPF: entity.cpf },
-        { Email: entity.email },
-        { Phone: entity.phone }
+        entity.cpf,
+        entity.email,
+        entity.phone
       )
 
-      const user = {}
-      user.cpf = search.find((f) => f.cpf === entity.cpf)?.cpf
-      user.email = search.find((f) => f.email === entity.email)?.email
-      user.phone = search.find((f) => f.phone === entity.phone)?.phone
+      const userSearchEmail = search.find((f) => f.email === entity.email)
 
-      const contract = DuplicateRegister(user)
+      const userSearch = search.find((f) => f.cpf === null && f.phone === null)
 
-      if (!contract.isValid()) {
-        throw new ValidationError(
-          'Dados já cadastrados',
-          contract.errors(),
-          constants.code
-        )
+      const membership = userSearchEmail
+        ? await this.MembershipRepository.findBy({
+            UserId: userSearchEmail.id,
+            Password: null,
+          })
+        : null
+
+      const userSearchIsValid = userSearch || membership
+
+      if (
+        (!userSearchIsValid && search.length >= 1) ||
+        !(userSearchIsValid && search.length === 1)
+      ) {
+        const user = {}
+        user.cpf = search.find((f) => f.cpf === entity.cpf)?.cpf
+        user.email = search.find((f) => f.email === entity.email)?.email
+        user.phone = search.find((f) => f.phone === entity.phone)?.phone
+
+        const contract = DuplicateRegister(user)
+
+        if (!contract.isValid()) {
+          const errors = contract.errors()
+
+          throw new ValidationError(
+            'Dados já cadastrados',
+            contract.errors(),
+            constants.code
+          )
+        }
       }
 
       step.value.addData({
         entity,
         userId,
-        isValid: contract.isValid(),
+        isValid: true,
       })
+
+      return userSearchEmail
     } catch (error) {
       step.value.addData(error)
       throw error
@@ -384,7 +452,7 @@ function getModel(entity) {
 
   const model = {}
   keys.forEach((key) => {
-    if (entity[key]) {
+    if (entity[key] || key === 'name') {
       model[key] = entity[key]
     }
   })

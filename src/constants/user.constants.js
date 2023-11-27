@@ -35,6 +35,7 @@ const NOT_FOUND = {
   code: 1114,
   message: 'Usuário não encontrado!',
 }
+const REQUIRED_CELLPHONE = { code: 1115, message: 'Telefone é obrigatório' }
 
 module.exports = {
   code,
@@ -51,5 +52,6 @@ module.exports = {
   REGISTERED_CELLPHONE,
   NOT_REGISTER_EMAIL,
   NOT_REGISTER_CPF,
-  NOT_FOUND
+  NOT_FOUND,
+  REQUIRED_CELLPHONE,
 }

@@ -62,13 +62,13 @@ class ContratoPorContratoId {
       if (error.status === 401) {
         throw new ClientServerAuthError('Algo deu errado', {
           client: url,
-          ...error.data,
+          errors: error.data,
         })
       }
 
       throw new ClientServerError('Algo deu errado', {
         client: url,
-        ...error.data,
+        errors: error.data,
       })
     } finally {
       this.LoggerService.finalizeStep(step)
