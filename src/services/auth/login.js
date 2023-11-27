@@ -34,6 +34,10 @@ module.exports = class AuthLoginService {
         )
       }
 
+      await this.MembershipRepository.update(membership.id, {
+        RecoveryKey: '',
+      })
+
       const data = { token: jwt.sign(user, config.jwtSecret) }
       step.value.addData(data)
       return data
