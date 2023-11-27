@@ -57,13 +57,13 @@ class ConsultaProva {
       if (error.status === 401) {
         throw new ClientServerAuthError('Access Denied', {
           client: url,
-          ...error.data,
+          errors: error.data,
         })
       }
 
       throw new ClientServerError('Something went wrong', {
         client: url,
-        ...error.data,
+        errors: error.data,
       })
     } finally {
       this.LoggerService.finalizeStep(step)

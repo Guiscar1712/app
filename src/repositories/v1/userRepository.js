@@ -1,6 +1,8 @@
 const moment = require('moment')
 const database = require('../../database/config.database')
 const SimpleQuery = require('../../database/queries/v1/simpleQuery')
+const { RepositoryError } = require('../../utils/errors')
+const constants = require('../../constants/user.constants')
 const table = 'User'
 
 module.exports = class UserRepository {
@@ -56,10 +58,35 @@ module.exports = class UserRepository {
       'UserRepositoryFindByCpfOrEmailOrPhone'
     )
     try {
-      const result = await (transaction || database)(table)
-        .where(cpf)
-        .orWhere(email)
-        .orWhere(phone)
+      if (!cpf && !email && !phone) {
+        throw RepositoryError(
+          'Parâmetros inválidos',
+          [
+            constants.REQUIRED_CPF,
+            constants.REQUIRED_EMAIL,
+            constants.REQUIRED_CELLPHONE,
+          ],
+          constants.code
+        )
+      }
+
+      let query = `SELECT * FROM [User] u WHERE 1 = 1`
+
+      const where = []
+
+      if (cpf) {
+        where.push(` u.cpf = '${cpf}' `)
+      }
+      if (email) {
+        where.push(` u.email = '${email}' `)
+      }
+      if (phone) {
+        where.push(` u.phone = '${phone}' `)
+      }
+
+      query += ` and (${where.join(' or ')})`
+
+      const result = await database.raw(query)
 
       const items = []
       for (const row of result) {
