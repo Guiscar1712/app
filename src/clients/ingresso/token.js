@@ -34,7 +34,7 @@ async function main() {
   } catch (error) {
     throw new ClientServerError('Something went wrong', {
       client: url,
-      ...error.data,
+      errors: error.data,
     })
   }
 }
