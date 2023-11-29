@@ -104,7 +104,7 @@ module.exports = class AuthValidatorService {
   getProvidersValidator(userData) {
     const providers = []
 
-    if (config.providerValidator.email) {
+    if (config.providerValidator['verification-code'].email) {
       providers.push({
         provider: `verification-code`,
         receiver: `email`,
@@ -112,7 +112,7 @@ module.exports = class AuthValidatorService {
       })
     }
 
-    if (config.providerValidator.sms) {
+    if (config.providerValidator['verification-code'].sms) {
       throw new ServerError(
         `Serviço não implementado`,
         [constantAuth.NOT_IMPLEMENTED_SMS],
@@ -120,7 +120,7 @@ module.exports = class AuthValidatorService {
       )
     }
 
-    if (config.providerValidator.social) {
+    if (config.providerValidator['verification-code'].social) {
       providers.push({
         provider: `verification-code`,
         receiver: `firebase`,
