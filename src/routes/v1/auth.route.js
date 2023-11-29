@@ -18,7 +18,7 @@ router.post(
 )
 
 router.post(
-  '/request',
+  '/:provider/request',
   (req, res, next) => {
     const { TrackMiddleware } = req.container.cradle
     TrackMiddleware.tracking('AUTH_VERIFICATION_CODE_REQUEST', req, res, next)

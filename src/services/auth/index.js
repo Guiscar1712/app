@@ -15,8 +15,8 @@ module.exports = class AuthService {
     return await this.AuthValidatorService.request(document)
   }
 
-  request = async ({ receiver, userId }) => {
-    return await this.AuthRequestService.request(receiver, userId)
+  request = async ({ provider, receiver, userId }) => {
+    return await this.AuthRequestService.request(provider, receiver, userId)
   }
 
   login = async ({ provider, userId, key }) => {

@@ -106,8 +106,8 @@ module.exports = class AuthValidatorService {
 
     if (config.providerValidator.email) {
       providers.push({
-        provider: `VERIFICATRION_CODE`,
-        receiver: `EMAIL`,
+        provider: `verification-code`,
+        receiver: `email`,
         identifier: Util.obfuscateEmail(userData.email),
       })
     }
@@ -122,9 +122,9 @@ module.exports = class AuthValidatorService {
 
     if (config.providerValidator.social) {
       providers.push({
-        provider: `VERIFICATRION_CODE`,
-        receiver: `FIREBASE`,
-        identifier: `SOCIAL`,
+        provider: `verification-code`,
+        receiver: `firebase`,
+        identifier: `social`,
       })
     }
 

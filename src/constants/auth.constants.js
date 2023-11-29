@@ -1,4 +1,4 @@
-const code = 'AUTH-2200'
+const CODE = 'AUTH-2200'
 
 const REQUIRED_USER_ID = { code: 2201, message: 'UserId é obrigatório' }
 const REQUIRED_RECEIVER = { code: 2202, message: 'Receiver é obrigatório' }
@@ -11,28 +11,18 @@ const DIVERGENT_REGISTRATION = {
   message: 'Email não confere com CPF cadastrado.',
 }
 
-const NOT_IMPLEMENTED_SOCIAL = {
-  code: 2297,
-  message: 'Autenticação social não está disponível.',
-}
-const NOT_IMPLEMENTED_EMAIL = {
-  code: 2298,
-  message: 'Envio de EMAIL não está disponível.',
-}
-const NOT_IMPLEMENTED_SMS = {
+const NOT_IMPLEMENTED_PROVIDER = {
   code: 2299,
-  message: 'Envio de SMS não está disponível.',
+  message: 'Provider está disponível.',
 }
 
 module.exports = {
-  code,
+  CODE,
   REQUIRED_USER_ID,
   REQUIRED_RECEIVER,
   REQUIRED_PROVIDER,
   REQUIRED_KEY,
   INVALID_KEY,
   DIVERGENT_REGISTRATION,
-  NOT_IMPLEMENTED_EMAIL,
-  NOT_IMPLEMENTED_SOCIAL,
-  NOT_IMPLEMENTED_SMS,
+  NOT_IMPLEMENTED_PROVIDER,
 }

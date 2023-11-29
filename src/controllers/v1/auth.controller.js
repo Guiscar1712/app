@@ -17,7 +17,11 @@ module.exports = class UserController {
     try {
       const contract = CpfValidate(document)
       if (!contract.isValid()) {
-        throw new ValidationError('Parâmetros inválidos', contract.errors(), constants.code)
+        throw new ValidationError(
+          'Parâmetros inválidos',
+          contract.errors(),
+          constants.code
+        )
       }
 
       const data = await this.AuthService.validator(document)
@@ -32,17 +36,21 @@ module.exports = class UserController {
   }
 
   request = async (request, response, next) => {
+    let provider = request.params.provider
     let { receiver, userId } = request.body
     this.LoggerService.setIndex({ userId })
     const step = this.LoggerService.addStep('AuthControllerRequest')
-
     try {
       const contract = requestValidate({ receiver, userId })
       if (!contract.isValid()) {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
 
-      const data = await this.AuthService.request({ receiver, userId })
+      const data = await this.AuthService.request({
+        provider,
+        receiver,
+        userId,
+      })
 
       response.code = 200
       step.value.addData(data)

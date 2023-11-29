@@ -1,5 +1,5 @@
 const Util = require('../../utils/util')
-const { NotFoundError } = require('../../utils/errors')
+const { NotFoundError, ServerError } = require('../../utils/errors')
 const constantUser = require(`../../constants/user.constants`)
 const constantAuth = require(`../../constants/auth.constants`)
 const config = require('../../utils/config')
@@ -11,63 +11,78 @@ module.exports = class AuthRequestService {
     this.LoggerService = LoggerService
   }
 
-  request = async (receiver, userId) => {
+  request = async (provider, receiver, userId) => {
     const step = this.LoggerService.addStep('AuthRequestService')
     try {
-      if (receiver == 'EMAIL' && !config.providerValidator.email) {
-        throw new ServerError(
-          `Serviço não implementado`,
-          [constantAuth.NOT_IMPLEMENTED_EMAIL],
-          constantAuth.code
-        )
+      let data
+
+      this.providerIsValid(provider, receiver)
+
+      if (provider === 'verification-code') {
+        data = await this.verificationCode(receiver, userId, data)
       }
 
-      if (receiver == 'SMS' && !config.providerValidator.sms) {
-        throw new ServerError(
-          `Serviço não implementado`,
-          [constantAuth.NOT_IMPLEMENTED_SMS],
-          constantAuth.code
-        )
+      if (provider === 'verification-external') {
+        data = await this.verificationExternal(receiver, userId, data)
       }
 
-      if (receiver == 'SOCIAL' && !config.providerValidator.social) {
-        throw new ServerError(
-          `Serviço não implementado`,
-          [constantAuth.NOT_IMPLEMENTED_SOCIAL],
-          constantAuth.code
-        )
-      }
-
-      if (receiver == 'EMAIL') {
-        const userData = await this.UserRepository.findBy({ id: userId })
-
-        if (!userData) {
-          throw new NotFoundError(
-            `Registro não encontrado`,
-            [constantUser.NOT_FOUND],
-            constantAuth.code
-          )
-        }
-
-        await this.UserService.sendVerificationCode(
-          userId,
-          userData.name,
-          userData.email
-        )
-
-        const data = {
-          provider: `VERIFICATRION_CODE`,
-          receiver: `EMAIL`,
-          identifier: Util.obfuscateEmail(userData.email),
-        }
-
-        step.value.addData(data)
-        return data
-      }
+      step.value.addData(data)
+      return data
     } catch (error) {
       throw error
     } finally {
       this.LoggerService.finalizeStep(step)
+    }
+  }
+
+  async verificationCode(receiver, userId, data) {
+    if (receiver == 'EMAIL') {
+      const userData = await this.UserRepository.findBy({ id: userId })
+
+      if (!userData) {
+        throw new NotFoundError(
+          `Registro não encontrado`,
+          [constantUser.NOT_FOUND],
+          constantAuth.code
+        )
+      }
+
+      await this.UserService.sendVerificationCode(
+        userId,
+        userData.name,
+        userData.email
+      )
+
+      data = {
+        provider: `verification-code`,
+        receiver: `email`,
+        identifier: Util.obfuscateEmail(userData.email),
+      }
+    }
+    return data
+  }
+
+  async verificationExternal(receiver, userId, data) {
+    throw new ServerError(
+      `Serviço não implementado`,
+      [constantAuth.NOT_IMPLEMENTED_PROVIDER],
+      constantAuth.CODE
+    )
+  }
+
+  providerIsValid(provider, receiver) {
+    receiver = receiver.toLowerCase()
+
+    const isValid =
+      !config.providerValidator[provider] ||
+      !config.providerValidator[provider][receiver]
+
+    if (isValid) {
+      throw new ServerError(
+        `Serviço não implementado`,
+        [constantAuth.NOT_IMPLEMENTED_PROVIDER],
+        constantAuth.CODE
+      )
     }
   }
 }
