@@ -3,12 +3,19 @@ const { NotFoundError, ServerError } = require('../../utils/errors')
 const constantUser = require(`../../constants/user.constants`)
 const constantAuth = require(`../../constants/auth.constants`)
 const config = require('../../utils/config')
+const crypto = require('crypto')
 
 module.exports = class AuthRequestService {
-  constructor({ UserService, UserRepository, LoggerService }) {
+  constructor({
+    UserService,
+    UserRepository,
+    LoggerService,
+    VerificadorToken,
+  }) {
     this.UserService = UserService
     this.UserRepository = UserRepository
     this.LoggerService = LoggerService
+    this.VerificadorToken = VerificadorToken
   }
 
   request = async (provider, receiver, userId) => {
@@ -17,13 +24,21 @@ module.exports = class AuthRequestService {
       let data
 
       this.providerIsValid(provider, receiver)
+      const userData = await this.UserRepository.findBy({ id: userId })
+      if (!userData) {
+        throw new NotFoundError(
+          `Registro não encontrado`,
+          [constantUser.NOT_FOUND],
+          constantAuth.CODE
+        )
+      }
 
       if (provider === 'verification-code') {
-        data = await this.verificationCode(receiver, userId, data)
+        data = await this.verificationCode(receiver, userData)
       }
 
       if (provider === 'verification-external') {
-        data = await this.verificationExternal(receiver, userId, data)
+        data = await this.verificationExternal(receiver, userData)
       }
 
       step.value.addData(data)
@@ -35,15 +50,15 @@ module.exports = class AuthRequestService {
     }
   }
 
-  async verificationCode(receiver, userId, data) {
-    if (receiver == 'EMAIL') {
-      const userData = await this.UserRepository.findBy({ id: userId })
+  async verificationCode(receiver, userData) {
+    let data
 
+    if (receiver == 'EMAIL') {
       if (!userData) {
         throw new NotFoundError(
           `Registro não encontrado`,
           [constantUser.NOT_FOUND],
-          constantAuth.code
+          constantAuth.CODE
         )
       }
 
@@ -59,15 +74,50 @@ module.exports = class AuthRequestService {
         identifier: Util.obfuscateEmail(userData.email),
       }
     }
+
     return data
   }
 
-  async verificationExternal(receiver, userId, data) {
-    throw new ServerError(
-      `Serviço não implementado`,
-      [constantAuth.NOT_IMPLEMENTED_PROVIDER],
-      constantAuth.CODE
-    )
+  async verificationExternal(receiver, userData) {
+    const verificador = config.kroton.captacao
+
+    const cpf = Util.formatCpf(userData.cpf)
+
+    let data
+
+    if ((receiver = 'sms')) {
+      data = {
+        identificador: cpf,
+        template: verificador.verificadorSMS,
+        contato: userData.phone,
+      }
+
+      let cipher = crypto.createCipheriv(
+        verificador.verificadorCipher,
+        verificador.vericadorKey,
+        verificador.verificadorKeyIV
+      )
+
+      const dataStr = JSON.stringify(data)
+
+      let encrypted =
+        cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64')
+
+      const vericadorBody = {
+        sistema: 1,
+        solicitacao: encrypted,
+      }
+
+      await this.VerificadorToken.request(vericadorBody)
+
+      data = {
+        provider: `verification-external`,
+        receiver: `sms`,
+        identifier: Util.obfuscatePhone(userData.phone),
+      }
+    }
+
+    return data
   }
 
   providerIsValid(provider, receiver) {

@@ -14,6 +14,14 @@ module.exports = {
   },
   azureBlobsConnection: process.env.AZUREBLOBS_CONNECTION,
   kroton: {
+    captacao: {
+      url: process.env.KROTON_CAPTACAO_URL,
+      vericadorKey: process.env.PROVIDER_COGNA_KEY,
+      verificadorKeyIV: process.env.PROVIDER_COGNA_KEY_IV,
+      verificadorCipher: process.env.PROVIDER_COGNA_KEY_CIPHER,
+      verificadorSMS: process.env.PROVIDER_COGNA_SMS,
+      verificadorEmail: process.env.PROVIDER_COGNA_EMAIL,
+    },
     ingresso: {
       grant_type: process.env.KROTON_INGRESSO_GRANT_TYPE,
       url: process.env.KROTON_INGRESSO_URL,
@@ -54,7 +62,16 @@ module.exports = {
     'verification-code': {
       email: process.env.PROVIDER_VALIDATION_EMAIL === 'true' ?? false,
       sms: process.env.PROVIDER_VALIDATION_SMS === 'true' ?? false,
+      whatsapp: process.env.PROVIDER_VALIDATION_WHATSAPP === 'true' ?? false,
       social: process.env.PROVIDER_VALIDATION_SOCIAL === 'true' ?? false,
+    },
+
+    'verification-external': {
+      email: process.env.PROVIDER_VALIDATION_EMAIL_COGNA === 'true' ?? false,
+      sms: process.env.PROVIDER_VALIDATION_SMS_COGNA === 'true' ?? false,
+      whatsapp:
+        process.env.PROVIDER_VALIDATION_WHATSAPP_COGNA === 'true' ?? false,
+      social: process.env.PROVIDER_VALIDATION_SOCIAL_COGNA === 'true' ?? false,
     },
   },
 }

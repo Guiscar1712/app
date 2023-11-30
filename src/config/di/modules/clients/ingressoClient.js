@@ -11,6 +11,8 @@ const ProvaIniciar = require('../../../../clients/ingresso/iniciarProva')
 const ProvaFinalizar = require('../../../../clients/ingresso/finalizarProva')
 const ProvaElegibilidade = require('../../../../clients/ingresso/elegibilidadeProva')
 const ProvaConsulta = require('../../../../clients/ingresso/consultaProva')
+const VerificadorToken = require('../../../../clients/ingresso/verificador/token')
+const VerificadorTokenValidar = require('../../../../clients/ingresso/verificador/tokenValidar')
 
 module.exports = {
   IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento),
@@ -24,4 +26,6 @@ module.exports = {
   ProvaFinalizar: asClass(ProvaFinalizar),
   ProvaElegibilidade: asClass(ProvaElegibilidade),
   ProvaConsulta: asClass(ProvaConsulta),
+  VerificadorToken: asClass(VerificadorToken),
+  VerificadorTokenValidar: asClass(VerificadorTokenValidar),
 }
