@@ -4,6 +4,7 @@ const constantAuth = require(`../../constants/auth.constants`)
 const jwt = require('jsonwebtoken')
 const config = require('../../utils/config')
 const encrypedCipher = require('./encrypedCipher')
+const Util = require('../../utils/util')
 
 module.exports = class AuthLoginService {
   constructor({
@@ -18,7 +19,7 @@ module.exports = class AuthLoginService {
     this.LoggerService = LoggerService
   }
 
-  request = async (provider, receiver, userId, key) => {
+  request = async (provider, receiver, userId, token) => {
     const step = this.LoggerService.addStep('AuthLoginService')
     try {
       const user = await this.UserRepository.findBy({ id: userId })
@@ -35,11 +36,11 @@ module.exports = class AuthLoginService {
       })
 
       if (provider === 'verification-code') {
-        this.verificationCode(key, membership)
+        this.verificationCode(token, membership)
       }
 
       if (provider === 'verification-external') {
-        await this.verificationExternal(user, key)
+        await this.verificationExternal(receiver, token, user.cpf)
       }
 
       await this.MembershipRepository.update(membership.id, {
@@ -56,35 +57,48 @@ module.exports = class AuthLoginService {
     }
   }
 
-  verificationCode(key, membership) {
-    if (key !== membership.recoveryKey) {
+  verificationCode(token, membership) {
+    if (token !== membership.recoveryKey) {
       throw new ValidationError(
         `Parâmetros inválidos`,
-        [constantAuth.INVALID_KEY],
+        [constantAuth.INVALID_TOKEN],
         constantAuth.CODE
       )
     }
+
+    return true
   }
 
-  async verificationExternal(receiver, key, document) {
+  async verificationExternal(receiver, token, document) {
     let vericadorBody = {}
-    if (reciver === 'sms') {
+    if (receiver == 'sms') {
       vericadorBody.sistema = 1
     } else {
       throw new ValidationError(
         `Parâmetros inválidos`,
-        [constantAuth.INVALID_KEY],
+        [constantAuth.INVALID_TOKEN],
         constantAuth.CODE
       )
     }
 
+    document = Util.formatCpf(document)
     const data = {
       identificador: document,
-      codigo: key,
+      codigo: token,
     }
 
     vericadorBody.token = encrypedCipher(data)
 
-    await this.VerificadorTokenValidar.request(vericadorBody)
+    const isValid = await this.VerificadorTokenValidar.request(vericadorBody)
+
+    if (!isValid) {
+      throw new ValidationError(
+        `Parâmetros inválidos`,
+        [constantAuth.INVALID_TOKEN],
+        constantAuth.CODE
+      )
+    }
+
+    return true
   }
 }

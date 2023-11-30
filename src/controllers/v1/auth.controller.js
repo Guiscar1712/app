@@ -62,17 +62,22 @@ module.exports = class UserController {
   }
 
   login = async (request, response, next) => {
-    let { provider, receiver, userId, key } = request.body
+    let { provider, receiver, userId, token } = request.body
     this.LoggerService.setIndex({ userId })
     const step = this.LoggerService.addStep('AuthControllerLogin')
 
     try {
-      const contract = loginValidate({ provider, receiver, userId, key })
+      const contract = loginValidate({ provider, receiver, userId, token })
       if (!contract.isValid()) {
         throw new ValidationError('Parâmetros inválidos', contract.errors())
       }
 
-      const data = await this.AuthService.login({ provider, userId, key })
+      const data = await this.AuthService.login({
+        provider,
+        receiver,
+        userId,
+        token,
+      })
 
       response.code = 200
       step.value.addData(data)
