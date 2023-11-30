@@ -24,9 +24,10 @@ module.exports = class AuthValidatorService {
     try {
       document = Util.getNumbers(document)
       let userData = await this.UserRepository.findBy({ Cpf: document })
-      const personalData = await this.UserService.personalDataGet(document)
 
       if (!userData) {
+        const personalData = await this.UserService.personalDataGet(document)
+
         const personalEmail = personalData.emails.find((f) => f.main)
         userData = await this.UserRepository.findBy({
           Email: personalEmail.email,
@@ -41,7 +42,7 @@ module.exports = class AuthValidatorService {
         }
       }
 
-      userData = await this.userRegister(userData, personalData, document)
+      //userData = await this.userRegister(userData, personalData, document)
 
       const providers = this.getProvidersValidator(userData)
 
@@ -59,7 +60,7 @@ module.exports = class AuthValidatorService {
         throw new NotFoundError(
           `Registro não encontrado`,
           [constantUser.NOT_REGISTER_CPF],
-          constantAuth.code
+          constantAuth.CODE
         )
       }
 
@@ -102,32 +103,53 @@ module.exports = class AuthValidatorService {
   }
 
   getProvidersValidator(userData) {
-    const providers = []
+    const validators = []
+    const providers = Object.keys(config.providerValidator)
+    providers.forEach((provider) => {
+      const receivers = Object.keys(config.providerValidator[provider])
 
-    if (config.providerValidator['verification-code'].email) {
-      providers.push({
-        provider: `verification-code`,
-        receiver: `email`,
-        identifier: Util.obfuscateEmail(userData.email),
+      receivers.forEach((receiver) => {
+        if (config.providerValidator[provider][receiver]) {
+          const identifier = this.getIdentifier(receiver, userData)
+
+          if (!identifier) return
+
+          validators.push({
+            provider: provider,
+            receiver: receiver,
+            identifier: identifier,
+          })
+        }
       })
+    })
+
+    return validators
+  }
+
+  getIdentifier(receiver, userData) {
+    if (receiver === 'email') {
+      if (userData.email) return Util.obfuscateEmail(userData.email)
+
+      return null
+    }
+    if (receiver === 'sms') {
+      if (userData.phone) return Util.obfuscatePhone(userData.phone)
+
+      return null
+    }
+    if (receiver === 'whatsapp') {
+      if (userData.phone) return Util.obfuscatePhone(userData.phone)
+
+      return null
+    }
+    if (receiver === 'social') {
+      return 'social'
     }
 
-    if (config.providerValidator['verification-code'].sms) {
-      throw new ServerError(
-        `Serviço não implementado`,
-        [constantAuth.NOT_IMPLEMENTED_SMS],
-        constantAuth.code
-      )
-    }
-
-    if (config.providerValidator['verification-code'].social) {
-      providers.push({
-        provider: `verification-code`,
-        receiver: `firebase`,
-        identifier: `social`,
-      })
-    }
-
-    return providers
+    throw new ServerError(
+      `Serviço não implementado`,
+      [constantAuth.NOT_IMPLEMENTED_PROVIDER],
+      constantAuth.CODE
+    )
   }
 }
