@@ -21,6 +21,10 @@ class CaptacaoValidar {
 
       const res = await axios
         .get(`${url}`, {
+          params: {
+            sistema: data.sistema,
+            token: data.token,
+          },
           headers: { 'Content-Type': 'application/json' },
         })
         .catch(function (error) {

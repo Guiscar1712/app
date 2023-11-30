@@ -28,21 +28,13 @@ module.exports = class AuthValidatorService {
       if (!userData) {
         const personalData = await this.UserService.personalDataGet(document)
 
+        await this.userRegister(userData, personalData, document)
+
         const personalEmail = personalData.emails.find((f) => f.main)
         userData = await this.UserRepository.findBy({
           Email: personalEmail.email,
         })
-
-        if (userData) {
-          throw new ValidationError(
-            `Cadastro com divergência`,
-            [constantAuth.DIVERGENT_REGISTRATION],
-            constantAuth.code
-          )
-        }
       }
-
-      //userData = await this.userRegister(userData, personalData, document)
 
       const providers = this.getProvidersValidator(userData)
 

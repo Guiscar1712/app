@@ -20,13 +20,19 @@ module.exports = {
     return contract
   },
 
-    loginValidate(model) {
+  loginValidate(model) {
     const contract = new Validator()
 
     contract.isRequired(
       model.provider,
       constants.REQUIRED_PROVIDER.code,
       constants.REQUIRED_PROVIDER.message
+    )
+
+    contract.isRequired(
+      model.receiver,
+      constants.REQUIRED_RECEIVER.code,
+      constants.REQUIRED_RECEIVER.message
     )
 
     contract.isRequired(

@@ -3,8 +3,7 @@ const { NotFoundError, ServerError } = require('../../utils/errors')
 const constantUser = require(`../../constants/user.constants`)
 const constantAuth = require(`../../constants/auth.constants`)
 const config = require('../../utils/config')
-const crypto = require('crypto')
-
+const encrypedCipher = require('./encrypedCipher')
 module.exports = class AuthRequestService {
   constructor({
     UserService,
@@ -92,16 +91,7 @@ module.exports = class AuthRequestService {
         contato: userData.phone,
       }
 
-      let cipher = crypto.createCipheriv(
-        verificador.verificadorCipher,
-        verificador.vericadorKey,
-        verificador.verificadorKeyIV
-      )
-
-      const dataStr = JSON.stringify(data)
-
-      let encrypted =
-        cipher.update(dataStr, 'utf8', 'base64') + cipher.final('base64')
+      let encrypted = encrypedCipher(data, verificador)
 
       const vericadorBody = {
         sistema: 1,
