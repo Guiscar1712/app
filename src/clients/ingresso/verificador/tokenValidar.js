@@ -17,8 +17,6 @@ class CaptacaoValidar {
   request = async (data) => {
     const step = this.LoggerService.addStep('IngressoClientPersonalDataRequest')
     try {
-      const token = await getToken()
-
       const res = await axios
         .get(`${url}`, {
           params: {
@@ -40,8 +38,8 @@ class CaptacaoValidar {
         response: res,
       })
 
-      if (res.status === 200) {
-        return res.data
+      if (res.status === 200 || res.status === 400) {
+        return res.data?.valido
       }
 
       throw res

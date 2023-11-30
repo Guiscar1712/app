@@ -36,9 +36,9 @@ module.exports = {
     )
 
     contract.isRequired(
-      model.key,
-      constants.REQUIRED_KEY.code,
-      constants.REQUIRED_KEY.message
+      model.token,
+      constants.REQUIRED_TOKEN.code,
+      constants.REQUIRED_TOKEN.message
     )
 
     contract.isRequired(

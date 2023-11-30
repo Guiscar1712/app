@@ -62,7 +62,7 @@ module.exports = class AuthRequestService {
       }
 
       await this.UserService.sendVerificationCode(
-        userId,
+        userData.id,
         userData.name,
         userData.email
       )
