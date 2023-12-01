@@ -20,7 +20,7 @@ module.exports = class UserController {
         throw new ValidationError(
           'Parâmetros inválidos',
           contract.errors(),
-          constants.code
+          constants.CODE
         )
       }
 
@@ -43,7 +43,11 @@ module.exports = class UserController {
     try {
       const contract = requestValidate({ receiver, userId })
       if (!contract.isValid()) {
-        throw new ValidationError('Parâmetros inválidos', contract.errors())
+        throw new ValidationError(
+          'Parâmetros inválidos',
+          contract.errors(),
+          constants.CODE
+        )
       }
 
       const data = await this.AuthService.request({
@@ -69,7 +73,11 @@ module.exports = class UserController {
     try {
       const contract = loginValidate({ provider, userId, token })
       if (!contract.isValid()) {
-        throw new ValidationError('Parâmetros inválidos', contract.errors())
+        throw new ValidationError(
+          'Parâmetros inválidos',
+          contract.errors(),
+          constants.CODE
+        )
       }
 
       const data = await this.AuthService.login({
