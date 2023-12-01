@@ -22,6 +22,7 @@ module.exports = class AuthRequestService {
     try {
       let data
 
+      receiver = receiver.toLowerCase()
       this.providerIsValid(provider, receiver)
       const userData = await this.UserRepository.findBy({ id: userId })
       if (!userData) {
@@ -52,7 +53,7 @@ module.exports = class AuthRequestService {
   async verificationCode(receiver, userData) {
     let data
 
-    if (receiver == 'EMAIL') {
+    if (receiver == 'email') {
       if (!userData) {
         throw new NotFoundError(
           `Registro não encontrado`,
