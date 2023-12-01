@@ -37,8 +37,8 @@ module.exports = class AuthRequestService {
         data = await this.verificationCode(receiver, userData)
       }
 
-      if (provider === 'verification-external') {
-        data = await this.verificationExternal(receiver, userData)
+      if (provider === 'verification-external-sms') {
+        data = await this.verificationExternalSms(receiver, userData)
       }
 
       step.value.addData(data)
@@ -78,34 +78,30 @@ module.exports = class AuthRequestService {
     return data
   }
 
-  async verificationExternal(receiver, userData) {
+  async verificationExternalSms(receiver, userData) {
     const verificador = config.kroton.captacao
 
     const cpf = Util.formatCpf(userData.cpf)
 
-    let data
+    let data = {
+      identificador: cpf,
+      template: verificador.verificadorSMS,
+      contato: userData.phone,
+    }
 
-    if ((receiver = 'sms')) {
-      data = {
-        identificador: cpf,
-        template: verificador.verificadorSMS,
-        contato: userData.phone,
-      }
+    let encrypted = encrypedCipher(data, verificador)
 
-      let encrypted = encrypedCipher(data, verificador)
+    const vericadorBody = {
+      sistema: 1,
+      solicitacao: encrypted,
+    }
 
-      const vericadorBody = {
-        sistema: 1,
-        solicitacao: encrypted,
-      }
+    await this.VerificadorToken.request(vericadorBody)
 
-      await this.VerificadorToken.request(vericadorBody)
-
-      data = {
-        provider: `verification-external`,
-        receiver: `sms`,
-        identifier: Util.obfuscatePhone(userData.phone),
-      }
+    data = {
+      provider: `verification-external-sms`,
+      receiver: `sms`,
+      identifier: Util.obfuscatePhone(userData.phone),
     }
 
     return data

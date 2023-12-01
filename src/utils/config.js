@@ -65,13 +65,8 @@ module.exports = {
       whatsapp: process.env.PROVIDER_VALIDATION_WHATSAPP === 'true' ?? false,
       social: process.env.PROVIDER_VALIDATION_SOCIAL === 'true' ?? false,
     },
-
-    'verification-external': {
-      email: process.env.PROVIDER_VALIDATION_EMAIL_COGNA === 'true' ?? false,
+    'verification-external-sms': {
       sms: process.env.PROVIDER_VALIDATION_SMS_COGNA === 'true' ?? false,
-      whatsapp:
-        process.env.PROVIDER_VALIDATION_WHATSAPP_COGNA === 'true' ?? false,
-      social: process.env.PROVIDER_VALIDATION_SOCIAL_COGNA === 'true' ?? false,
     },
   },
 }
