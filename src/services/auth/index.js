@@ -19,12 +19,7 @@ module.exports = class AuthService {
     return await this.AuthRequestService.request(provider, receiver, userId)
   }
 
-  login = async ({ provider, receiver, userId, token }) => {
-    return await this.AuthLoginService.request(
-      provider,
-      receiver,
-      userId,
-      token
-    )
+  login = async ({ provider, userId, token }) => {
+    return await this.AuthLoginService.request(provider, userId, token)
   }
 }

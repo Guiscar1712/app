@@ -19,7 +19,7 @@ module.exports = class AuthLoginService {
     this.LoggerService = LoggerService
   }
 
-  request = async (provider, receiver, userId, token) => {
+  request = async (provider, userId, token) => {
     const step = this.LoggerService.addStep('AuthLoginService')
     try {
       const user = await this.UserRepository.findBy({ id: userId })
@@ -39,8 +39,8 @@ module.exports = class AuthLoginService {
         this.verificationCode(token, membership)
       }
 
-      if (provider === 'verification-external') {
-        await this.verificationExternal(receiver, token, user.cpf)
+      if (provider === 'verification-external-sms') {
+        await this.verificationExternalSms(token, user.cpf)
       }
 
       await this.MembershipRepository.update(membership.id, {
@@ -69,17 +69,10 @@ module.exports = class AuthLoginService {
     return true
   }
 
-  async verificationExternal(receiver, token, document) {
+  async verificationExternalSms(token, document) {
     let vericadorBody = {}
-    if (receiver == 'sms') {
-      vericadorBody.sistema = 1
-    } else {
-      throw new ValidationError(
-        `Parâmetros inválidos`,
-        [constantAuth.INVALID_TOKEN],
-        constantAuth.CODE
-      )
-    }
+
+    vericadorBody.sistema = 1
 
     document = Util.formatCpf(document)
     const data = {

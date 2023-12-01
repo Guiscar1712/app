@@ -30,12 +30,6 @@ module.exports = {
     )
 
     contract.isRequired(
-      model.receiver,
-      constants.REQUIRED_RECEIVER.code,
-      constants.REQUIRED_RECEIVER.message
-    )
-
-    contract.isRequired(
       model.token,
       constants.REQUIRED_TOKEN.code,
       constants.REQUIRED_TOKEN.message
