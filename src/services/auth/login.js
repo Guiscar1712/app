@@ -37,10 +37,14 @@ module.exports = class AuthLoginService {
 
       if (provider === 'verification-code') {
         this.verificationCode(token, membership)
-      }
-
-      if (provider === 'verification-external-sms') {
+      } else if (provider === 'verification-external-sms') {
         await this.verificationExternalSms(token, user.cpf)
+      } else {
+        throw new ValidationError(
+          `Parâmetros inválidos`,
+          [constantAuth.NOT_IMPLEMENTED_PROVIDER],
+          constantAuth.CODE
+        )
       }
 
       await this.MembershipRepository.update(membership.id, {
