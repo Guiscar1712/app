@@ -27,11 +27,7 @@ module.exports = class AuthValidatorService {
 
       if (!userData) {
         const personalData = await this.UserService.personalDataGet(document)
-
-        await this.userRegister(userData, personalData, document)
-
-        const personalEmail = personalData.emails.find((f) => f.main)
-        userData = await this.userFindByEmail(personalEmail)
+        userData = await this.userRegister(userData, personalData, document)
       }
 
       const providers = this.getProvidersValidator(userData)
@@ -106,14 +102,6 @@ module.exports = class AuthValidatorService {
 
       userData.id = user.id
     }
-
-    // else if (userEmail !== personalEmail.email) {
-    //   const updateUser = {
-    //     email: personalEmail.email,
-    //   }
-
-    //   await this.UserRepository.update(userData.id, updateUser)
-    // }
 
     return userData
   }
