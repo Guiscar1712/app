@@ -31,9 +31,7 @@ module.exports = class AuthValidatorService {
         await this.userRegister(userData, personalData, document)
 
         const personalEmail = personalData.emails.find((f) => f.main)
-        userData = await this.UserRepository.findBy({
-          Email: personalEmail.email,
-        })
+        userData = await this.userFindByEmail(personalEmail)
       }
 
       const providers = this.getProvidersValidator(userData)
@@ -62,6 +60,12 @@ module.exports = class AuthValidatorService {
     }
   }
 
+  async userFindByEmail(personalEmail) {
+    return await this.UserRepository.findBy({
+      Email: personalEmail.email,
+    })
+  }
+
   async userRegister(userData, personalData, document) {
     const userEmail = userData?.email
     const personalEmail = personalData?.emails.find((f) => f.main)
@@ -70,6 +74,23 @@ module.exports = class AuthValidatorService {
     )
 
     if (!userEmail) {
+      const userEmailData = await this.userFindByEmail(personalEmail)
+      if (userEmailData) {
+        throw new ValidationError(
+          `Parâmetros inválidos`,
+          [
+            {
+              code: constantAuth.DIVERGENT_REGISTRATION.code,
+              message: Util.stringFormat(
+                constantAuth.DIVERGENT_REGISTRATION.message,
+                Util.obfuscateEmail(personalEmail.email)
+              ),
+            },
+          ],
+          constantAuth.CODE
+        )
+      }
+
       userData = {
         name: personalData.name,
         email: personalEmail.email,
@@ -84,13 +105,16 @@ module.exports = class AuthValidatorService {
       await transaction.commit()
 
       userData.id = user.id
-    } else if (userEmail !== personalEmail.email) {
-      const updateUser = {
-        email: personalEmail.email,
-      }
-
-      await this.UserRepository.update(userData.id, updateUser)
     }
+
+    // else if (userEmail !== personalEmail.email) {
+    //   const updateUser = {
+    //     email: personalEmail.email,
+    //   }
+
+    //   await this.UserRepository.update(userData.id, updateUser)
+    // }
+
     return userData
   }
 
