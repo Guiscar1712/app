@@ -1,3 +1,5 @@
+const util = require('util')
+
 module.exports = class Util {
   static isNumber(char) {
     if (typeof char !== 'string') {
@@ -152,5 +154,13 @@ module.exports = class Util {
   static obfuscatePhone(phone) {
     const phoneOfuscado = phone.slice(0, 4) + '*'.repeat(5) + phone.slice(9, 11)
     return phoneOfuscado
+  }
+
+  static stringFormat(text, value) {
+    if (!text && !value) {
+      return null
+    }
+
+    return util.format(text, value)
   }
 }

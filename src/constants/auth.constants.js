@@ -11,7 +11,7 @@ const INVALID_TOKEN = {
 
 const DIVERGENT_REGISTRATION = {
   code: 2289,
-  message: 'Email não confere com CPF cadastrado.',
+  message: `O e-mail informado na inscrição (%s) não confere com o CPF cadastrado.`,
 }
 
 const NOT_IMPLEMENTED_PROVIDER = {
