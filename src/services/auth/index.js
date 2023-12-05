@@ -22,4 +22,8 @@ module.exports = class AuthService {
   login = async ({ provider, userId, token }) => {
     return await this.AuthLoginService.request(provider, userId, token)
   }
+
+  register = async (authRegister) => {
+    return await this.AuthRegisterService.request(authRegister)
+  }
 }

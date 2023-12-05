@@ -2,6 +2,7 @@ const { CpfValidate } = require('../../validators/user')
 const { requestValidate, loginValidate } = require('../../validators/auth')
 const { ValidationError } = require('../../utils/errors')
 const constants = require('../../constants/auth.constants')
+const AuthRegisterRequest = require('../../dto/auth/authRegister.request')
 
 module.exports = class UserController {
   constructor({ AuthService, LoggerService }) {
@@ -87,6 +88,21 @@ module.exports = class UserController {
       })
 
       response.code = 200
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
+      next(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  register = async (request, response, next) => {
+    this.LoggerService.setIndex({ userId })
+    const step = this.LoggerService.addStep('AuthControllerRegister')
+
+    try {
+      const authRegister = new AuthRegisterRequest(request.body)
+      const data = await this.AuthService.register(authRegister)
       step.value.addData(data)
       this.LoggerService.finalizeStep(step)
       next(data)

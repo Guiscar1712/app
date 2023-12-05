@@ -19,7 +19,6 @@ const REGISTERED_CELLPHONE = {
   message: 'Celular já esta cadastrado',
 }
 
-//const NOT_REGISTER_EMAIL = { code: 112, message: 'E-mail não cadastrado' }
 const NOT_REGISTER_EMAIL = {
   code: 1112,
   message:

@@ -42,4 +42,64 @@ module.exports = {
     )
     return contract
   },
+
+  registerValidate(model) {
+    const contract = new Validator()
+
+    contract.isRequired(
+      model.document,
+      constants.REQUIRED_DOCUMENT.code,
+      constants.REQUIRED_DOCUMENT.message
+    )
+
+    contract.isValidCpf(
+      Util.getNumbers(model.document),
+      constants.INVALID_DOCUMENT.code,
+      constants.INVALID_DOCUMENT.message
+    )
+
+    contract.isRequired(
+      model.name,
+      constants.REQUIRED_NAME.code,
+      constants.REQUIRED_NAME.message
+    )
+
+    contract.isEmail(
+      model.email,
+      constants.INVALID_EMAIL.code,
+      constants.INVALID_EMAIL.message
+    )
+
+    contract.isRequired(
+      model.phone,
+      constants.REQUIRED_PHONE.code,
+      constants.REQUIRED_PHONE.message
+    )
+
+    return contract
+  },
+
+  registerExistValidate(model) {
+    const contract = new Validator()
+
+    contract.isRequired(
+      !model.document,
+      constants.EXIST_DOCUMENT.code,
+      constants.EXIST_DOCUMENT.message
+    )
+
+    contract.isEmail(
+      !model.email,
+      constants.EXIST_EMAIL.code,
+      constants.EXIST_EMAIL.message
+    )
+
+    contract.isRequired(
+      !model.phone,
+      constants.EXIST_PHONE.code,
+      constants.EXIST_PHONE.message
+    )
+
+    return contract
+  },
 }
