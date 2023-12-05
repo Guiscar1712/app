@@ -97,13 +97,14 @@ module.exports = class UserController {
   }
 
   register = async (request, response, next) => {
-    this.LoggerService.setIndex({ userId })
+    this.LoggerService.setIndex({ email: request.body.email })
     const step = this.LoggerService.addStep('AuthControllerRegister')
 
     try {
       const authRegister = new AuthRegisterRequest(request.body)
       const data = await this.AuthService.register(authRegister)
       step.value.addData(data)
+      this.LoggerService.setUserId(data.id)
       this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {

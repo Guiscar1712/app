@@ -52,11 +52,13 @@ module.exports = {
       constants.REQUIRED_DOCUMENT.message
     )
 
-    contract.isValidCpf(
-      Util.getNumbers(model.document),
-      constants.INVALID_DOCUMENT.code,
-      constants.INVALID_DOCUMENT.message
-    )
+    if (model.document) {
+      contract.isValidCpf(
+        Util.getNumbers(model.document),
+        constants.INVALID_DOCUMENT.code,
+        constants.INVALID_DOCUMENT.message
+      )
+    }
 
     contract.isRequired(
       model.name,
@@ -88,7 +90,7 @@ module.exports = {
       constants.EXIST_DOCUMENT.message
     )
 
-    contract.isEmail(
+    contract.isRequired(
       !model.email,
       constants.EXIST_EMAIL.code,
       constants.EXIST_EMAIL.message

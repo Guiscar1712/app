@@ -41,7 +41,7 @@ module.exports = class AuthValidatorService {
       authRegister.phone
     )
 
-    if (!userSearch) {
+    if (userSearch) {
       const userSearchDocument = userSearch.find(
         (f) => f.cpf === authRegister.document
       )

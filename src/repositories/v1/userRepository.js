@@ -40,7 +40,7 @@ module.exports = class UserRepository {
     }
   }
 
-    update = async (id, entity, transaction) => {
+  update = async (id, entity, transaction) => {
     const step = this.LoggerService.addStep('UserRepositoryUpdate')
     try {
       step.value.addData({ id, entity, transaction })
@@ -131,5 +131,6 @@ function format(row) {
     alertTeatchers: row.AlertTeatchers,
     zipcode: row.Zipcode,
     state: row.State,
+    optin: row.Optin,
   }
 }

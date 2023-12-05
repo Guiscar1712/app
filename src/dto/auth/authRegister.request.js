@@ -1,4 +1,5 @@
 const { registerValidate } = require('../../validators/auth')
+const { ValidationError } = require('../../utils/errors')
 const constants = require('../../constants/auth.constants')
 const Util = require('../../utils/util')
 

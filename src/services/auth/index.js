@@ -3,11 +3,13 @@ module.exports = class AuthService {
     AuthValidatorService,
     AuthRequestService,
     AuthLoginService,
+    AuthRegisterService,
     LoggerService,
   }) {
     this.AuthValidatorService = AuthValidatorService
     this.AuthRequestService = AuthRequestService
     this.AuthLoginService = AuthLoginService
+    this.AuthRegisterService = AuthRegisterService
     this.LoggerService = LoggerService
   }
 
