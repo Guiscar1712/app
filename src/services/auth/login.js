@@ -51,7 +51,10 @@ module.exports = class AuthLoginService {
         RecoveryKey: '',
       })
 
-      const data = { token: jwt.sign(user, config.jwtSecret) }
+      const data = {
+        token: jwt.sign(user, config.jwtSecret),
+        email: user.email,
+      }
       step.value.addData(data)
       return data
     } catch (error) {
