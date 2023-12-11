@@ -2,6 +2,7 @@ const { asClass } = require('awilix')
 
 const IngressoClient = require('../../../../clients/ingresso/ingresso')
 const IngressoGetDadosPagamento = require('../../../../clients/ingresso/getDadosPagamento')
+const InscricoesPorCpf = require('../../../../clients/ingresso/inscricoesPorCpfRequest')
 const InscricaoPorIdOrigin = require('../../../../clients/ingresso/inscricaoPorIdOrigin')
 const PersonalData = require('../../../../clients/ingresso/personalDataRequest')
 const PersonalDataUpdate = require('../../../../clients/ingresso/personalDataUpdate')
@@ -17,6 +18,7 @@ const VerificadorTokenValidar = require('../../../../clients/ingresso/verificado
 module.exports = {
   IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento),
   IngressoClient: asClass(IngressoClient),
+  InscricoesPorCpf: asClass(InscricoesPorCpf),
   InscricaoPorIdOrigin: asClass(InscricaoPorIdOrigin),
   PersonalData: asClass(PersonalData),
   PersonalDataUpdate: asClass(PersonalDataUpdate),

@@ -20,40 +20,52 @@ module.exports = class EnrollmentDetails {
   }
 
   get = async (idOrigin) => {
-    const data = await retry(this.IngressoClient.inscricaoPorIdOrigin, idOrigin)
+    const step = this.LoggerService.addStep('EnrollmentServiceDetails')
 
-    const enrollmentsDto = new EnrollmentsDto(data)
+    try {
+      const data = await retry(
+        this.IngressoClient.inscricaoPorIdOrigin,
+        idOrigin
+      )
 
-    if (
-      !enrollmentsDto ||
-      !enrollmentsDto.businessKey ||
-      enrollmentsDto.status === 'ERROR'
-    ) {
-      throw new ClientServerError('Unexpected Content', {
-        method: 'EnrollmentsDto',
-        data,
-      })
-    }
+      const enrollmentsDto = new EnrollmentsDto(data)
 
-    if (!enrollmentsDto.enem.active) {
-      await getAdmissionsTest(enrollmentsDto, data)
-    }
-
-    await this.getPaymentStatus(idOrigin, enrollmentsDto)
-
-    if (enrollmentsDto.contract.available) {
-      const queryFetch = {
-        system: data.sistema,
-        enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
-        businessKey: enrollmentsDto.businessKey,
+      if (
+        !enrollmentsDto ||
+        !enrollmentsDto.businessKey ||
+        enrollmentsDto.status === 'ERROR'
+      ) {
+        throw new ClientServerError('Unexpected Content', {
+          method: 'EnrollmentsDto',
+          data,
+        })
       }
 
-      const contracts =
-        await this.ContractListService.fetchContracts(queryFetch)
-      enrollmentsDto.contract.available = contracts.length >= 1
-    }
+      if (!enrollmentsDto.enem.active) {
+        await getAdmissionsTest(enrollmentsDto, data)
+      }
 
-    return enrollmentsDto
+      await this.getPaymentStatus(idOrigin, enrollmentsDto)
+
+      if (enrollmentsDto.contract.available) {
+        const queryFetch = {
+          system: data.sistema,
+          enrollmentId: enrollmentsDto.studentEnrollment.enrollmentId,
+          businessKey: enrollmentsDto.businessKey,
+        }
+
+        const contracts =
+          await this.ContractListService.fetchContracts(queryFetch)
+        enrollmentsDto.contract.available = contracts.length >= 1
+      }
+
+      return enrollmentsDto
+    } catch (error) {
+      step.value.addData(error)
+      throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
+    }
   }
 
   async getPaymentStatus(idOrigin, enrollmentsDto) {

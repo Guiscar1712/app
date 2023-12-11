@@ -2,6 +2,7 @@ module.exports = class Ingresso {
   constructor({
     LoggerService,
     IngressoGetDadosPagamento,
+    InscricoesPorCpf,
     InscricaoPorIdOrigin,
     PersonalData,
     PersonalDataUpdate,
@@ -14,6 +15,7 @@ module.exports = class Ingresso {
   }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
+    this.InscricoesPorCpf = InscricoesPorCpf
     this.InscricaoPorIdOrigin = InscricaoPorIdOrigin
     this.ContratoAceite = ContratoAceite
     this.PersonalData = PersonalData
@@ -35,6 +37,10 @@ module.exports = class Ingresso {
 
   getDadosPagamento = async (businessKey) => {
     return await this.IngressoGetDadosPagamento.request(businessKey)
+  }
+
+  inscricoesPorCpf = async (Cpf) => {
+    return await this.InscricoesPorCpf.request(Cpf)
   }
 
   inscricaoPorIdOrigin = async (idOrigin) => {
