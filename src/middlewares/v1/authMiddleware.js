@@ -15,6 +15,7 @@ module.exports = class AuthMiddleware {
           this.LoggerService.setIndex({
             userId: decoded.id,
             email: decoded.email,
+            document: decoded.cpf,
           })
           step.value.addData({ isAuthenticated: true, decoded })
           next()
