@@ -27,7 +27,9 @@ async function searchForEnrollments(document) {
     }
   })
 
-  return enrollments
+  const enrollmentsSort = Util.sortNewest(enrollments, 'enrollmentDate')
+
+  return enrollmentsSort
 }
 
 function validateEnrollmentsDate(element) {

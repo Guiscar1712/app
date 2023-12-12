@@ -163,4 +163,14 @@ module.exports = class Util {
 
     return util.format(text, value)
   }
+
+  static sortNewest(list, fieldName) {
+    list.sort(compareData)
+
+    function compareData(a, b) {
+      return new Date(b[fieldName]) - new Date(a[fieldName])
+    }
+
+    return list
+  }
 }
