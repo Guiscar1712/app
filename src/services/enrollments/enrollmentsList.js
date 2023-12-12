@@ -40,8 +40,10 @@ module.exports = class EnrollmentList {
         }
       })
 
+      const enrollmentsSort = Util.sortNewest(enrollments, 'enrollmentDate')
       step.value.addData(data)
-      return enrollments
+
+      return enrollmentsSort
     } catch (error) {
       step.value.addData(error)
       throw error
