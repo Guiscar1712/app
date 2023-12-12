@@ -78,7 +78,7 @@ module.exports = class AuthValidatorService {
     }
 
     const transaction = await database.transaction()
-    const user = await this.UserRepository.insert(userDataInsert, transaction)
+    const user = await this.UserRepository.save(userDataInsert, transaction)
     await this.MembershipRepository.insert({ UserId: user.id }, transaction)
     await transaction.commit()
 

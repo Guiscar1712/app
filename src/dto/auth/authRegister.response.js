@@ -1,7 +1,7 @@
 class AuthRegisterResponse {
   constructor(data) {
     this.id = data.id
-    this.document = data.cpf ?? data.document
+    this.document = data.document
     this.name = data.name
     this.email = data.email
     this.phone = data.phone

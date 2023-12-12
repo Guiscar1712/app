@@ -40,6 +40,21 @@ module.exports = class UserRepository {
     }
   }
 
+  save = async (entity, transaction) => {
+    const step = this.LoggerService.addStep('UserRepositoryInsert')
+    try {
+      const row = await SimpleQuery.insert(entity, table, transaction)
+      const data = formatSave(row)
+      step.value.addData(data)
+      return data
+    } catch (error) {
+      step.value.addData({ inputData: { entity, transaction }, error })
+      throw error
+    } finally {
+      this.LoggerService.finalizeStep(step)
+    }
+  }
+
   update = async (id, entity, transaction) => {
     const step = this.LoggerService.addStep('UserRepositoryUpdate')
     try {
@@ -131,6 +146,20 @@ function format(row) {
     alertTeatchers: row.AlertTeatchers,
     zipcode: row.Zipcode,
     state: row.State,
+    optin: row.Optin,
+  }
+}
+
+function formatSave(row) {
+  if (!row) {
+    return null
+  }
+  return {
+    id: row.Id,
+    name: row.Name,
+    email: row.Email,
+    document: row.CPF,
+    phone: row.Phone,
     optin: row.Optin,
   }
 }
