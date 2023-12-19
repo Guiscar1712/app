@@ -14,6 +14,10 @@ module.exports = class Util {
   }
 
   static getNumbers(text, limit) {
+    if (!text) {
+      return text
+    }
+
     let r = ''
     for (let index = 0; index < text.length; index++) {
       const c = text[index]

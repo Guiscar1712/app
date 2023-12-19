@@ -92,7 +92,7 @@ module.exports = class AuthValidatorService {
         email: personalEmail.email,
         cpf: document,
         birthday: personalData.birthdate,
-        phone: Util.getNumbers(personalPhone.number),
+        phone: Util.getNumbers(personalPhone?.number),
       }
 
       const transaction = await database.transaction()
