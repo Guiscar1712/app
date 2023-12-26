@@ -104,4 +104,52 @@ module.exports = {
 
     return contract
   },
+
+  recoveryValidate(model) {
+    const contract = new Validator()
+
+    contract.isRequired(
+      model.userId,
+      constants.REQUIRED_USER_ID.code,
+      constants.REQUIRED_USER_ID.message
+    )
+
+    contract.isValidCpf(
+      model.document,
+      constants.INVALID_DOCUMENT.code,
+      constants.INVALID_DOCUMENT.message
+    )
+
+    contract.isDateValid(
+      model.birthday,
+      constants.REQUIRED_BIRTHDAY.code,
+      constants.REQUIRED_BIRTHDAY.message
+    )
+
+    contract.isRequired(
+      model.name,
+      constants.REQUIRED_NAME.code,
+      constants.REQUIRED_NAME.message
+    )
+
+    contract.isRequired(
+      model.motherName,
+      constants.REQUIRED_MOTHER_NAME.code,
+      constants.REQUIRED_MOTHER_NAME.message
+    )
+
+    return contract
+  },
+
+  updateValidate(model) {
+    const contract = new Validator()
+
+    contract.isEmail(
+      model.email,
+      constants.INVALID_EMAIL.code,
+      constants.INVALID_EMAIL.message
+    )
+
+    return contract
+  },
 }
