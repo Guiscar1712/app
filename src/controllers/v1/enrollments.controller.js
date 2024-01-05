@@ -13,6 +13,10 @@ module.exports = class EnrollmentsController {
   }
 
   static async get(request, response, next) {
+    /*  #swagger.tags = ['Enrollment']
+        #swagger.description = 'Endpoint to sign in a specific Enrollment' */
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+    // #swagger.deprecated = true
     try {
       const document = request.params.document
 

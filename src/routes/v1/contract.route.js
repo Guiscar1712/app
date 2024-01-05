@@ -12,6 +12,29 @@ router.get(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['Contract']
+        #swagger.description = 'Endpoint to sign in a specific Contract' */
+
+    /*  #swagger.parameters['idOrigin'] = {
+            in: 'query',
+            description: 'Contract information.',
+            required: true
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: { "success": true,
+	                "data": [{
+			              "id": "645bf02d9f5aeb1f7ab7ec62",
+			              "name": "Prestação de serviço",
+			              "accepted": false}]},
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
+
     const { ContractController } = req.container.cradle
     ContractController.getContracts(req, res, next)
   },
@@ -32,6 +55,29 @@ router.get(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['Contract']
+        #swagger.description = 'Endpoint to sign in a specific Contract' */
+
+    /*  #swagger.parameters['contractId'] = {
+            in: 'path',
+            description: 'Contract information.',
+            required: true
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: { "success": true,
+	                "data": [{
+			              "id": "645bf02d9f5aeb1f7ab7ec62",
+			              "name": "Prestação de serviço",
+			              "accepted": false}]},
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
+
     const { ContractController } = req.container.cradle
     ContractController.getByContractId(req, res, next)
   },
@@ -52,6 +98,29 @@ router.put(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['Contract']
+        #swagger.description = 'Endpoint to sign in a specific Contract' */
+
+    /*  #swagger.parameters['contractId'] = {
+            in: 'path',
+            description: 'Contract information.',
+            required: true
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: { "success": true,
+	                "data": [{
+			              "id": "645bf02d9f5aeb1f7ab7ec62",
+			              "name": "Prestação de serviço",
+			              "accepted": true}]},
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
+
     const { ContractController } = req.container.cradle
     ContractController.accepted(req, res, next)
   },

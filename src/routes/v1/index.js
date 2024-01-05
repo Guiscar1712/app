@@ -11,7 +11,15 @@ router.use('/contract', require('./contract.route'))
 router.use('/exam', require('./exam.route'))
 
 //Legado => Sem Logs
-router.use('/notification', require('./notification.route'), errorHandler)
-router.use('/course', require('./course.route'), errorHandler)
+router.use(
+  '/notification',
+  require('./notification.route'), // #swagger.ignore = true
+  errorHandler
+)
+router.use(
+  '/course',
+  require('./course.route'), // #swagger.ignore = true
+  errorHandler
+)
 
 module.exports = router

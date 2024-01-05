@@ -97,6 +97,7 @@ module.exports = class UserController {
   }
 
   register = async (request, response, next) => {
+    
     this.LoggerService.setIndex({ email: request.body.email })
     const step = this.LoggerService.addStep('AuthControllerRegister')
 

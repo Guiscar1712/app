@@ -177,4 +177,10 @@ module.exports = class Util {
 
     return list
   }
+
+  static splitIP(address) {
+    const chunk = address.split(':')
+    const ip = chunk[0]
+    return ip
+  }
 }

@@ -8,6 +8,9 @@ router.post(
     TrackMiddleware.tracking('USER_LOGIN', req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['User']
+        #swagger.description = 'Endpoint to sign in a specific User' */
+    // #swagger.deprecated = true
     const { UserController } = req.container.cradle
     UserController.login(req, res, next)
   },
@@ -28,6 +31,9 @@ router.post(
     UserController.loginFirebase(req, res, next)
   },
   (data, req, res, next) => {
+    /*  #swagger.tags = ['User']
+        #swagger.description = 'Endpoint to sign in a specific User' */
+    // #swagger.deprecated = true
     const { ResponseMiddleware } = req.container.cradle
     ResponseMiddleware.Handler(data, req, res, next)
   }
@@ -40,6 +46,9 @@ router.post(
     TrackMiddleware.tracking('USER_REGISTER', req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['User']
+        #swagger.description = 'Endpoint to sign in a specific User' */
+    // #swagger.deprecated = true
     const { UserController } = req.container.cradle
     UserController.register(req, res, next)
   },
@@ -60,6 +69,24 @@ router.get(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['User']
+        #swagger.description = 'Endpoint to sign in a specific User' */
+
+    /*  #swagger.parameters['cpf'] = {
+            in: 'path',
+            description: 'User information.',
+            required: true
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: {  $ref: "#/definitions/personalDataResponse" },
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
     const { UserController } = req.container.cradle
     UserController.personalDataGet(req, res, next)
   },
@@ -81,6 +108,31 @@ router.patch(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['User']
+        #swagger.description = 'Endpoint to sign in a specific User' */
+
+    /*  #swagger.parameters['cpf'] = {
+            in: 'path',
+            description: 'User information.',
+            required: true
+    } */
+
+    /*  #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'User information.',
+            required: true,
+            schema: { $ref: "#/definitions/personalData" }
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: {  $ref: "#/definitions/personalDataResponse" },
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
     const { UserController } = req.container.cradle
     UserController.personalDataUpdate(req, res, next)
   },

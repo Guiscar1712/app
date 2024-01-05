@@ -5,15 +5,14 @@
     "main": "server.js",
     "scripts": {
         "start": "node src/server.js",
-        "worker-receiver": "node src/worker-receiver.js",
-        "worker-notification": "node src/worker-notification.js",
         "dev": "npm run develop",
         "develop": "nodemon src/server.js",
         "lint": "npx eslint ./src",
         "lint:fix": "npx eslint ./src --fix",
         "migrations": "npx knex migrate:latest",
         "seeds": "npx knex seed:run",
-        "debug": "nodemon --inspect src/server.js"
+        "debug": "nodemon --inspect src/server.js",
+        "start-gendoc": "node src/docs/swagger.js"
     },
     "author": "Bluecore",
     "license": "ISC",
@@ -46,7 +45,9 @@
         "uuid": "^9.0.0",
         "winston": "^3.8.2",
         "winston-daily-rotate-file": "^4.7.1",
-        "xml2js": "^0.6.2"
+        "xml2js": "^0.6.2",
+        "swagger-autogen": "^2.23.4",
+        "swagger-ui-express": "^4.1.4"
     },
     "devDependencies": {
         "eslint": "^8.49.0",

@@ -23,6 +23,11 @@ const EXIST_DOCUMENT = { code: 2214, message: 'CPF já cadastrado' }
 const EXIST_EMAIL = { code: 2215, message: 'E-mail já cadastrado' }
 const EXIST_PHONE = { code: 2216, message: 'Telefone já cadastrado' }
 
+const UNAUTHORIZED = {
+  code: 2288,
+  message: `O Usuário não foi autenticado`,
+}
+
 const DIVERGENT_REGISTRATION = {
   code: 2289,
   message: `O e-mail informado na inscrição (%s) não confere com o CPF cadastrado.`,
@@ -51,6 +56,7 @@ module.exports = {
   EXIST_DOCUMENT,
   EXIST_EMAIL,
   EXIST_PHONE,
+  UNAUTHORIZED,
   DIVERGENT_REGISTRATION,
   NOT_IMPLEMENTED_PROVIDER,
 }

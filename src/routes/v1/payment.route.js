@@ -12,6 +12,28 @@ router.get(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['Payment']
+        #swagger.description = 'Endpoint to sign in a specific Payment' */
+
+    /*  #swagger.parameters['originId'] = {
+            in: 'path',
+            description: 'Payment information.',
+            required: true
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: { "success": true,
+	                "data": { "expiresIn":"2024-01-09T02:26:04.626Z",
+                    "qrCode":"0002010102122682001x2560pix.stone.com.br/pix/v8ea4ac9c6540559.005802BR5925EDIT3396",
+                    "qrCodeUrl":"https://api.par.me/core/v5/transactions/tran_LGX8nlR7P/qrcode?payment_method=pix",
+                    "totalAmount": 59}},
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
     const { PaymentController } = req.container.cradle
     PaymentController.paymentPix(req, res, next)
   },
@@ -31,6 +53,29 @@ router.get(
     AuthMiddleware.isAuthenticated(req, res, next)
   },
   (req, res, next) => {
+    /*  #swagger.tags = ['Payment']
+        #swagger.description = 'Endpoint to sign in a specific Payment' */
+
+    /*  #swagger.parameters['originId'] = {
+            in: 'path',
+            description: 'Payment information.',
+            required: true
+    } */
+
+    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+
+    /*  #swagger.responses[200] = { 
+        schema: { "success": true,
+	                "data": {
+                    "invoiceType":"PreMatricula",
+                    "status":"GENERATED",
+                    "totalAmount":59,
+                    "type":"PIX"}},
+        description: "Validate successfully" } */
+
+    /*  #swagger.responses[401] = { 
+        schema: { $ref: "#/definitions/response401" },
+        description: "Unathorized" } */
     const { PaymentController } = req.container.cradle
     PaymentController.paymentStatus(req, res, next)
   },

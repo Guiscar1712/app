@@ -1,4 +1,5 @@
 const { ValidationError } = require('../../utils/errors')
+const Util = require('../../utils/util')
 
 module.exports = class NotificationController {
   constructor({
@@ -59,11 +60,14 @@ module.exports = class NotificationController {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
 
-      const { ipAddress } = request.body
+      let ipAddress =
+        request.headers['x-forwarded-for'] || request.socket.remoteAddress
+
+      ipAddress = Util.splitIP(ipAddress)
 
       const data = await this.ContractService.contractAccepted(
         request.params.contractId,
-        ipAddress
+        { ipAddress }
       )
 
       step.value.addData({ contratoAceito: data.response })

@@ -2,7 +2,8 @@ const UserService = require('../services/user.service')
 const { ApplyValidate } = require('../validators/user')
 
 module.exports = class UserController {
-  static async get (request, response, next) {
+  static async get(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const data = await UserService.findById(request.params.id)
       response.json(data)
@@ -12,7 +13,8 @@ module.exports = class UserController {
     }
   }
 
-  static async getMe (request, response, next) {
+  static async getMe(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const data = await UserService.findById(request.user.id)
       response.json(data)
@@ -22,7 +24,8 @@ module.exports = class UserController {
     }
   }
 
-  static async list (request, response, next) {
+  static async list(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const data = await UserService.list()
       response.json(data)
@@ -32,7 +35,8 @@ module.exports = class UserController {
     }
   }
 
-  static async register (request, response, next) {
+  static async register(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const contract = ApplyValidate(request.body)
       if (!contract.isValid()) {
@@ -63,7 +67,8 @@ module.exports = class UserController {
     }
   }
 
-  static async login (request, response, next) {
+  static async login(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { email, password } = request.body
       const data = await UserService.login(email, password)
@@ -74,7 +79,8 @@ module.exports = class UserController {
     }
   }
 
-  static async loginFirebase (request, response, next) {
+  static async loginFirebase(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { token } = request.headers
       const data = await UserService.loginFirebase(token)
@@ -85,7 +91,8 @@ module.exports = class UserController {
     }
   }
 
-  static async update (request, response, next) {
+  static async update(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const contract = ApplyValidate(request.body)
       if (!contract.isValid()) {
@@ -105,7 +112,8 @@ module.exports = class UserController {
     }
   }
 
-  static async getRecoveryKey (request, response, next) {
+  static async getRecoveryKey(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { email } = request.body
       const data = await UserService.getRecovery(email)
@@ -116,7 +124,8 @@ module.exports = class UserController {
     }
   }
 
-  static async validateCode (request, response, next) {
+  static async validateCode(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { email, code } = request.body
       const data = await UserService.validateCode(email, code)
@@ -127,7 +136,8 @@ module.exports = class UserController {
     }
   }
 
-  static async changePassword (request, response, next) {
+  static async changePassword(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { email, code, password } = request.body
       const data = await UserService.changePassword(email, code, password)
@@ -138,7 +148,8 @@ module.exports = class UserController {
     }
   }
 
-  static async recoverPassword (request, response, next) {
+  static async recoverPassword(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { cpf } = request.body
       const data = await UserService.recoverPassword(cpf)
@@ -149,7 +160,8 @@ module.exports = class UserController {
     }
   }
 
-  static async delete (request, response, next) {
+  static async delete(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       await UserService.delete(request.user.id)
       response.status(202).send()
@@ -159,7 +171,8 @@ module.exports = class UserController {
     }
   }
 
-  static async photo (request, response, next) {
+  static async photo(request, response, next) {
+    // #swagger.tags = ['Users']
     try {
       const { base64 } = request.body
       const data = await UserService.photo(request.user.id, base64)
@@ -167,7 +180,6 @@ module.exports = class UserController {
     } catch (error) {
       console.log(error)
       next(error)
-      // response.status(400).json({ success: false })
     }
   }
 }
