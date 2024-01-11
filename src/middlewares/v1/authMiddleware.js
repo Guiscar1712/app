@@ -1,6 +1,8 @@
 const config = require('../../utils/config')
 const jwt = require('jsonwebtoken')
 const constants = require('../../constants/auth.constants')
+const { ValidationError } = require('../../utils/errors')
+
 module.exports = class AuthMiddleware {
   constructor({ LoggerService }) {
     this.LoggerService = LoggerService
