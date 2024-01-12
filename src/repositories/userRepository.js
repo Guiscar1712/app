@@ -1,5 +1,4 @@
-//const moment = require('moment')
-const moment = require('../config/momentConfig')
+const moment = require('moment')
 const database = require('../database/config.database')
 const { SimpleQuery } = require('../database')
 const table = 'User'
