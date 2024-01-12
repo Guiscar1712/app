@@ -82,7 +82,7 @@ router.post(
 )
 
 router.post(
-  '/update',
+  '/recovery/update',
   (req, res, next) => {
     const { TrackMiddleware } = req.container.cradle
     TrackMiddleware.tracking('AUTH_UPDATE', req, res, next)
