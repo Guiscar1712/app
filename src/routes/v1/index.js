@@ -4,7 +4,7 @@ const { cradle } = require('./../../config/di')
 const errorHandler = require('../../middlewares/errorHandler')
 
 router.use('/user', require('./user.route'))
-router.use('/auth', require('./auth.route'))
+router.use('/auth', require('./auth'))
 router.use('/enrollment', require('./enrollment.route'))
 router.use('/payment', require('./payment.route'))
 router.use('/contract', require('./contract.route'))
