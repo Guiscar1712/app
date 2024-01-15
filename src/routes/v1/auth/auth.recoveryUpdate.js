@@ -28,7 +28,8 @@ router.post(
         schema: { "success": true,
                   "data": {
                     "id": 1286,
-                    "email": "heitor.fernandes@bluecore.com.br" }} */
+                    "email": "heitor.fernandes@bluecore.com.br" }},
+        description: "Login successfully" } */
     const { AuthController } = req.container.cradle
     AuthController.update(req, res, next)
   },

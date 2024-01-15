@@ -1046,6 +1046,65 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "Login successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1J9.eyJ6gAn6I6NsRx6MPyKdAeTAiyeuEC-I4jE"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "heitor.fernandes@bluecore.com.br"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "eyJhbGciOiJIUzI1J9.eyJ6gAn6I6NsRx6MPyKdAeTAiyeuEC-I4jE"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "heitor.fernandes@bluecore.com.br"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
           "400": {
             "description": "Invalid parameters",
             "content": {
@@ -1087,8 +1146,87 @@
     },
     "/api/v1/auth/recovery/update": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint to request authentication token",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Auth Request information.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "heitor.fernandes@bluecore.com.br"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
+          "200": {
+            "description": "Login successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1286
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "heitor.fernandes@bluecore.com.br"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1286
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "heitor.fernandes@bluecore.com.br"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
           "400": {
             "description": "Invalid parameters",
             "content": {
@@ -1125,7 +1263,12 @@
               "$ref": "#/components/schemas/response500"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/api/v1/enrollment/{document}": {
