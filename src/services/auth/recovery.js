@@ -5,6 +5,7 @@ const constantUser = require(`../../constants/user.constants`)
 const constantAuth = require(`../../constants/auth.constants`)
 const jwt = require('jsonwebtoken')
 const config = require('../../utils/config')
+const backbone = config.kroton.backbone
 
 module.exports = class AuthValidatorService {
   constructor({ UserService, UserRepository, IngressoClient, LoggerService }) {
@@ -52,12 +53,12 @@ module.exports = class AuthValidatorService {
     if (backboneData) {
       const errors = []
 
-      const name = Util.calculateLevenshteinDistance( 
+      const name = Util.calculateLevenshteinDistance(
         authRecovery.name,
         backboneData.name
       )
 
-      if (name > 1) {
+      if (name > backbone.distance) {
         errors.push(constantAuth.INVALID_NAME)
       }
 
@@ -66,7 +67,7 @@ module.exports = class AuthValidatorService {
         backboneData.motherName
       )
 
-      if (motherName > 1) {
+      if (motherName > backbone.distance) {
         errors.push(constantAuth.INVALID_MOTHER_NAME)
       }
 
