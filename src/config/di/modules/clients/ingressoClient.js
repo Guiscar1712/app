@@ -14,6 +14,7 @@ const ProvaElegibilidade = require('../../../../clients/ingresso/elegibilidadePr
 const ProvaConsulta = require('../../../../clients/ingresso/consultaProva')
 const VerificadorToken = require('../../../../clients/ingresso/verificador/token')
 const VerificadorTokenValidar = require('../../../../clients/ingresso/verificador/tokenValidar')
+const Backbone = require('../../../../clients/ingresso/backbone')
 
 module.exports = {
   IngressoGetDadosPagamento: asClass(IngressoGetDadosPagamento),
@@ -30,4 +31,5 @@ module.exports = {
   ProvaConsulta: asClass(ProvaConsulta),
   VerificadorToken: asClass(VerificadorToken),
   VerificadorTokenValidar: asClass(VerificadorTokenValidar),
+  Backbone: asClass(Backbone),
 }

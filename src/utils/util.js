@@ -183,4 +183,40 @@ module.exports = class Util {
     const ip = chunk[0]
     return ip
   }
+
+  static calculateLevenshteinDistance(str1, str2) {
+    const matriz = []
+
+    for (let i = 0; i <= str1.length; i++) {
+      matriz[i] = [i]
+      for (let j = 0; j <= str2.length; j++) {
+        if (i === 0) {
+          matriz[i][j] = j
+        } else {
+          matriz[i][j] = 0
+        }
+      }
+    }
+
+    for (let i = 1; i <= str1.length; i++) {
+      for (let j = 1; j <= str2.length; j++) {
+        const custo = str1[i - 1] === str2[j - 1] ? 0 : 1
+        matriz[i][j] = Math.min(
+          matriz[i - 1][j] + 1,
+          matriz[i][j - 1] + 1,
+          matriz[i - 1][j - 1] + custo
+        )
+      }
+    }
+
+    return matriz[str1.length][str2.length]
+  }
+
+  static dateToString(data) {
+    const day = String(data.getDate()).padStart(2, '0')
+    const month = String(data.getMonth() + 1).padStart(2, '0')
+    const year = data.getFullYear()
+
+    return `${day}/${month}/${year}`
+  }
 }

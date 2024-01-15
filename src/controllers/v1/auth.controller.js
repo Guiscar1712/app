@@ -3,6 +3,8 @@ const { requestValidate, loginValidate } = require('../../validators/auth')
 const { ValidationError } = require('../../utils/errors')
 const constants = require('../../constants/auth.constants')
 const AuthRegisterRequest = require('../../dto/auth/authRegister.request')
+const AuthRecoveryRequest = require('../../dto/auth/authRecovery.request')
+const AuthUpdateRequest = require('../../dto/auth/authUpdate.request')
 
 module.exports = class UserController {
   constructor({ AuthService, LoggerService }) {
@@ -106,6 +108,36 @@ module.exports = class UserController {
       const data = await this.AuthService.register(authRegister)
       step.value.addData(data)
       this.LoggerService.setUserId(data.id)
+      this.LoggerService.finalizeStep(step)
+      next(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  recovery = async (request, response, next) => {
+    const step = this.LoggerService.addStep('AuthControllerRecovery')
+    try {
+      let authRecovery = new AuthRecoveryRequest(request.body)
+
+      const data = await this.AuthService.recovery(authRecovery)
+      response.code = 200
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
+      next(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  update = async (request, response, next) => {
+    const step = this.LoggerService.addStep('AuthControllerUpdate')
+    try {
+      let authUpdate = new AuthUpdateRequest(request.body)
+
+      const data = await this.AuthService.update(request.user, authUpdate)
+      response.code = 200
+      step.value.addData(data)
       this.LoggerService.finalizeStep(step)
       next(data)
     } catch (error) {
