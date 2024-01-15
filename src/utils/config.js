@@ -41,6 +41,7 @@ module.exports = {
       url: process.env.BACKBONE_API_BASE_URL,
       apim: process.env.BACKBONE_API_APIM,
       key: process.env.BACKBONE_API_KEY,
+      distance: process.env.AUTH_RECOVERY_DISTANCE || 1,
     },
     ci360: {
       url: process.env.KROTON_CI369_URI,

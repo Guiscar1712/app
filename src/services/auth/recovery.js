@@ -52,12 +52,12 @@ module.exports = class AuthValidatorService {
     if (backboneData) {
       const errors = []
 
-      const name = Util.calculateLevenshteinDistance(
+      const name = Util.calculateLevenshteinDistance( 
         authRecovery.name,
         backboneData.name
       )
 
-      if (name > 2) {
+      if (name > 1) {
         errors.push(constantAuth.INVALID_NAME)
       }
 
@@ -66,7 +66,7 @@ module.exports = class AuthValidatorService {
         backboneData.motherName
       )
 
-      if (motherName > 2) {
+      if (motherName > 1) {
         errors.push(constantAuth.INVALID_MOTHER_NAME)
       }
 
@@ -78,7 +78,7 @@ module.exports = class AuthValidatorService {
         errors.push(constantAuth.INVALID_BIRTHDAY)
       }
 
-      if (errors > 1) {
+      if (errors.length >= 1) {
         throw new ValidationError(
           `Dados não confere`,
           errors,
