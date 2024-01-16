@@ -19,49 +19,14 @@ app.use(express.urlencoded({ extended: false, limit: '50mb' }))
 app.use(express.json({ limit: '50mb' }))
 app.use(cookieParser())
 
-app.use(
-  require('./routes')
-  // #swagger.ignore = true
-)
-
 app.use((req, res, next) => {
   req.container = container.createScope()
   next()
 })
 
-const apiV1 = require('./routes/v1')
-const apiV2 = require('./routes/v2')
+app.use('/api', require('./routes'))
 
-app.use(
-  '/api/v1',
-  apiV1
-  /*  #swagger.responses[400] = { 
-        schema: { $ref: "#/definitions/response400" },
-        description: "Invalid parameters" } */
-
-  /*  #swagger.responses[500] = { 
-        schema: { $ref: "#/definitions/response500" },
-        description: "Server errors" } */
-)
-
-app.use(
-  '/api/v2',
-  apiV2
-  /*  #swagger.responses[400] = { 
-        schema: { $ref: "#/definitions/response400" },
-        description: "Invalid parameters" } */
-
-  /*  #swagger.responses[500] = { 
-        schema: { $ref: "#/definitions/response500" },
-        description: "Server errors" } */
-)
-
-const docs =
-  process.env.NODE_ENV == 'homolog' || process.env.NODE_ENV == 'development'
-
-const swaggerUi = require('swagger-ui-express')
-const swaggerFile = require('./docs/swagger-output.json')
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+const swaggerConfig = require('./docs/swagger.config')
+swaggerConfig(app)
 
 module.exports = app

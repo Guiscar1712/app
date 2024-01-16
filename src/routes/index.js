@@ -1,20 +1,28 @@
 const express = require('express')
 const router = express.Router()
 
-const errorHandler = require('../middlewares/errorHandler')
-
-// router.use('/api/test', require('./test.route'))
-router.use('/api/user', require('./user.route'), errorHandler)
-router.use('/api/subscription', require('./subscription.route'), errorHandler)
-router.use('/api/course' , require('./course.route'), errorHandler)
+router.use('/', require('./legacy'))
 router.use(
-  '/api/notification-preference',
-  require('./notificationPreference.route'),
-  errorHandler
+  '/v1',
+  require('./v1')
+  /*  #swagger.responses[400] = { 
+        schema: { $ref: "#/definitions/response400" },
+        description: "Invalid parameters" } */
+
+  /*  #swagger.responses[500] = { 
+        schema: { $ref: "#/definitions/response500" },
+        description: "Server errors" } */
 )
-router.use('/api/notification', require('./notification.route'), errorHandler)
-router.use('/api/register-app', require('./registerApp.route'), errorHandler)
-router.use('/api/exam', require('./exam.route'), errorHandler)
-router.use('/api/cep', require('./cep.route'), errorHandler)
+router.use(
+  '/v2',
+  require('./v2')
+  /*  #swagger.responses[400] = { 
+        schema: { $ref: "#/definitions/response400" },
+        description: "Invalid parameters" } */
+
+  /*  #swagger.responses[500] = { 
+        schema: { $ref: "#/definitions/response500" },
+        description: "Server errors" } */
+)
 
 module.exports = router

@@ -15,6 +15,2597 @@
     }
   ],
   "paths": {
+    "/api/user/register": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/user/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/login-firebase": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/user/validate": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "code": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/changePassword": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  },
+                  "code": {
+                    "example": "any"
+                  },
+                  "password": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/recoverPassword": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cpf": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/getRecoveryKey": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/user/photo": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true,
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "base64": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/user/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/user/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "deprecated": true
+      }
+    },
+    "/api/subscription/{cpf}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "cpf",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/subscription/": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/subscription/courses": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/subscription/courses/{identifier}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/courses": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/courses/{identifier}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "identifier",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/trending": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/most-wanted": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/study-at-home": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/higher-wages": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/areas": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/course/find": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification-preference/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification-preference/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "example": "any"
+                  },
+                  "Content": {
+                    "example": "any"
+                  },
+                  "NotificationId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/{id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/read/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/all-read": {
+      "put": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/not-read/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/send-to-topic": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "topic": {
+                    "example": "any"
+                  },
+                  "title": {
+                    "example": "any"
+                  },
+                  "body": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/send-to-client": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "example": "any"
+                  },
+                  "title": {
+                    "example": "any"
+                  },
+                  "body": {
+                    "example": "any"
+                  },
+                  "data": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/subscribe-topic": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "example": "any"
+                  },
+                  "topic": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/unsubscribe-topic": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "example": "any"
+                  },
+                  "topic": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/notification/send-sms": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/register-app/": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/exam/eligible/{subscriptionKey}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "subscriptionKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/exam/instructions": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/exam/start/{subscriptionKey}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "subscriptionKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/exam/finalize/{subscriptionKey}": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "subscriptionKey",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/cep/{cep}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "cep",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/user/login": {
       "post": {
         "tags": [
@@ -1271,74 +3862,6 @@
         ]
       }
     },
-    "/api/v1/enrollment/{document}": {
-      "get": {
-        "tags": [
-          "Enrollment"
-        ],
-        "description": "Endpoint to sign in a specific Enrollment",
-        "parameters": [
-          {
-            "name": "document",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Invalid parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/response400"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/response400"
-                }
-              }
-            },
-            "schema": {
-              "$ref": "#/components/schemas/response400"
-            }
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Server errors",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/response500"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/response500"
-                }
-              }
-            },
-            "schema": {
-              "$ref": "#/components/schemas/response500"
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "deprecated": true
-      }
-    },
     "/api/v1/enrollment/{idOrigin}/details": {
       "get": {
         "tags": [
@@ -2465,272 +4988,22 @@
         ]
       }
     },
-    "/api/v2/enrollment/{document}": {
-      "get": {
-        "tags": [
-          "Enrollment"
-        ],
-        "description": "Endpoint to sign in a specific Enrollment",
+    "/api/v1/notification/read/{id}": {
+      "put": {
+        "description": "",
         "parameters": [
           {
-            "name": "document",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
-            },
-            "description": "Enrollment information."
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "idOrigin": {
-                            "type": "number",
-                            "example": 234523
-                          },
-                          "businessKey": {
-                            "type": "string",
-                            "example": "CPF_06780053601_OFFER_SRC_KROTON_b732d"
-                          },
-                          "enrollmentDate": {
-                            "type": "string",
-                            "example": "2023-01-16T14:11:58"
-                          },
-                          "enem": {
-                            "type": "object",
-                            "properties": {
-                              "active": {
-                                "type": "boolean",
-                                "example": false
-                              },
-                              "approved": {
-                                "type": "boolean",
-                                "example": false
-                              }
-                            }
-                          },
-                          "courseTypeName": {
-                            "type": "string",
-                            "example": "Bacharelado"
-                          },
-                          "unit": {
-                            "type": "string",
-                            "example": "CAMPO BELO/MG - I(11088903)U"
-                          },
-                          "modality": {
-                            "type": "string",
-                            "example": "A distância"
-                          },
-                          "shift": {
-                            "type": "string",
-                            "example": "Noite"
-                          },
-                          "monthlyPayment": {
-                            "type": "number",
-                            "example": 189
-                          },
-                          "courseName": {
-                            "type": "string",
-                            "example": "Administração"
-                          },
-                          "studentEnrollment": {
-                            "type": "object",
-                            "properties": {
-                              "enrollmentId": {
-                                "type": "number",
-                                "example": 45654645
-                              },
-                              "studentCode": {
-                                "type": "string",
-                                "example": "456454"
-                              },
-                              "studentName": {
-                                "type": "string",
-                                "example": "Marinalva Joana"
-                              },
-                              "studentEmail": {
-                                "type": "string",
-                                "example": "aljoana@gmail.com"
-                              },
-                              "studentDocument": {
-                                "type": "string",
-                                "example": "067.800.536-01"
-                              },
-                              "payment": {
-                                "type": "boolean",
-                                "example": true
-                              },
-                              "active": {
-                                "type": "boolean",
-                                "example": true
-                              }
-                            }
-                          },
-                          "classification": {
-                            "type": "string",
-                            "example": "STUDENT"
-                          },
-                          "paymentConfig": {
-                            "type": "object",
-                            "properties": {
-                              "pix": {
-                                "type": "object",
-                                "properties": {
-                                  "enabled": {
-                                    "type": "boolean",
-                                    "example": true
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "idOrigin": {
-                            "type": "number",
-                            "example": 234523
-                          },
-                          "businessKey": {
-                            "type": "string",
-                            "example": "CPF_06780053601_OFFER_SRC_KROTON_b732d"
-                          },
-                          "enrollmentDate": {
-                            "type": "string",
-                            "example": "2023-01-16T14:11:58"
-                          },
-                          "enem": {
-                            "type": "object",
-                            "properties": {
-                              "active": {
-                                "type": "boolean",
-                                "example": false
-                              },
-                              "approved": {
-                                "type": "boolean",
-                                "example": false
-                              }
-                            }
-                          },
-                          "courseTypeName": {
-                            "type": "string",
-                            "example": "Bacharelado"
-                          },
-                          "unit": {
-                            "type": "string",
-                            "example": "CAMPO BELO/MG - I(11088903)U"
-                          },
-                          "modality": {
-                            "type": "string",
-                            "example": "A distância"
-                          },
-                          "shift": {
-                            "type": "string",
-                            "example": "Noite"
-                          },
-                          "monthlyPayment": {
-                            "type": "number",
-                            "example": 189
-                          },
-                          "courseName": {
-                            "type": "string",
-                            "example": "Administração"
-                          },
-                          "studentEnrollment": {
-                            "type": "object",
-                            "properties": {
-                              "enrollmentId": {
-                                "type": "number",
-                                "example": 45654645
-                              },
-                              "studentCode": {
-                                "type": "string",
-                                "example": "456454"
-                              },
-                              "studentName": {
-                                "type": "string",
-                                "example": "Marinalva Joana"
-                              },
-                              "studentEmail": {
-                                "type": "string",
-                                "example": "aljoana@gmail.com"
-                              },
-                              "studentDocument": {
-                                "type": "string",
-                                "example": "067.800.536-01"
-                              },
-                              "payment": {
-                                "type": "boolean",
-                                "example": true
-                              },
-                              "active": {
-                                "type": "boolean",
-                                "example": true
-                              }
-                            }
-                          },
-                          "classification": {
-                            "type": "string",
-                            "example": "STUDENT"
-                          },
-                          "paymentConfig": {
-                            "type": "object",
-                            "properties": {
-                              "pix": {
-                                "type": "object",
-                                "properties": {
-                                  "enabled": {
-                                    "type": "boolean",
-                                    "example": true
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "xml": {
-                    "name": "main"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           },
           "400": {
             "description": "Invalid parameters",
@@ -2751,19 +5024,105 @@
             }
           },
           "401": {
-            "description": "Unathorized",
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/response401"
+                  "$ref": "#/components/schemas/response500"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/response401"
+                  "$ref": "#/components/schemas/response500"
                 }
               }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
             }
+          }
+        }
+      }
+    },
+    "/api/v1/notification/all-read": {
+      "put": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notification/": {
+      "post": {
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Server errors",
@@ -2784,11 +5143,75 @@
             }
           }
         },
-        "security": [
-          {
-            "bearerAuth": []
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "example": "any"
+                  },
+                  "content": {
+                    "example": "any"
+                  },
+                  "notificationId": {
+                    "example": "any"
+                  },
+                  "data": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
           }
-        ]
+        }
+      }
+    },
+    "/api/v1/course/areas": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response400"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response500"
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
       }
     },
     "/api/v2/enrollment/{idOrigin}/details": {

@@ -12,7 +12,7 @@
         "migrations": "npx knex migrate:latest",
         "seeds": "npx knex seed:run",
         "debug": "nodemon --inspect src/server.js",
-        "start-gendoc": "node src/docs/swagger.js"
+        "start-gendoc": "node src/docs/swagger.autogen.js"
     },
     "author": "Bluecore",
     "license": "ISC",
