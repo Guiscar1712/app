@@ -2409,16 +2409,13 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "in": {
+                  "Title": {
                     "example": "any"
                   },
-                  "description": {
+                  "Content": {
                     "example": "any"
                   },
-                  "required": {
-                    "example": "any"
-                  },
-                  "schema": {
+                  "NotificationId": {
                     "example": "any"
                   }
                 }
