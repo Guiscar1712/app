@@ -38,6 +38,13 @@ module.exports = class PaymentForPix {
       )
       const system = enrollment.sistema.toUpperCase()
       const businessKey = enrollment.inscricao.businessKey
+      const statusPayment = enrollment.matricula?.pagamento?.pago
+
+      if (statusPayment) {
+        throw new ValidationError('Pagamento não disponível', [
+          { message: 'Inscricao já possui pagamento efetuado ', status },
+        ])
+      }
 
       if (!businessKey) {
         this.LoggerService.setIndex({ system, businessKey, originId })
