@@ -11,6 +11,8 @@ router.put(
   TrackMiddleware.tracking,
   AuthMiddleware.isAuthenticated,
   NotificationController.readAll
+  // #swagger.tags = ['Notification']
+  /*  #swagger.security = [{ "token": [] }]  */
 )
 
 module.exports = router

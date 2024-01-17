@@ -29,7 +29,7 @@ router.patch(
             schema: { $ref: "#/definitions/personalData" }
     } */
 
-    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+    /*  #swagger.security = [{ "token": [] }]  */
 
     /*  #swagger.responses[200] = { 
         schema: {  $ref: "#/definitions/personalDataResponse" },

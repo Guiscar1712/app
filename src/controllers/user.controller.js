@@ -3,8 +3,6 @@ const { ApplyValidate } = require('../validators/user')
 
 module.exports = class UserController {
   static async get(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const data = await UserService.findById(request.params.id)
       response.json(data)
@@ -15,7 +13,6 @@ module.exports = class UserController {
   }
 
   static async getMe(request, response, next) {
-    // #swagger.tags = ['User']
     try {
       const data = await UserService.findById(request.user.id)
       response.json(data)
@@ -26,8 +23,6 @@ module.exports = class UserController {
   }
 
   static async list(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const data = await UserService.list()
       response.json(data)
@@ -38,8 +33,6 @@ module.exports = class UserController {
   }
 
   static async register(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const contract = ApplyValidate(request.body)
       if (!contract.isValid()) {
@@ -71,8 +64,6 @@ module.exports = class UserController {
   }
 
   static async login(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { email, password } = request.body
       const data = await UserService.login(email, password)
@@ -84,8 +75,6 @@ module.exports = class UserController {
   }
 
   static async loginFirebase(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { token } = request.headers
       const data = await UserService.loginFirebase(token)
@@ -97,8 +86,6 @@ module.exports = class UserController {
   }
 
   static async update(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const contract = ApplyValidate(request.body)
       if (!contract.isValid()) {
@@ -119,8 +106,6 @@ module.exports = class UserController {
   }
 
   static async getRecoveryKey(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { email } = request.body
       const data = await UserService.getRecovery(email)
@@ -132,8 +117,6 @@ module.exports = class UserController {
   }
 
   static async validateCode(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { email, code } = request.body
       const data = await UserService.validateCode(email, code)
@@ -145,8 +128,6 @@ module.exports = class UserController {
   }
 
   static async changePassword(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { email, code, password } = request.body
       const data = await UserService.changePassword(email, code, password)
@@ -158,8 +139,6 @@ module.exports = class UserController {
   }
 
   static async recoverPassword(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { cpf } = request.body
       const data = await UserService.recoverPassword(cpf)
@@ -171,8 +150,6 @@ module.exports = class UserController {
   }
 
   static async delete(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       await UserService.delete(request.user.id)
       response.status(202).send()
@@ -183,8 +160,6 @@ module.exports = class UserController {
   }
 
   static async photo(request, response, next) {
-    // #swagger.tags = ['User']
-    // #swagger.deprecated = true
     try {
       const { base64 } = request.body
       const data = await UserService.photo(request.user.id, base64)

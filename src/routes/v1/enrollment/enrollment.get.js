@@ -11,6 +11,9 @@ router.get(
   trackMiddleware.tracking,
   authMiddleware.isAuthenticated,
   enrollmentsController.get,
+  /*  #swagger.tags = ['Enrollment']
+        #swagger.description = 'Endpoint to sign in a specific Enrollment' */
+  /*  #swagger.security = [{ "token": [] }]  */
   errorHandler
 )
 

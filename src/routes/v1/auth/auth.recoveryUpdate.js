@@ -15,7 +15,7 @@ router.post(
     /* 	#swagger.tags = ['Auth']
         #swagger.description = 'Endpoint to request authentication token' */
 
-    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+    /*  #swagger.security = [{ "token": [] }]  */
 
     /*	#swagger.parameters['obj'] = {
             in: 'body',

@@ -21,7 +21,7 @@ router.get(
             required: true
     } */
 
-    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+    /*  #swagger.security = [{ "token": [] }]  */
 
     /*  #swagger.responses[200] = { 
         schema: {  $ref: "#/definitions/personalDataResponse" },

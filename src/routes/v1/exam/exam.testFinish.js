@@ -21,7 +21,7 @@ router.post(
             required: true
     } */
 
-    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+    /*  #swagger.security = [{ "token": [] }]  */
 
     /*  #swagger.responses[200] = { 
         schema: { "success": true,

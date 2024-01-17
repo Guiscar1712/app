@@ -1,7 +1,18 @@
 const express = require('express')
 const router = express.Router()
 
-router.use('/', require('./legacy'))
+router.use(
+  '/',
+  require('./legacy')
+  /*  #swagger.responses[400] = { 
+        schema: { },
+        description: "Invalid parameters" } */
+
+  /*  #swagger.responses[500] = { 
+        schema: {  },
+        description: "Server errors" } */
+)
+
 router.use(
   '/v1',
   require('./v1')

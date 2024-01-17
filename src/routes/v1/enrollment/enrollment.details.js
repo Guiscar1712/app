@@ -15,7 +15,7 @@ router.get(
   (req, res, next) => {
     /*  #swagger.tags = ['Enrollment']
         #swagger.description = 'Endpoint to sign in a specific Enrollment' */
-    /*  #swagger.security = [{ "bearerAuth": [] }]  */
+    /*  #swagger.security = [{ "token": [] }]  */
     // #swagger.deprecated = true
     const { EnrollmentsController } = req.container.cradle
     EnrollmentsController.getDetails(req, res, next)

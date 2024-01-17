@@ -11,6 +11,13 @@ router.put(
   TrackMiddleware.tracking,
   AuthMiddleware.isAuthenticated,
   NotificationController.read
+  // #swagger.tags = ['Notification']
+  /*  #swagger.security = [{ "token": [] }]  */
+  /*  #swagger.parameters['id'] = {
+            in: 'path',
+            description: 'Notification information.',
+            required: true
+    } */
 )
 
 module.exports = router
