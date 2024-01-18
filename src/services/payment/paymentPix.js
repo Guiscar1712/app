@@ -7,6 +7,8 @@ const {
   ServerError,
 } = require('../../utils/errors')
 
+const constants = require('../../constants/payment.constants')
+
 module.exports = class PaymentForPix {
   constructor({
     LoggerService,
@@ -27,9 +29,11 @@ module.exports = class PaymentForPix {
     try {
       const status = await this.PaymentPixStatusService.get(originId)
       if (status?.status === 'PAID') {
-        throw new ValidationError('Pagamento não disponível', [
-          { message: 'Pagamento não disponível', status },
-        ])
+        throw new ValidationError(
+          'Pagamento não disponível',
+          [constants.PAYMENT_PAID],
+          constants.code
+        )
       }
 
       const enrollment = await retry(
@@ -41,16 +45,20 @@ module.exports = class PaymentForPix {
       const statusPayment = enrollment.matricula?.pagamento?.pago
 
       if (statusPayment) {
-        throw new ValidationError('Pagamento não disponível', [
-          { message: 'Inscricao já possui pagamento efetuado ', status },
-        ])
+        throw new ValidationError(
+          'Pagamento não disponível',
+          [constants.PAYMENT_PAID],
+          constants.code
+        )
       }
 
       if (!businessKey) {
         this.LoggerService.setIndex({ system, businessKey, originId })
-        throw new ValidationError('Pagamento não disponível', [
-          { message: 'Pagamento não disponível', status, system, enrollment },
-        ])
+        throw new ValidationError(
+          'Pagamento não disponível',
+          [constants.REQUIRED_BUSINESSKEY],
+          constants.code
+        )
       }
 
       this.LoggerService.setIndex({ system, businessKey, originId })
