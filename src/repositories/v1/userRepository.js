@@ -133,7 +133,9 @@ function format(row) {
     cpf: row.CPF,
     phone: row.Phone,
     gender: row.Gender,
-    birthday: row.BirthDay ? moment(row.BirthDay).format('DD/MM/YYYY') : null,
+    birthday: row.BirthDay
+      ? moment(row.BirthDay).add(3, 'hours').format('DD/MM/YYYY')
+      : null,
     photo: row.Photo,
     city: row.City,
     address: row.Address,
