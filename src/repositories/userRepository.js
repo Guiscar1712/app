@@ -4,16 +4,16 @@ const { SimpleQuery } = require('../database')
 const table = 'User'
 
 module.exports = class UserRepository {
-  static async findBy (query, transaction) {
+  static async findBy(query, transaction) {
     const row = await SimpleQuery.findBy(query, table, transaction)
     return format(row)
   }
 
-  static async deleteBy (query, transaction) {
+  static async deleteBy(query, transaction) {
     return await SimpleQuery.deleteBy(query, table, transaction)
   }
 
-  static async filterBy (query, transaction) {
+  static async filterBy(query, transaction) {
     const rows = await SimpleQuery.filterBy(query, table, transaction)
     const items = []
     for (const row of rows) {
@@ -22,23 +22,23 @@ module.exports = class UserRepository {
     return items
   }
 
-  static async findById (id, transaction) {
+  static async findById(id, transaction) {
     return await this.findBy({ Id: id }, transaction)
   }
 
-  static async list (transaction) {
+  static async list(transaction) {
     return await this.filterBy({}, transaction)
   }
 
-  static async insert (entity, transaction) {
+  static async insert(entity, transaction) {
     return format(await SimpleQuery.insert(entity, table, transaction))
   }
 
-  static async update (id, entity, transaction) {
+  static async update(id, entity, transaction) {
     return await SimpleQuery.update({ id }, entity, table, transaction)
   }
 
-  static async findByOr (cpf, email, phone, transaction) {
+  static async findByOr(cpf, email, phone, transaction) {
     const result = await (transaction || database)(table)
       .where(cpf)
       .orWhere(email)
@@ -53,7 +53,7 @@ module.exports = class UserRepository {
   }
 }
 
-function format (row) {
+function format(row) {
   if (!row) {
     return null
   }
@@ -65,7 +65,9 @@ function format (row) {
     cpf: row.CPF,
     phone: row.Phone,
     gender: row.Gender,
-    birthday: row.BirthDay ? moment(row.BirthDay).format('DD/MM/YYYY') : null,
+    birthday: row.BirthDay
+      ? moment(row.BirthDay).add(3, 'hours').format('DD/MM/YYYY')
+      : null,
     photo: row.Photo,
     city: row.City,
     address: row.Address,
@@ -77,6 +79,6 @@ function format (row) {
     alertWarnings: row.AlertWarnings,
     alertTeatchers: row.AlertTeatchers,
     zipcode: row.Zipcode,
-    state: row.State
+    state: row.State,
   }
 }
