@@ -7,8 +7,8 @@ exports.up = function (knex) {
     table.string('URL', 2048).notNullable()
     table.boolean('Enabled').notNullable()
     table.datetime('CreatedAt').defaultTo(knex.fn.now())
-    table.datetime('UpdatedAt').defaultTo(knex.fn.now())
-    table.datetime('DeleteAt').defaultTo(knex.fn.now())
+    table.datetime('UpdatedAt')
+    table.datetime('DeleteAt')
   })
 }
 
