@@ -51,7 +51,7 @@ module.exports = class CourseService {
 
     const coursesPreview = await coursePreviewRepository.findByIn(identifier)
 
-     aindacourse.coursePreview = !!coursesPreview[0]
+    course.coursePreview = !!coursesPreview[0]
     course.coursePreviewURL = coursesPreview[0]?.url
 
     return getCourseIdentifierDTO(course)
