@@ -19,6 +19,7 @@ module.exports = class PaymentController {
         originId,
         request.user.id
       )
+
       step.value.addData(data)
       this.LoggerService.finalizeStep(step)
       next(data)

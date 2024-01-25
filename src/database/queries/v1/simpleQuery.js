@@ -16,6 +16,19 @@ module.exports = class SimpleQuery {
     }
   }
 
+  static async findByIn(queryFields, queryValues, from, transaction) {
+    try {
+      const result = await (transaction || database)
+        .from(from)
+        .whereIn(queryFields, queryValues)
+
+      const data = result !== undefined ? result : []
+      return data
+    } catch (error) {
+      throw new RepositoryError(error.message, error)
+    }
+  }
+
   static async deleteBy(query, from, transaction) {
     try {
       const data = await (transaction || database)
