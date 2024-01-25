@@ -10,6 +10,7 @@ router.use('/payment', require('./payment.route'))
 router.use('/contract', require('./contract.route'))
 router.use('/exam', require('./exam.route'))
 router.use('/course-preview-lead', require('./coursePreviewLead.route'))
+router.use('/settings', require('./pageSectionFeature.route'))
 
 //Legado => Sem Logs
 router.use('/notification', require('./notification.route'), errorHandler)
