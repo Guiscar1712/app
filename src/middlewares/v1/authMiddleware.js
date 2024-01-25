@@ -38,6 +38,32 @@ module.exports = class AuthMiddleware {
     }
   }
 
+  optionalAuthentication = async (req, res, next) => {
+    const step = this.LoggerService.addStep(
+      'AuthMiddlewareOptionalAuthentication'
+    )
+    try {
+      this.getUserAuthenticated(req)
+        .then((decoded) => {
+          req.user = decoded
+          this.LoggerService.setIndex({
+            userId: decoded.id,
+            email: decoded.email,
+            document: decoded.cpf,
+          })
+          step.value.addData({ isAuthenticated: true, decoded })
+          next()
+        })
+        .catch((err) => {
+          next()
+        })
+    } catch (error) {
+      next(error)
+    } finally {
+      this.LoggerService.finalizeStep(step)
+    }
+  }
+
   isLocalhost = (req, res, next) => {
     if (
       req.connection.remoteAddress === '::ffff:127.0.0.1' ||

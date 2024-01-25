@@ -6,11 +6,16 @@ const {
   notificationDelete,
   notificationRead,
   notificationAllRead,
-  notificationNotRead
+  notificationNotRead,
 } = require('./../../services/notification')
 
 module.exports = class NotificationController {
-  static async save (request, response, next) {
+  constructor({ LoggerService, NotificationList }) {
+    this.LoggerService = LoggerService
+    this.NotificationList = NotificationList
+  }
+
+  static async save(request, response, next) {
     try {
       const { title, content, notificationId, data } = request.body
 
@@ -18,14 +23,20 @@ module.exports = class NotificationController {
         throw new ValidationError('Parâmetros inválidos', [{}])
       }
 
-      const notification = await notificationSave(title, content, notificationId, data, request.user.id)
+      const notification = await notificationSave(
+        title,
+        content,
+        notificationId,
+        data,
+        request.user.id
+      )
       return response.status(201).json(notification)
     } catch (error) {
       next(error)
     }
   }
 
-  static async get (request, response, next) {
+  static async get(request, response, next) {
     try {
       const data = await notificationList(request.user.id)
       return response.status(200).json(data)
@@ -34,7 +45,19 @@ module.exports = class NotificationController {
     }
   }
 
-  static async getById (request, response, next) {
+  list = async (request, response, next) => {
+    const step = this.LoggerService.addStep('NotificationControllerList')
+    try {
+      const data = await this.NotificationList.get(request.user.id)
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
+      next(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async getById(request, response, next) {
     try {
       const data = await notificationById(request.params.id, request.user.id)
       return response.status(200).json(data)
@@ -43,7 +66,7 @@ module.exports = class NotificationController {
     }
   }
 
-  static async delete (request, response, next) {
+  static async delete(request, response, next) {
     try {
       if (!request.params.id) {
         throw new ValidationError('Parâmetros inválidos', [{}])
@@ -55,7 +78,7 @@ module.exports = class NotificationController {
     }
   }
 
-  static async read (request, response, next) {
+  static async read(request, response, next) {
     try {
       if (!request.params.id) {
         throw new ValidationError('Parâmetros inválidos', [{}])
@@ -67,7 +90,7 @@ module.exports = class NotificationController {
     }
   }
 
-  static async readAll (request, response, next) {
+  static async readAll(request, response, next) {
     try {
       const data = await notificationAllRead(request.user.id)
       return response.status(200).send(data)
@@ -76,7 +99,7 @@ module.exports = class NotificationController {
     }
   }
 
-  static async readNot (request, response, next) {
+  static async readNot(request, response, next) {
     try {
       if (!request.params.id) {
         throw new ValidationError('Parâmetros inválidos', [{}])
