@@ -21,6 +21,8 @@ module.exports = (item) => ({
   courseSubjectsDescription: htmltoList(item.CourseSubjectsDescription),
   marketCall: item.MarketCall || '',
   marketDescription: item.MarketDescription,
+  coursePreview: item.coursePreview,
+  coursePreviewURL: item.coursePreviewURL,
   relatedCourses: item.RelatedCourses.length
     ? item.RelatedCourses.map((r) => ({
         identifier: r.Identifier,
