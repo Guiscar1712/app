@@ -4,7 +4,6 @@ class CoursePreviewLeadModel {
     this.Name = data.name
     this.Email = data.email
     this.Phone = data.phone
-    this.CoursePreviewId = data.coursePreviewId
   }
 }
 
