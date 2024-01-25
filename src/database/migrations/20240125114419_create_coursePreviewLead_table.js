@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.string('Email', 255).notNullable()
     table.string('Phone', 20).notNullable()
     table.datetime('CreatedAt').defaultTo(knex.fn.now())
-    table.datetime('UpdatedAt').defaultTo(knex.fn.now())
+    table.datetime('UpdatedAt')
   })
 }
 
