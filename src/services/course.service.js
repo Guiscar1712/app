@@ -37,7 +37,7 @@ module.exports = class CourseService {
   }
 
   static async getCourse({ identifier }) {
-    const item = (
+    const course = (
       await axios.get(
         `${process.env.KROTON_API_BASE_URL}/cursos/${identifier}/complete`,
         {
@@ -49,7 +49,12 @@ module.exports = class CourseService {
       )
     ).data
 
-    return getCourseIdentifierDTO(item)
+    const coursesPreview = await coursePreviewRepository.findByIn(identifier)
+
+    course.coursePreview = !!coursesPreview[0]
+    course.coursePreviewURL = coursesPreview[0]?.url
+
+    return getCourseIdentifierDTO(course)
   }
 
   static async getCourseTrending() {
