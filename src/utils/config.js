@@ -3,6 +3,7 @@ const Util = require('./util')
 
 module.exports = {
   jwtSecret: process.env.JWT_SECRET,
+  jwtExpiresInRecovery: process.env.JWT_EXPIRES_RECOVERY,
   support: process.env.SUPPORT,
   sendGrid: {
     key: process.env.SENDGRID_KEY,
@@ -35,6 +36,12 @@ module.exports = {
       delay: Util.toNumber(process.env.KROTON_INGRESSO_DELAY_RETRIES) || 100,
       enrollments_search_months_ago:
         Util.toNumber(process.env.KROTON_INGRESSO_SEARCH_MONTHS_AGO) || 12,
+    },
+    backbone: {
+      url: process.env.BACKBONE_API_BASE_URL,
+      apim: process.env.BACKBONE_API_APIM,
+      key: process.env.BACKBONE_API_KEY,
+      distance: process.env.AUTH_RECOVERY_DISTANCE || 1,
     },
     ci360: {
       url: process.env.KROTON_CI369_URI,

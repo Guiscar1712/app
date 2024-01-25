@@ -12,6 +12,7 @@ module.exports = class Ingresso {
     ProvaFinalizar,
     ProvaElegibilidade,
     ProvaConsulta,
+    Backbone,
   }) {
     this.LoggerService = LoggerService
     this.IngressoGetDadosPagamento = IngressoGetDadosPagamento
@@ -25,6 +26,7 @@ module.exports = class Ingresso {
     this.ProvaFinalizar = ProvaFinalizar
     this.ProvaElegibilidade = ProvaElegibilidade
     this.ProvaConsulta = ProvaConsulta
+    this.Backbone = Backbone
   }
 
   personalDataGet = async (cpf) => {
@@ -69,5 +71,9 @@ module.exports = class Ingresso {
 
   provaConsulta = async (subscriptionKey) => {
     return await this.ProvaConsulta.request(subscriptionKey)
+  }
+
+  backbone = async (document) => {
+    return await this.Backbone.request(document)
   }
 }

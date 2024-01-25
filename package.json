@@ -1,26 +1,25 @@
 {
     "name": "kroton-vitrine-api",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "description": "Kroton vitrine node api ",
     "main": "server.js",
     "scripts": {
         "start": "node src/server.js",
-        "worker-receiver": "node src/worker-receiver.js",
-        "worker-notification": "node src/worker-notification.js",
         "dev": "npm run develop",
         "develop": "nodemon src/server.js",
         "lint": "npx eslint ./src",
         "lint:fix": "npx eslint ./src --fix",
         "migrations": "npx knex migrate:latest",
         "seeds": "npx knex seed:run",
-        "debug": "nodemon --inspect src/server.js"
+        "debug": "nodemon --inspect src/server.js",
+        "start-gendoc": "node src/docs/swagger.autogen.js"
     },
     "author": "Bluecore",
     "license": "ISC",
     "dependencies": {
         "@azure/service-bus": "^7.9.0",
-        "@azure/storage-blob": "^12.12.0",
-        "@sendgrid/mail": "^7.7.0",
+        "@azure/storage-blob": "^12.17.0",
+        "@sendgrid/mail": "^8.1.0",
         "awilix": "^8.0.1",
         "azure-storage": "^2.10.7",
         "bcrypt": "^5.1.0",
@@ -33,7 +32,7 @@
         "express-validator": "^6.14.2",
         "firebase": "^9.17.2",
         "firebase-admin": "^11.5.0",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.2",
         "knex": "^2.3.0",
         "lodash": "^4.17.21",
         "md5": "^2.3.0",
@@ -45,7 +44,10 @@
         "on-finished": "^2.4.1",
         "uuid": "^9.0.0",
         "winston": "^3.8.2",
-        "winston-daily-rotate-file": "^4.7.1"
+        "winston-daily-rotate-file": "^4.7.1",
+        "xml2js": "^0.6.2",
+        "swagger-autogen": "^2.23.4",
+        "swagger-ui-express": "^4.1.4"
     },
     "devDependencies": {
         "eslint": "^8.49.0",
@@ -56,7 +58,7 @@
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-prettier": "^5.0.0",
         "eslint-plugin-promise": "^6.1.1",
-        "nodemon": "^2.0.20",
+        "nodemon": "^3.0.2",
         "prettier": "^3.0.3"
     }
 }

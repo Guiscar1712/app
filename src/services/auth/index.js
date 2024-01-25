@@ -4,12 +4,16 @@ module.exports = class AuthService {
     AuthRequestService,
     AuthLoginService,
     AuthRegisterService,
+    AuthRecoveryService,
+    AuthUpdateService,
     LoggerService,
   }) {
     this.AuthValidatorService = AuthValidatorService
     this.AuthRequestService = AuthRequestService
     this.AuthLoginService = AuthLoginService
     this.AuthRegisterService = AuthRegisterService
+    this.AuthRecoveryService = AuthRecoveryService
+    this.AuthUpdateService = AuthUpdateService
     this.LoggerService = LoggerService
   }
 
@@ -27,5 +31,13 @@ module.exports = class AuthService {
 
   register = async (authRegister) => {
     return await this.AuthRegisterService.request(authRegister)
+  }
+
+  recovery = async (authRecovery) => {
+    return await this.AuthRecoveryService.request(authRecovery)
+  }
+
+  update = async (user, authUpdate) => {
+    return await this.AuthUpdateService.request(user, authUpdate)
   }
 }
