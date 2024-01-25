@@ -1,4 +1,4 @@
-const coursePreviewLeadResponse = require('./coursePreviewLeadResponse.Dto')
+const CoursePreviewLeadModel = require('./coursePreviewLeadModel.Dto')
 module.exports = {
-  coursePreviewLeadResponse,
+  CoursePreviewLeadModel,
 }

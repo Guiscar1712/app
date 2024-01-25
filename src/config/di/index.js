@@ -10,6 +10,8 @@ const payment = require('./modules/payment')
 const middlewares = require('./modules/middlewares')
 const exam = require('./modules/exam')
 
+const coursePreviewLead = require('./modules/coursePreviewLead')
+
 const clients = require('./modules/clients')
 const cognaPayClient = require('./modules/clients/cognaPayClient')
 const ingressoClient = require('./modules/clients/ingressoClient')
@@ -22,6 +24,7 @@ container.register(user)
 container.register(auth)
 container.register(enrollments)
 container.register(exam)
+container.register(coursePreviewLead)
 container.register(payment)
 
 container.register(clients)

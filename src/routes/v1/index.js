@@ -9,6 +9,7 @@ router.use('/enrollment', require('./enrollment.route'))
 router.use('/payment', require('./payment.route'))
 router.use('/contract', require('./contract.route'))
 router.use('/exam', require('./exam.route'))
+router.use('/course-preview-lead', require('./coursePreviewLead.route'))
 
 //Legado => Sem Logs
 router.use('/notification', require('./notification.route'), errorHandler)
