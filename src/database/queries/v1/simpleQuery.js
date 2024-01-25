@@ -2,7 +2,7 @@ const database = require('../../config.database')
 const { RepositoryError } = require('../../../utils/errors')
 
 module.exports = class SimpleQuery {
-  static async findBy (query, from, transaction) {
+  static async findBy(query, from, transaction) {
     try {
       const result = await (transaction || database)
         .from(from)
@@ -16,7 +16,20 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async deleteBy (query, from, transaction) {
+  static async findByIn(queryFields, queryValues, from, transaction) {
+    try {
+      const result = await (transaction || database)
+        .from(from)
+        .whereIn(queryFields, queryValues)
+
+      const data = result !== undefined ? result : []
+      return data
+    } catch (error) {
+      throw new RepositoryError(error.message, error)
+    }
+  }
+
+  static async deleteBy(query, from, transaction) {
     try {
       const data = await (transaction || database)
         .from(from)
@@ -28,11 +41,9 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async filterBy (query, from, transaction) {
+  static async filterBy(query, from, transaction) {
     try {
-      const result = await (transaction || database)
-        .from(from)
-        .where(query)
+      const result = await (transaction || database).from(from).where(query)
 
       const data = result !== undefined ? result : []
       return data
@@ -41,12 +52,9 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async insert (entity, from, transaction) {
+  static async insert(entity, from, transaction) {
     try {
-      const data = await (transaction || database)(from).insert(
-        entity,
-        '*'
-      )
+      const data = await (transaction || database)(from).insert(entity, '*')
 
       return data[0]
     } catch (error) {
@@ -54,11 +62,9 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async update (query, entity, from, transaction) {
+  static async update(query, entity, from, transaction) {
     try {
-      await (transaction || database)(from)
-        .update(entity)
-        .where(query)
+      await (transaction || database)(from).update(entity).where(query)
 
       return { ...query, ...entity }
     } catch (error) {
