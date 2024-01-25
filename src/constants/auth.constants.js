@@ -23,6 +23,24 @@ const EXIST_DOCUMENT = { code: 2214, message: 'CPF já cadastrado' }
 const EXIST_EMAIL = { code: 2215, message: 'E-mail já cadastrado' }
 const EXIST_PHONE = { code: 2216, message: 'Telefone já cadastrado' }
 
+const REQUIRED_MOTHER_NAME = {
+  code: 2217,
+  message: 'Nome da mãe é obrigatório',
+}
+
+const REQUIRED_BIRTHDAY = {
+  code: 2218,
+  message: 'Data de nascimento é obrigatório',
+}
+
+const INVALID_MOTHER_NAME = { code: 2219, message: 'Nome da mãe inválido' }
+const INVALID_BIRTHDAY = { code: 22020, message: 'Data de nascimento inválido' }
+
+const UNAUTHORIZED = {
+  code: 2288,
+  message: `O Usuário não foi autenticado`,
+}
+
 const DIVERGENT_REGISTRATION = {
   code: 2289,
   message: `O e-mail informado na inscrição (%s) não confere com o CPF cadastrado.`,
@@ -51,6 +69,11 @@ module.exports = {
   EXIST_DOCUMENT,
   EXIST_EMAIL,
   EXIST_PHONE,
+  REQUIRED_MOTHER_NAME,
+  REQUIRED_BIRTHDAY,
+  INVALID_MOTHER_NAME,
+  INVALID_BIRTHDAY,
+  UNAUTHORIZED,
   DIVERGENT_REGISTRATION,
   NOT_IMPLEMENTED_PROVIDER,
 }

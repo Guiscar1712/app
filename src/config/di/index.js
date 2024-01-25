@@ -11,6 +11,7 @@ const middlewares = require('./modules/middlewares')
 const exam = require('./modules/exam')
 
 const coursePreviewLead = require('./modules/coursePreviewLead')
+const notification = require('./modules/notification')
 const settings = require('./modules/settings')
 
 const clients = require('./modules/clients')
@@ -28,6 +29,7 @@ container.register(exam)
 container.register(coursePreviewLead)
 container.register(settings)
 container.register(payment)
+container.register(notification)
 
 container.register(clients)
 container.register(contract)

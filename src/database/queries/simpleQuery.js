@@ -1,7 +1,7 @@
 const database = require('../config.database')
 
 module.exports = class SimpleQuery {
-  static async findBy (query, from, transaction) {
+  static async findBy(query, from, transaction) {
     try {
       const result = await (transaction || database)
         .from(from)
@@ -16,7 +16,7 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async deleteBy (query, from, transaction) {
+  static async deleteBy(query, from, transaction) {
     try {
       const result = await (transaction || database)
         .from(from)
@@ -31,11 +31,9 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async filterBy (query, from, transaction) {
+  static async filterBy(query, from, transaction) {
     try {
-      const result = await (transaction || database)
-        .from(from)
-        .where(query)
+      const result = await (transaction || database).from(from).where(query)
 
       const data = result !== undefined ? result : []
       return data
@@ -45,12 +43,24 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async insert (entity, from, transaction) {
+  static async filterAndOrderBy(query, sort, from, transaction) {
     try {
-      const result = await (transaction || database)(from).insert(
-        entity,
-        '*'
-      )
+      const result = await (transaction || database)
+        .from(from)
+        .where(query)
+        .orderBy(sort)
+
+      const data = result !== undefined ? result : []
+      return data
+    } catch (error) {
+      console.log(error)
+      return error.code + ':' + error.message
+    }
+  }
+
+  static async insert(entity, from, transaction) {
+    try {
+      const result = await (transaction || database)(from).insert(entity, '*')
 
       const data = result !== undefined ? result : null
       return data[0]
@@ -60,7 +70,7 @@ module.exports = class SimpleQuery {
     }
   }
 
-  static async update (query, entity, from, transaction) {
+  static async update(query, entity, from, transaction) {
     try {
       const result = await (transaction || database)(from)
         .update(entity)

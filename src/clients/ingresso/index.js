@@ -7,6 +7,7 @@ const contratoAceite = require('./contratoAceite')
 const contratoPorId = require('./contratoPorContratoId')
 const contratosPorMatricula = require('./contratosPorMatricula')
 const contratosPorBusinessKey = require('./contratosPorBusinessKey')
+const getBackbone = require('./backbone')
 
 module.exports = {
   getToken,
@@ -17,5 +18,6 @@ module.exports = {
   contratoAceite,
   contratoPorId,
   contratosPorMatricula,
-  contratosPorBusinessKey
+  contratosPorBusinessKey,
+  getBackbone,
 }

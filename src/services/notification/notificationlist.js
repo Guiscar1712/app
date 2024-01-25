@@ -1,7 +1,8 @@
-const notificationRepository = require('../../repositories/v1/notificationRepository')
+const notificationRepository = require('../../repositories/notificationRepository')
 
-async function notificationList (UserId) {
-  return await notificationRepository.filterBy({ UserId })
+async function notificationList(UserId) {
+  const order = { column: 'id', order: 'desc' }
+  return await notificationRepository.filterBy({ UserId }, [order])
 }
 
 module.exports = notificationList

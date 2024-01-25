@@ -1,5 +1,7 @@
 const config = require('../../utils/config')
 const jwt = require('jsonwebtoken')
+const constants = require('../../constants/auth.constants')
+const { ValidationError } = require('../../utils/errors')
 
 module.exports = class AuthMiddleware {
   constructor({ LoggerService }) {
@@ -21,8 +23,13 @@ module.exports = class AuthMiddleware {
           next()
         })
         .catch((err) => {
-          step.value.addData({ isAuthenticated: false, err })
-          res.status(401).send(err)
+          const error = new ValidationError(
+            'Unauthorized',
+            [constants.UNAUTHORIZED],
+            constants.CODE
+          )
+          step.value.addData({ isAuthenticated: false, error })
+          res.status(401).send(error)
         })
     } catch (error) {
       next(error)

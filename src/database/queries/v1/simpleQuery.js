@@ -52,6 +52,20 @@ module.exports = class SimpleQuery {
     }
   }
 
+  static async filterAndOrderBy(query, sort, from, transaction) {
+    try {
+      const result = await (transaction || database)
+        .from(from)
+        .where(query)
+        .orderBy(sort)
+
+      const data = result !== undefined ? result : []
+      return data
+    } catch (error) {
+      throw new RepositoryError(error.message, error)
+    }
+  }
+
   static async insert(entity, from, transaction) {
     try {
       const data = await (transaction || database)(from).insert(entity, '*')

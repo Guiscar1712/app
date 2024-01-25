@@ -1,7 +1,7 @@
 const IngressoKrotonService = require('../services/ingressoKroton.service')
 
 module.exports = class SubscriptionController {
-  static async get (request, response, next) {
+  static async get(request, response, next) {    
     try {
       let cpf = request.params.cpf
 
@@ -20,20 +20,23 @@ module.exports = class SubscriptionController {
       // response.status(400).json({ success: false })
     }
 
-    function formatCpf (cpf) {
+    function formatCpf(cpf) {
       const cnpjCpf = cpf.replace(/\D/g, '')
 
       if (cnpjCpf.length === 11) {
-        return cnpjCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '\$1.\$2.\$3-\$4')
+        return cnpjCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, '$1.$2.$3-$4')
       }
 
       throw new Error('CPF inválido!')
     }
   }
 
-  static async post (request, response, next) {
+  static async post(request, response, next) {
+    
     try {
-      const subscription = await IngressoKrotonService.createSubscription(request.body)
+      const subscription = await IngressoKrotonService.createSubscription(
+        request.body
+      )
       response.json(subscription)
     } catch (error) {
       if (error.response) {
