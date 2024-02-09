@@ -91,8 +91,13 @@ module.exports = {
     contract.isRequired(value.number, '40103', 'number is required')
     contract.isRequired(value.city, '40103', 'city is required')
     contract.isRequired(value.state, '40103', 'state is required')
-    contract.isRequired(value.zip, '40103', 'zip is required')
-    contract.isRequired(value.zipFormated, '40103', 'zipFormated is required')
+    
+    //===========================================================================
+    //A validação de CEP está sendo removida para testes (ID Monday: 6026658532) 
+    //contract.isRequired(value.zip, '40103', 'zip is required')
+    //contract.isRequired(value.zipFormated, '40103', 'zipFormated is required')
+    //===========================================================================
+
     contract.isRequired(value.country, '40103', 'country is required')
     contract.isRequired(value.neighborhood, '40103', 'neighborhood is required')
     return contract
