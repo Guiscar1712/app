@@ -6,7 +6,7 @@ const {
   DiscountValidator,
   StudentValidator,
   SchoolValidator,
-  AddressValidator
+  AddressValidator,
 } = require('./PaymentRequest.Validator')
 
 let errors = {}
@@ -33,7 +33,7 @@ class PaymentRequest {
   redirectUrl
   adjustLayoutToIFrame
 
-  constructor (data) {
+  constructor(data) {
     errors = {}
     errorsAddress = []
     errorsChargesItems = []
@@ -76,7 +76,7 @@ class PaymentRequest {
 
     const discount = {
       amount: data.amount,
-      limitDate: data.limitDate
+      limitDate: data.limitDate,
     }
 
     const contract = DiscountValidator(discount)
@@ -94,7 +94,7 @@ class PaymentRequest {
       smsNotification: data.smsNotification,
       sendCheckoutNotification: data.sendCheckoutNotification,
       expirationInDays: data.expirationInDays,
-      challenge: this._setLinkCheckoutChallenge(data.challenge)
+      challenge: this._setLinkCheckoutChallenge(data.challenge),
     }
 
     return linkCheckout
@@ -104,7 +104,7 @@ class PaymentRequest {
     const challenge = {
       question: data.question,
       answer: data.answer,
-      useCaptcha: data.useCaptcha
+      useCaptcha: data.useCaptcha,
     }
     return challenge
   }
@@ -122,7 +122,7 @@ class PaymentRequest {
           chargeReference: element.chargeReference,
           description: element.description,
           course: this._setChargesCourse(element.course),
-          items: this._setChargesItems(element.items)
+          items: this._setChargesItems(element.items),
         }
 
         charges.push(charge)
@@ -150,7 +150,7 @@ class PaymentRequest {
   _setChargesCourse(data) {
     const course = {
       courseReference: data.courseReference,
-      name: data.name
+      name: data.name,
     }
 
     return course
@@ -177,7 +177,7 @@ class PaymentRequest {
         groupDefinition: this._setChargesItemsGroupDefinition(
           element.groupDefinition
         ),
-        issueDate: element.issueDate
+        issueDate: element.issueDate,
       }
 
       items.push(item)
@@ -197,7 +197,7 @@ class PaymentRequest {
       key: data.key,
       order: data.order,
       description: data.description,
-      sign: data.sign
+      sign: data.sign,
     }
 
     return groupDefinition
@@ -215,7 +215,7 @@ class PaymentRequest {
       subscription: data.subscription,
       name: data.name,
       email: data.email,
-      address: this._setAddress(data.address)
+      address: this._setAddress(data.address),
     }
 
     if (student.ra && student.subscription) {
@@ -248,7 +248,7 @@ class PaymentRequest {
     const school = {
       name: data.name,
       cnpj: data.cnpj,
-      address: this._setAddress(data.address)
+      address: this._setAddress(data.address),
     }
 
     const contract = SchoolValidator(school)
@@ -274,16 +274,18 @@ class PaymentRequest {
       return null
     }
 
+    const zipCode = data.zip || '00000-000'
+
     const address = {
       street: data.street,
       number: data.number,
       complement: data.complement,
       city: data.city,
       state: data.state,
-      zip: data.zip,
-      zipFormated: data.zip,
+      zip: zipCode,
+      zipFormated: zipCode,
       country: data.country,
-      neighborhood: data.neighborhood
+      neighborhood: data.neighborhood,
     }
 
     const contract = AddressValidator(address)
