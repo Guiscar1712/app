@@ -93,6 +93,10 @@ module.exports = class LoggerService {
   }
 
   setIndex(data) {
+    if (data.document) {
+      data.document = Util.getNumbers(data.document)
+    }
+
     this.Log.content.setIndex(data)
   }
 
