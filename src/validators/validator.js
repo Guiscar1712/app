@@ -50,6 +50,15 @@ ValidationContract.prototype.isEmail = (value, code, message) => {
   }
 }
 
+ValidationContract.prototype.isPhone = (value, code, message) => {
+  // eslint-disable-next-line prefer-regex-literals
+  const phone = value.replace(/\D/g, '')
+
+  if (phone.length !== 10 && phone.length !== 11) {
+    errors.push({ code, message })
+  }
+}
+
 ValidationContract.prototype.duplicateRegister = (value, code, message) => {
   if (value) {
     errors.push({ code, message })
@@ -89,6 +98,10 @@ ValidationContract.prototype.containsInArray = (
   if (!value || !array.includes(value)) {
     errors.push({ code, message })
   }
+}
+
+ValidationContract.prototype.errorsPush = (messageError) => {
+  errors.push(messageError)
 }
 
 ValidationContract.prototype.errors = () => {

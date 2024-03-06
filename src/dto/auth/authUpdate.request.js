@@ -7,7 +7,8 @@ class AuthRecoveryRequest {
   constructor(data) {
     this.isValidate(data)
 
-    this.email = data.email
+    this.setEmail(data.email)
+    this.setPhone(data.phone)
   }
 
   isValidate(data) {
@@ -18,6 +19,18 @@ class AuthRecoveryRequest {
         contract.errors(),
         constants.CODE
       )
+    }
+  }
+
+  setEmail(email) {
+    if (email) {
+      this.email = email
+    }
+  }
+
+  setPhone(phone) {
+    if (phone) {
+      this.phone = Util.getNumbers(phone)
     }
   }
 }

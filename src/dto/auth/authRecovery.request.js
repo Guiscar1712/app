@@ -10,8 +10,8 @@ class AuthRecoveryRequest {
     this.userId = data.userId
     this.name = data.name
     this.document = data.document
-    this.birthday = new Date(data.birthday)
     this.motherName = data.motherName
+    this.setBirthday(data.birthday)
   }
 
   isValidate(data) {
@@ -23,6 +23,14 @@ class AuthRecoveryRequest {
         constants.CODE
       )
     }
+  }
+
+  setBirthday(birthday) {
+    const day = birthday.slice(8, 10)
+    const month = birthday.slice(5, 7)
+    const year = birthday.slice(0, 4)
+
+    this.birthday = new Date(year, month - 1, day)
   }
 }
 

@@ -41,25 +41,28 @@ module.exports = class Util {
     return null
   }
 
-  static formatTelephone(telephone) {
-    const numeroLimpo = telephone.replace(/\D/g, '')
+  static formatPhone(phone) {
+    phone = phone.replace(/\D/g, '')
 
-    let numeroFormatado
-    if (numeroLimpo.length === 10) {
-      numeroFormatado = numeroLimpo.replace(
-        /(\d{2})(\d{4})(\d{4})/,
-        '($1) $2-$3'
-      )
-    } else if (numeroLimpo.length === 11) {
-      numeroFormatado = numeroLimpo.replace(
-        /(\d{2})(\d{5})(\d{4})/,
-        '($1) $2-$3'
-      )
-    } else {
-      throw new Error('Numero de telefone inválido')
+    if (phone.length === 10) {
+      return phone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3')
     }
 
-    return numeroFormatado
+    if (phone.length === 11) {
+      return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+    }
+
+    throw new Error('Número de telefone inválido')
+  }
+
+  static formatPhoneDDI(phone) {
+    phone = phone.replace(/\D/g, '')
+
+    if (phone.length !== 11) {
+      return phone
+    }
+
+    return `55${phone}`
   }
 
   static formatCpf(cpf) {
