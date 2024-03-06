@@ -34,7 +34,12 @@ const REQUIRED_BIRTHDAY = {
 }
 
 const INVALID_MOTHER_NAME = { code: 2219, message: 'Nome da mãe inválido' }
-const INVALID_BIRTHDAY = { code: 22020, message: 'Data de nascimento inválido' }
+const INVALID_BIRTHDAY = { code: 2220, message: 'Data de nascimento inválido' }
+
+const REQUIRED_EMAIL_OR_PHONE = {
+  code: 2221,
+  message: 'Informe email e/ou telefone',
+}
 
 const UNAUTHORIZED = {
   code: 2288,
@@ -73,6 +78,7 @@ module.exports = {
   REQUIRED_BIRTHDAY,
   INVALID_MOTHER_NAME,
   INVALID_BIRTHDAY,
+  REQUIRED_EMAIL_OR_PHONE,
   UNAUTHORIZED,
   DIVERGENT_REGISTRATION,
   NOT_IMPLEMENTED_PROVIDER,

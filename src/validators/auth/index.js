@@ -144,12 +144,25 @@ module.exports = {
   updateValidate(model) {
     const contract = new Validator()
 
-    contract.isEmail(
-      model.email,
-      constants.INVALID_EMAIL.code,
-      constants.INVALID_EMAIL.message
-    )
+    if (!model.email && !model.phone) {
+      contract.errorsPush(constants.REQUIRED_EMAIL_OR_PHONE)
+    }
 
+    if (model.email) {
+      contract.isEmail(
+        model.email,
+        constants.INVALID_EMAIL.code,
+        constants.INVALID_EMAIL.message
+      )
+    }
+
+    if (model.phone) {
+      contract.isPhone(
+        model.phone,
+        constants.INVALID_PHONE.code,
+        constants.INVALID_PHONE.message
+      )
+    }
     return contract
   },
 }

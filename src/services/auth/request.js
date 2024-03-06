@@ -82,11 +82,12 @@ module.exports = class AuthRequestService {
     const verificador = config.kroton.captacao
 
     const cpf = Util.formatCpf(userData.cpf)
+    const phone = Util.formatPhoneDDI(userData.phone)
 
     let data = {
       identificador: cpf,
       template: verificador.verificadorSMS,
-      contato: userData.phone,
+      contato: phone,
     }
 
     let encrypted = encrypedCipher(data, verificador)

@@ -16,7 +16,7 @@ class PersonalData {
     this.escolaConclusao = data.schoolConclusion
     this.anoConclusaoEnsinoMedio = data.yearCompletionOfHighSchool
     this.setEmails(data.emails)
-    this.setTelephones(data.telephones)
+    this.setPhones(data.telephones)
     this.setAddresses(data.addresses)
     this.setSpecialNeeds(data.specialNeeds)
     this.setCommunicationChannels(data.communicationChannels)
@@ -32,11 +32,11 @@ class PersonalData {
     }
   }
 
-  setTelephones(telephones) {
+  setPhones(phones) {
     this.telefones = []
-    if (telephones) {
-      telephones.forEach((element) => {
-        this.telefones.push(new Telephone(element))
+    if (phones) {
+      phones.forEach((element) => {
+        this.telefones.push(new Phone(element))
       })
     }
   }
@@ -79,7 +79,7 @@ class Email {
   }
 }
 
-class Telephone {
+class Phone {
   constructor(data) {
     this.principal = data.main
     this.setNumber(data.number)
@@ -87,7 +87,7 @@ class Telephone {
   }
 
   setNumber = (number) => {
-    this.numero = Util.formatTelephone(number)
+    this.numero = Util.formatPhone(number)
   }
 
   setType = () => {
@@ -146,7 +146,7 @@ class Responsible {
   }
 
   setCellPhone(cellPhone) {
-    this.celular = new Telephone(cellPhone)
+    this.celular = new Phone(cellPhone)
   }
 
   setEmail(email) {
