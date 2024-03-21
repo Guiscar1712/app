@@ -2310,7 +2310,8 @@
           {
             "token": []
           }
-        ]
+        ],
+        "deprecated": true
       },
       "post": {
         "tags": [
@@ -2507,7 +2508,8 @@
           {
             "token": []
           }
-        ]
+        ],
+        "deprecated": true
       },
       "delete": {
         "tags": [
@@ -2589,7 +2591,8 @@
           {
             "token": []
           }
-        ]
+        ],
+        "deprecated": true
       }
     },
     "/api/notification/read/{id}": {
@@ -2832,7 +2835,8 @@
           {
             "token": []
           }
-        ]
+        ],
+        "deprecated": true
       }
     },
     "/api/register-app/": {
@@ -4895,6 +4899,212 @@
         "deprecated": true
       }
     },
+    "/api/v1/enrollment/{document}/cards": {
+      "get": {
+        "tags": [
+          "Enrollment"
+        ],
+        "description": "Endpoint to sign in a specific Enrollment",
+        "parameters": [
+          {
+            "name": "document",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Enrollment information."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string",
+                            "example": "36645073"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "ELIENE RIBEIRO SOUZA"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "lyusorriso@yahoo.com.br"
+                          },
+                          "document": {
+                            "type": "string",
+                            "example": "014.523.835-02"
+                          },
+                          "birthday": {
+                            "type": "string",
+                            "example": "1984-05-28"
+                          },
+                          "institution": {
+                            "type": "string",
+                            "example": "Anhanguera Educacional"
+                          },
+                          "expirationDate": {
+                            "type": "string",
+                            "example": "6/2024"
+                          },
+                          "courseName": {
+                            "type": "string",
+                            "example": "Enfermagem"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string",
+                            "example": "36645073"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "ELIENE RIBEIRO SOUZA"
+                          },
+                          "email": {
+                            "type": "string",
+                            "example": "lyusorriso@yahoo.com.br"
+                          },
+                          "document": {
+                            "type": "string",
+                            "example": "014.523.835-02"
+                          },
+                          "birthday": {
+                            "type": "string",
+                            "example": "1984-05-28"
+                          },
+                          "institution": {
+                            "type": "string",
+                            "example": "Anhanguera Educacional"
+                          },
+                          "expirationDate": {
+                            "type": "string",
+                            "example": "6/2024"
+                          },
+                          "courseName": {
+                            "type": "string",
+                            "example": "Enfermagem"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unathorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
     "/api/v1/payment/pix/{originId}": {
       "get": {
         "tags": [
@@ -6071,6 +6281,498 @@
         ]
       }
     },
+    "/api/v1/course-preview-lead/start": {
+      "post": {
+        "description": "",
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/course-preview-lead/finish": {
+      "post": {
+        "description": "",
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settings/page/{page}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settings/page": {
+      "get": {
+        "description": "",
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/course-preview-lead/start": {
+      "post": {
+        "description": "",
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/course-preview-lead/finish": {
+      "post": {
+        "description": "",
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settings/page/{page}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settings/page": {
+      "get": {
+        "description": "",
+        "responses": {
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        }
+      }
+    },
     "/api/v1/notification/read/{id}": {
       "put": {
         "tags": [
@@ -6152,7 +6854,8 @@
           {
             "token": []
           }
-        ]
+        ],
+        "deprecated": true
       }
     },
     "/api/v1/notification/all-read": {
@@ -6225,7 +6928,8 @@
           {
             "token": []
           }
-        ]
+        ],
+        "deprecated": true
       }
     },
     "/api/v1/notification/": {
@@ -6432,7 +7136,8 @@
               }
             }
           }
-        }
+        },
+        "deprecated": true
       }
     },
     "/api/v1/course/areas": {
@@ -6885,6 +7590,853 @@
                               "example": "DONE"
                             }
                           }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unathorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/api/v2/notification/": {
+      "get": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "Endpoint to sign in a specific Notification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Notification information.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 436
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2024-03-12T09:32:10.693Z"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "Notificaçcao 10001"
+                          },
+                          "content": {
+                            "type": "string",
+                            "example": "todo conteudo da notificação"
+                          },
+                          "data": {},
+                          "notificationType": {},
+                          "dateRead": {
+                            "type": "string",
+                            "example": "2024-03-12T09:50:25.799Z"
+                          },
+                          "userId": {
+                            "type": "number",
+                            "example": 1286
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "example": 436
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2024-03-12T09:32:10.693Z"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "Notificaçcao 10001"
+                          },
+                          "content": {
+                            "type": "string",
+                            "example": "todo conteudo da notificação"
+                          },
+                          "data": {},
+                          "notificationType": {},
+                          "dateRead": {
+                            "type": "string",
+                            "example": "2024-03-12T09:50:25.799Z"
+                          },
+                          "userId": {
+                            "type": "number",
+                            "example": 1286
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unathorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "Endpoint to sign in a specific Notification",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Auth Request information.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notificationId": {
+                  "type": "number",
+                  "example": 10002
+                },
+                "title": {
+                  "type": "string",
+                  "example": "Notificaçcao 10002"
+                },
+                "content": {
+                  "type": "string",
+                  "example": "todo conteudo da notificação"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "paymentType": {
+                      "type": "string",
+                      "example": "PIX"
+                    },
+                    "statusPayment": {
+                      "type": "string",
+                      "example": "PAID"
+                    },
+                    "idOrigin": {
+                      "type": "number",
+                      "example": 13542165
+                    }
+                  }
+                }
+              },
+              "required": [
+                "notificationId",
+                "title",
+                "content"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 438
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2024-03-12T09:46:46.936Z"
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Notificaçcao 10002"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "todo conteudo da notificação"
+                        },
+                        "data": {
+                          "type": "string",
+                          "example": "{\"invoiceType\":\"PreMatricula\",\"notificationType\":\"PAYMENT\",\"paymentType\":\"PIX\",\"statusPayment\":\"PAID\",\"idOrigin\":13542165,\"totalAmount\":9.9,\"paymentDate\":\"2023-07-12T09:52:18.6406672+00:00\"}"
+                        },
+                        "notificationType": {},
+                        "dateRead": {},
+                        "userId": {
+                          "type": "number",
+                          "example": 1286
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 438
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2024-03-12T09:46:46.936Z"
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Notificaçcao 10002"
+                        },
+                        "content": {
+                          "type": "string",
+                          "example": "todo conteudo da notificação"
+                        },
+                        "data": {
+                          "type": "string",
+                          "example": "{\"invoiceType\":\"PreMatricula\",\"notificationType\":\"PAYMENT\",\"paymentType\":\"PIX\",\"statusPayment\":\"PAID\",\"idOrigin\":13542165,\"totalAmount\":9.9,\"paymentDate\":\"2023-07-12T09:52:18.6406672+00:00\"}"
+                        },
+                        "notificationType": {},
+                        "dateRead": {},
+                        "userId": {
+                          "type": "number",
+                          "example": 1286
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unathorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/api/v2/notification/read/{id}": {
+      "put": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "Endpoint to sign in a specific Notification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Notification information."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dateRead": {
+                          "type": "string",
+                          "example": "2024-03-12T10:02:49.362Z"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1286
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dateRead": {
+                          "type": "string",
+                          "example": "2024-03-12T10:02:49.362Z"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1286
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unathorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/api/v2/notification/all-read": {
+      "put": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "Endpoint to sign in a specific Notification",
+        "responses": {
+          "200": {
+            "description": "Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dateRead": {
+                          "type": "string",
+                          "example": "2024-03-12T09:58:47.385Z"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dateRead": {
+                          "type": "string",
+                          "example": "2024-03-12T09:58:47.385Z"
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response400"
+            }
+          },
+          "401": {
+            "description": "Unathorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/response401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            },
+            "schema": {
+              "$ref": "#/components/schemas/response500"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/api/v2/notification/not-read/{id}": {
+      "put": {
+        "tags": [
+          "Notification"
+        ],
+        "description": "Endpoint to sign in a specific Notification",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Notification information."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dateRead": {},
+                        "userId": {
+                          "type": "number",
+                          "example": 1286
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "dateRead": {},
+                        "userId": {
+                          "type": "number",
+                          "example": 1286
                         }
                       }
                     }

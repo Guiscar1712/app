@@ -13,6 +13,7 @@ router.get(
   NotificationController.get
   // #swagger.tags = ['Notification']
   /*  #swagger.security = [{ "token": [] }]  */
+  // #swagger.deprecated = true
 )
 router.get(
   '/:id',
@@ -26,6 +27,7 @@ router.get(
             description: 'Notification information.',
             required: true
     } */
+  // #swagger.deprecated = true
 )
 router.post(
   '/',
@@ -77,6 +79,7 @@ router.put(
             description: 'Notification information.',
             required: true
     } */
+  // #swagger.deprecated = true
 )
 router.delete(
   '/:id',
@@ -90,6 +93,7 @@ router.delete(
             description: 'Notification information.',
             required: true
     } */
+  // #swagger.deprecated = true
 )
 
 router.post(

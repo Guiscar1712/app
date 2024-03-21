@@ -11,6 +11,7 @@ router.delete(
   TrackMiddleware.tracking,
   AuthMiddleware.isAuthenticated,
   NotificationController.delete
+  // #swagger.deprecated = true
 )
 
 module.exports = router

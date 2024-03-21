@@ -1,0 +1,56 @@
+#   pipeline
+#   ------------------------------------------------------------
+#   *vmImageName: versão da VM
+#   *webAppName: nome do web app
+#   *dockerRegistryServiceConnection: nome da service connection do registry
+#   *azureSubscriptionServiceConnection: nome da service connection da subscription da Azure
+#   *imageRepository: nome da imagem
+#   *containerRegistry: endereço do registry
+#   *dockerfilePath: caminho do arquivo Dockerfile na aplicação
+#    ------------------------------------------------------------
+#   *variáveis que devem ser configuradas diretamente no pipeline
+
+trigger: none # política de gatilho deve ser sobrescrita no pipeline
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: build and push
+  jobs:
+  - job: Build
+    displayName: build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: Docker@2
+      displayName: build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: "$(dockerRegistryServiceConnection)"
+        tags: |
+          $(tag)
+
+- stage: Deploy
+  displayName: deploy
+  jobs:
+  - job: Deploy
+    displayName: deploy
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - checkout: none
+    - task: AzureRmWebAppDeployment@4
+      displayName: deploy image to webapp container
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: $(azureSubscriptionServiceConnection)
+        appType: 'webAppContainer'
+        WebAppName: '$(webAppName)'
+        DockerNamespace: '$(containerRegistry)'
+        DockerRepository: '$(imageRepository)'
+        DockerImageTag: '$(tag)'

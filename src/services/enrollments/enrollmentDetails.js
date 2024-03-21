@@ -41,9 +41,7 @@ module.exports = class EnrollmentDetails {
         })
       }
 
-      if (!enrollmentsDto.enem.active) {
-        await getAdmissionsTest(enrollmentsDto, data)
-      }
+      await getAdmissionsTest(enrollmentsDto, data)
 
       await this.getPaymentStatus(idOrigin, enrollmentsDto)
 
@@ -79,13 +77,26 @@ module.exports = class EnrollmentDetails {
 }
 
 async function getAdmissionsTest(enrollmentsDto, data) {
+  if (
+    enrollmentsDto.enem.active ||
+    data.inscricao.classificacao.descricao == 'ALUNO' ||
+    data.inscricao.classificacao.descricao == 'CONVOCADO' ||
+    data.inscricao.tipoIngresso == 'ISENTO_VESTIBULAR'
+  ) {
+    enrollmentsDto.admissionsTest = new AdmissionsTest({
+      provaOnlineFinalizada: true,
+    })
+    return enrollmentsDto
+  }
+
   let exam = await retry(
     consultaProvaOnlinePorBusinesskey,
     enrollmentsDto.businessKey
   )
+
   if (!exam) {
-    throw new ClientServerError('Unexpected Content', {
-      method: 'AdmissionsTest',
+    throw new ClientServerError('getAdmissionsTest Unexpected Content', {
+      method: 'consultaProvaOnlinePorBusinesskey',
       errors: [data, enrollmentsDto, exam],
     })
   }
@@ -101,8 +112,8 @@ async function getAdmissionsTest(enrollmentsDto, data) {
     !enrollmentsDto.admissionsTest ||
     enrollmentsDto.admissionsTest.status === 'ERROR'
   ) {
-    throw new ClientServerError('Unexpected Content', {
-      method: 'AdmissionsTest',
+    throw new ClientServerError('getAdmissionsTest Unexpected Content', {
+      method: 'consultaProvaOnline',
       errors: [data, enrollmentsDto, exam],
     })
   }

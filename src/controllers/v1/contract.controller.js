@@ -61,13 +61,15 @@ module.exports = class NotificationController {
       }
 
       let ipAddress =
-        request.headers['x-forwarded-for'] || request.socket.remoteAddress
+        request.headers['x-forwarded-for'] ||
+        request.socket.remoteAddress ||
+        '0.0.0.0'
 
       ipAddress = Util.splitIP(ipAddress)
 
       const data = await this.ContractService.contractAccepted(
         request.params.contractId,
-        { ipAddress }
+        ipAddress
       )
 
       step.value.addData({ contratoAceito: data.response })

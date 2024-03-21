@@ -34,7 +34,16 @@ const NOT_FOUND = {
   code: 1114,
   message: 'Usuário não encontrado!',
 }
+
 const REQUIRED_CELLPHONE = { code: 1115, message: 'Telefone é obrigatório' }
+const REQUIRED_ZIPCODE = {
+  code: 1116,
+  message: 'CEP é obrigatório!',
+}
+const INVALID_ZIPCODE = {
+  code: 1117,
+  message: 'CEP é inválido!',
+}
 
 module.exports = {
   code,
@@ -53,4 +62,6 @@ module.exports = {
   NOT_REGISTER_CPF,
   NOT_FOUND,
   REQUIRED_CELLPHONE,
+  REQUIRED_ZIPCODE,
+  INVALID_ZIPCODE,
 }

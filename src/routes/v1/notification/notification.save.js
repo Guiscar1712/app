@@ -31,6 +31,7 @@ router.post(
   /*  #swagger.responses[401] = { 
         schema: { $ref: "#/definitions/response401" },
         description: "Unathorized" } */
+  // #swagger.deprecated = true
 )
 
 module.exports = router

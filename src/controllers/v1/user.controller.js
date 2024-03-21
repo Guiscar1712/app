@@ -9,8 +9,10 @@ const {
 } = require('../../validators/user')
 const Util = require('../../utils/util')
 module.exports = class UserController {
-  constructor({ UserService, LoggerService }) {
+  constructor({ UserService, RegisterAppService, EnrollmentCards, LoggerService }) {
     this.UserService = UserService
+    this.RegisterAppService = RegisterAppService
+    this.EnrollmentCards = EnrollmentCards
     this.LoggerService = LoggerService
   }
 
@@ -68,6 +70,31 @@ module.exports = class UserController {
     }
   }
 
+  registerApp = async (request, response, next) => {
+    const step = this.LoggerService.addStep('UserControllerRegisterApp')
+
+    try {
+      const token = request.body.token
+
+      if (!token) {
+        throw new ValidationError(
+          'Parâmetros inválidos',
+          [constants.REQUIRED_TOKEN_FIREBASE],
+          constants.code
+        )
+      }
+
+      const data = await this.RegisterAppService.save(token, request.user.id)
+
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
+
+      next(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   personalDataGet = async (request, response, next) => {
     const step = this.LoggerService.addStep('UserControllerPersonalDataGet')
     const cpf = request.params.cpf
@@ -101,6 +128,30 @@ module.exports = class UserController {
     }
   }
 
+  getStudentCards = async (request, response, next) => {
+    const step = this.LoggerService.addStep(
+      'EnrollmentsControllerGetStudentCards'
+    )
+    try {
+      const document = request.user.cpf
+
+      const contract = CpfValidate(document)
+      if (!contract.isValid()) {
+        throw new ValidationError('Parâmetros inválidos', contract.errors())
+      }
+
+      const data = await this.EnrollmentCards.get(document)
+
+      step.value.addData(data)
+      this.LoggerService.finalizeStep(step)
+      next(data)
+    } catch (error) {
+      this.LoggerService.setError(error)
+      this.LoggerService.finalize()
+      next(error)
+    }
+  }
+
   validateRegister(body) {
     const step = this.LoggerService.addStep('RegisterValidate')
     const contract = ApplyValidate(body)
@@ -108,7 +159,7 @@ module.exports = class UserController {
     step.value.addData({ isValid: contract.isValid() })
     this.LoggerService.finalizeStep(step)
 
-    if (!contract.isValid()) {    
+    if (!contract.isValid()) {
       throw new ValidationError(
         'Parâmetros inválidos',
         contract.errors(),
@@ -124,7 +175,7 @@ module.exports = class UserController {
     step.value.addData({ isValid: contract.isValid() })
     this.LoggerService.finalizeStep(step)
 
-    if (!contract.isValid()) {      
+    if (!contract.isValid()) {
       throw new ValidationError(
         'Parâmetros inválidos',
         contract.errors(),

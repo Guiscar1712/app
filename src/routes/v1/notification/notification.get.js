@@ -11,6 +11,7 @@ router.get(
   TrackMiddleware.tracking,
   AuthMiddleware.isAuthenticated,
   NotificationController.get
+  // #swagger.deprecated = true
 )
 
 module.exports = router

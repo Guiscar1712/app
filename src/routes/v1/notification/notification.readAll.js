@@ -13,6 +13,7 @@ router.put(
   NotificationController.readAll
   // #swagger.tags = ['Notification']
   /*  #swagger.security = [{ "token": [] }]  */
+  // #swagger.deprecated = true
 )
 
 module.exports = router

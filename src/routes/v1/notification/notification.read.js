@@ -18,6 +18,7 @@ router.put(
             description: 'Notification information.',
             required: true
     } */
+  // #swagger.deprecated = true
 )
 
 module.exports = router

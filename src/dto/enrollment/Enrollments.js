@@ -1,19 +1,17 @@
+const { EnrollmentsHelpers } = require('../../helpers')
 class EnrollmentDto {
-  constructor (data) {
-    const { sistema, inscricao, matricula, dadosPessoais, processamento } = data
-
-    if (processamento?.status !== 'SUCCESS') {
+  constructor(data) {
+    const classification = EnrollmentsHelpers.getClassification(data)
+    if (classification == 'ERROR') {
       this.status = 'ERROR'
       return
     }
 
+    this.classification = classification
+
+    const { sistema, inscricao, matricula, dadosPessoais } = data
     const { enem, classificacao, ofertas, contrato } = inscricao
-
     const course = ofertas.primeiraOpcao
-    if (!course) {
-      this.status = 'ERROR'
-      return
-    }
 
     this.idOrigin = inscricao.idOrigem
     this.businessKey = inscricao.businessKey
@@ -30,12 +28,10 @@ class EnrollmentDto {
 
     this.studentEnrollment = new EnrollmentStudentDto(matricula, dadosPessoais)
     this.contract = new EnrollmentContractDto(contrato)
-
-    this.setClassification(classificacao)
     this.setPaymentConfig(sistema)
   }
 
-  setPaymentConfig (system) {
+  setPaymentConfig(system) {
     system = system.toUpperCase()
 
     let isEnabled = false
@@ -44,36 +40,21 @@ class EnrollmentDto {
       isEnabled = process.env.COLABORAR_PAYMENT_PIX_ENABLED === 'true'
     } else if (system === 'OLIMPO' && process.env.OLIMPO_PAYMENT_PIX_ENABLED) {
       isEnabled = process.env.OLIMPO_PAYMENT_PIX_ENABLED === 'true'
-    } else if ((system === 'SAP' || system === 'ATHENAS') && process.env.ATHENAS_PAYMENT_PIX_ENABLED) {
+    } else if (
+      (system === 'SAP' || system === 'ATHENAS') &&
+      process.env.ATHENAS_PAYMENT_PIX_ENABLED
+    ) {
       isEnabled = process.env.ATHENAS_PAYMENT_PIX_ENABLED === 'true'
     }
 
     this.paymentConfig = {
       pix: {
-        enabled: isEnabled
-      }
+        enabled: isEnabled,
+      },
     }
   }
 
-  setClassification (classificacao) {
-    const enrollment = ['ALUNO']
-    const registered = ['INSCRITO', 'INSCRITO VG ONLINE', 'CONVOCADO']
-    const disqualified = ['DESCLASSIFICADO', 'DESCLASSIFICADO POR NOTA']
-
-    const classification = classificacao.descricao?.toUpperCase()
-
-    if (enrollment.includes(classification)) {
-      this.classification = 'STUDENT'
-    } else if (registered.includes(classification)) {
-      this.classification = 'ENROLLMENT'
-    } else if (disqualified.includes(classification)) {
-      this.classification = 'DISQUALIFIED'
-    } else {
-      this.classification = 'ABSENT'
-    }
-  }
-
-  setCourseName (courseName) {
+  setCourseName(courseName) {
     if (!courseName) {
       this.courseName = ''
     }
@@ -91,12 +72,12 @@ class EnrollmentDto {
 }
 
 class EnrollmentEnemDto {
-  constructor (enem, classificacao) {
+  constructor(enem, classificacao) {
     this.active = enem.utilizar
     this.setApprovedEnem(classificacao)
   }
 
-  setApprovedEnem (classificacao) {
+  setApprovedEnem(classificacao) {
     const approved = ['Convocado', 'Aluno']
     if (this.active && approved.includes(classificacao.descricao)) {
       this.approved = true
@@ -109,11 +90,11 @@ class EnrollmentEnemDto {
 class EnrollmentContractDto {
   available
   accepted
-  constructor (contrato) {
+  constructor(contrato) {
     this.setContract(contrato)
   }
 
-  setContract (contrato) {
+  setContract(contrato) {
     // Redirecionar para pagamento? Pagamento Pendente/
     if (!contrato || contrato.status === 'NAO_GERADO') {
       this.incomplete = null
@@ -154,7 +135,7 @@ class EnrollmentContractDto {
 }
 
 class EnrollmentStudentDto {
-  constructor (matricula, dadosPessoais) {
+  constructor(matricula, dadosPessoais) {
     this.enrollmentId = matricula?.id
     this.studentCode = matricula?.ra
 
@@ -167,12 +148,12 @@ class EnrollmentStudentDto {
   }
 
   // quando false consultar status pagamento
-  setPayment (matricula) {
+  setPayment(matricula) {
     this.payment = !!matricula?.pagamento?.pago
     // payment to this.paid = !!matricula?.pagamento?.pago
   }
 
-  setActiveEnrollment () {
+  setActiveEnrollment() {
     this.active = !!this.studentCode
   }
 }

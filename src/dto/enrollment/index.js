@@ -1,8 +1,11 @@
-const EnrollmentsDto = require('./Enrollments.Dto')
-const AdmissionsTest = require('./AdmissionsTest.Dto')
-const ContractDto = require('./Contract.Dto')
+const EnrollmentsDto = require('./Enrollments')
+const AdmissionsTest = require('./AdmissionsTest')
+const ContractDto = require('./Contract')
+const CardDto = require('./Card')
+
 module.exports = {
   EnrollmentsDto,
   AdmissionsTest,
-  ContractDto
+  ContractDto,
+  CardDto,
 }

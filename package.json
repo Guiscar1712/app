@@ -1,18 +1,15 @@
 {
     "name": "kroton-vitrine-api",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "Kroton vitrine node api ",
     "main": "server.js",
     "scripts": {
         "start": "node src/server.js",
-        "dev": "npm run develop",
-        "develop": "nodemon src/server.js",
+        "dev": "nodemon src/server.js",
         "lint": "npx eslint ./src",
         "lint:fix": "npx eslint ./src --fix",
         "migrations": "npx knex migrate:latest",
-        "seeds": "npx knex seed:run",
-        "debug": "nodemon --inspect src/server.js",
-        "start-gendoc": "node src/docs/swagger.autogen.js"
+        "seeds": "npx knex seed:run"
     },
     "author": "Bluecore",
     "license": "ISC",
