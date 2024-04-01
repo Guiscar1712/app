@@ -73,7 +73,7 @@ class EnrollmentDto {
 
 class EnrollmentEnemDto {
   constructor(enem, classificacao) {
-    this.active = enem.utilizar
+    this.active = enem?.utilizar
     this.setApprovedEnem(classificacao)
   }
 

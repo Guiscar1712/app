@@ -80,11 +80,20 @@ async function getAdmissionsTest(enrollmentsDto, data) {
   if (
     enrollmentsDto.enem.active ||
     data.inscricao.classificacao.descricao == 'ALUNO' ||
-    data.inscricao.classificacao.descricao == 'CONVOCADO' ||
-    data.inscricao.tipoIngresso == 'ISENTO_VESTIBULAR'
+    data.inscricao.classificacao.descricao == 'CONVOCADO'
   ) {
     enrollmentsDto.admissionsTest = new AdmissionsTest({
       provaOnlineFinalizada: true,
+    })
+    return enrollmentsDto
+  }
+
+  if (
+    data.inscricao.tipoIngresso == 'ISENTO_VESTIBULAR' ||
+    data.inscricao.tipoIngresso == 'ANALISE_DOCUMENTAL'
+  ) {
+    enrollmentsDto.admissionsTest = new AdmissionsTest({
+      elegivelProvaOnline: false,
     })
     return enrollmentsDto
   }

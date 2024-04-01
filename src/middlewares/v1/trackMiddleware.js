@@ -5,6 +5,7 @@ module.exports = class TrackMiddleware {
 
   tracking = async (typeLog, req, res, next) => {
     const indexLog = {
+      origin: req.origin,
       remoteAddress:
         req.headers['x-forwarded-for'] || req.socket.remoteAddress || null,
       appInfoDevice: req.headers['app-info-device'],
