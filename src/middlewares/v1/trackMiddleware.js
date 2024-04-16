@@ -5,13 +5,13 @@ module.exports = class TrackMiddleware {
 
   tracking = async (typeLog, req, res, next) => {
     const indexLog = {
-      origin: req.origin,
       remoteAddress:
         req.headers['x-forwarded-for'] || req.socket.remoteAddress || null,
       appInfoDevice: req.headers['app-info-device'],
       appInfoOs: req.headers['app-info-os'],
       appInfoVersion: req.headers['app-info-version'],
       appInfoBuild: req.headers['app-info-build'],
+      appInfoOrigin: req.headers['app-info-origin'],
     }
     this.LoggerService.newLog(indexLog, typeLog, req)
     const step = this.LoggerService.addStep('TrackMiddleware')
