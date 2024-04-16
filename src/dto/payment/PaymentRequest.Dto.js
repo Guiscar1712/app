@@ -55,8 +55,7 @@ class PaymentRequest {
     this.dueDateInformative = data.dueDateInformative
     this.remarks = data.remarks
     this.redirectUrl = data.redirectUrl || 'https://www.anhanguera.com/'
-    this.adjustLayoutToIFrame = false
-    this.linkCheckout = this._setLinkCheckout(data.linkCheckout)
+    this.adjustLayoutToIFrame = false    
     this.charges = this._setCharges(data.charges)
     this.discount = this._setDiscount(data.discount)
     this.student = this._setStudent(data.student)
@@ -86,27 +85,6 @@ class PaymentRequest {
     }
 
     return discount
-  }
-
-  _setLinkCheckout(data) {
-    const linkCheckout = {
-      emailNotification: data.emailNotification,
-      smsNotification: data.smsNotification,
-      sendCheckoutNotification: data.sendCheckoutNotification,
-      expirationInDays: data.expirationInDays,
-      challenge: this._setLinkCheckoutChallenge(data.challenge),
-    }
-
-    return linkCheckout
-  }
-
-  _setLinkCheckoutChallenge(data) {
-    const challenge = {
-      question: data.question,
-      answer: data.answer,
-      useCaptcha: data.useCaptcha,
-    }
-    return challenge
   }
 
   _setCharges(data) {
