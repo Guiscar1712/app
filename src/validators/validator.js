@@ -66,7 +66,7 @@ ValidationContract.prototype.duplicateRegister = (value, code, message) => {
 }
 
 ValidationContract.prototype.isValidCpf = (value, code, message) => {
-  if (!UTIL.isValidCpf(value)) {
+  if (!value || !UTIL.isValidCpf(value)) {
     errors.push({ code, message })
   }
 }

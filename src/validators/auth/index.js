@@ -3,7 +3,7 @@ const Util = require('../../utils/util')
 const constants = require('../../constants/auth.constants')
 
 module.exports = {
-  requestValidate(model) {
+  requestValidate(model = {}) {
     const contract = new Validator()
 
     contract.isRequired(
@@ -20,7 +20,7 @@ module.exports = {
     return contract
   },
 
-  loginValidate(model) {
+  loginValidate(model = {}) {
     const contract = new Validator()
 
     contract.isRequired(
@@ -43,7 +43,7 @@ module.exports = {
     return contract
   },
 
-  registerValidate(model) {
+  registerValidate(model = {}) {
     const contract = new Validator()
 
     contract.isRequired(
@@ -81,7 +81,7 @@ module.exports = {
     return contract
   },
 
-  registerExistValidate(model) {
+  registerExistValidate(model = {}) {
     const contract = new Validator()
 
     contract.isRequired(
@@ -105,7 +105,7 @@ module.exports = {
     return contract
   },
 
-  recoveryValidate(model) {
+  recoveryValidate(model = {}) {
     const contract = new Validator()
 
     contract.isRequired(
@@ -141,7 +141,7 @@ module.exports = {
     return contract
   },
 
-  updateValidate(model) {
+  updateValidate(model = {}) {
     const contract = new Validator()
 
     if (!model.email && !model.phone) {
