@@ -55,7 +55,8 @@ module.exports = class AuthValidatorService {
 
       const motherName = Util.calculateLevenshteinDistance(
         authRecovery.motherName,
-        backboneData.motherName
+        backboneData.motherName,
+        true
       )
 
       if (motherName > backbone.distance) {

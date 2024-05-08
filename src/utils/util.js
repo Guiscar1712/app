@@ -187,7 +187,16 @@ module.exports = class Util {
     return ip
   }
 
-  static calculateLevenshteinDistance(str1, str2) {
+  static calculateLevenshteinDistance(str1, str2, ignoreCase) {
+    if (!str1 || !str2) {
+      return this.toNumber(process.env.AUTH_RECOVERY_DISTANCE) || 1
+    }
+
+    if (ignoreCase) {
+      str1 = str1.toLowerCase()
+      str2 = str2.toLowerCase()
+    }
+
     const matriz = []
 
     for (let i = 0; i <= str1.length; i++) {
