@@ -4,6 +4,8 @@ const MembershipRepository = require('../../../repositories/v1/membershipReposit
 const UserRepository = require('../../../repositories/v1/userRepository')
 const UserFirebaseRepository = require('../../../repositories/v1/userFirebaseRepository')
 const UserService = require('../../../services/user')
+const UserHelpers = require('../../../helpers/user')
+const UserHelpersRegisterValidation = require('../../../helpers/user/registerValidation')
 const UserController = require('../../../controllers/v1/user.controller')
 
 module.exports = {
@@ -11,5 +13,7 @@ module.exports = {
   UserRepository: asClass(UserRepository),
   UserFirebaseRepository: asClass(UserFirebaseRepository),
   UserService: asClass(UserService),
+  UserHelpers: asClass(UserHelpers),
+  UserHelpersRegisterValidation: asClass(UserHelpersRegisterValidation),
   UserController: asClass(UserController),
 }

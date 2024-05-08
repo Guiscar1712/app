@@ -175,7 +175,7 @@ module.exports = {
     )
     contract.duplicateRegister(
       model.email,
-      constants.NOT_REGISTER_EMAIL.code,
+      constants.REGISTERED_EMAIL.code,
       constants.REGISTERED_EMAIL.message
     )
     contract.duplicateRegister(

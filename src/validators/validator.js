@@ -59,7 +59,8 @@ ValidationContract.prototype.isPhone = (value, code, message) => {
   }
 }
 
-ValidationContract.prototype.duplicateRegister = (value, code, message) => {
+ValidationContract.prototype.
+duplicateRegister = (value, code, message) => {
   if (value) {
     errors.push({ code, message })
   }
