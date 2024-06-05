@@ -36,6 +36,11 @@ module.exports = {
       delay: Util.toNumber(process.env.KROTON_INGRESSO_DELAY_RETRIES) || 100,
       enrollments_search_months_ago:
         Util.toNumber(process.env.KROTON_INGRESSO_SEARCH_MONTHS_AGO) || 12,
+      classroomCourseCycleDate: new Date(
+        process.env.CLASSROOM_COURSE_CYCLE_DATE
+      ),
+      blendedCourseCycleDate: new Date(process.env.BLENDED_COURSE_CYCLE_DATE),
+      distanceCourseCycleDate: new Date(process.env.DISTANCE_COURSE_CYCLE_DATE),
     },
     backbone: {
       url: process.env.BACKBONE_API_BASE_URL,

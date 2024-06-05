@@ -1,4 +1,4 @@
-function getClassification(data) {
+module.exports = (data) => {
   if (!isValid(data)) {
     return 'ERROR'
   }
@@ -48,8 +48,4 @@ function isValid(data) {
   }
 
   return true
-}
-
-module.exports = (data) => {
-  return getClassification(data)
 }

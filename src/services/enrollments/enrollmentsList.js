@@ -29,10 +29,6 @@ module.exports = class EnrollmentList {
       const enrollments = []
 
       data.forEach((element) => {
-        if (!validateEnrollmentsDate(element)) {
-          return
-        }
-
         const enrollmentsDto = new EnrollmentsDto(element)
         if (enrollmentsDto.status !== 'ERROR') {
           delete enrollmentsDto.contract
@@ -50,18 +46,4 @@ module.exports = class EnrollmentList {
       this.LoggerService.finalizeStep(step)
     }
   }
-}
-
-function validateEnrollmentsDate(element) {
-  const dateNow = moment()
-  const monthsAgo = parseInt(process.env.KROTON_INGRESSO_SEARCH_MONTHS_AGO)
-
-  if (!element || !element.inscricao || !element.inscricao.dataInscricao) {
-    return false
-  }
-
-  const enrollmentDate = moment(element.inscricao.dataInscricao)
-  const diffInMonths = dateNow.diff(enrollmentDate, 'months')
-
-  return !(diffInMonths > monthsAgo)
 }

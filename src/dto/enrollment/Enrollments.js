@@ -7,6 +7,12 @@ class EnrollmentDto {
       return
     }
 
+    const cycleIsValid = EnrollmentsHelpers.cycleIsValid(classification, data)
+    if (!cycleIsValid) {
+      this.status = 'ERROR'
+      return
+    }
+
     this.classification = classification
 
     const { sistema, inscricao, matricula, dadosPessoais } = data
