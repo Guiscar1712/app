@@ -1,7 +1,7 @@
 const getClassification = require('./getClassification')
-const cycleIsValid = require('./cycleIsValid')
+const isValidCycle = require('./isValidCycle')
 
 module.exports = {
   getClassification,
-  cycleIsValid,
+  isValidCycle,
 }

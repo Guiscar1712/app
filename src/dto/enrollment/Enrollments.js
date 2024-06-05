@@ -1,15 +1,20 @@
+const { STATUS } = require('../../constants/status.constants')
+const {
+  SYSTEM_OPTIONS,
+  PTC_SYSTEM_OPTIONS,
+} = require('../../constants/system.constants')
 const { EnrollmentsHelpers } = require('../../helpers')
 class EnrollmentDto {
   constructor(data) {
     const classification = EnrollmentsHelpers.getClassification(data)
-    if (classification == 'ERROR') {
-      this.status = 'ERROR'
+    if (classification === STATUS.ERROR) {
+      this.status = STATUS.ERROR
       return
     }
 
-    const cycleIsValid = EnrollmentsHelpers.cycleIsValid(classification, data)
-    if (!cycleIsValid) {
-      this.status = 'ERROR'
+    const isValidCycle = EnrollmentsHelpers.isValidCycle(classification, data)
+    if (!isValidCycle) {
+      this.status = STATUS.ERROR
       return
     }
 
@@ -42,12 +47,18 @@ class EnrollmentDto {
 
     let isEnabled = false
 
-    if (system === 'COLABORAR' && process.env.COLABORAR_PAYMENT_PIX_ENABLED) {
+    if (
+      system === SYSTEM_OPTIONS.COLABORAR &&
+      process.env.COLABORAR_PAYMENT_PIX_ENABLED
+    ) {
       isEnabled = process.env.COLABORAR_PAYMENT_PIX_ENABLED === 'true'
-    } else if (system === 'OLIMPO' && process.env.OLIMPO_PAYMENT_PIX_ENABLED) {
+    } else if (
+      system === SYSTEM_OPTIONS.OLIMPO &&
+      process.env.OLIMPO_PAYMENT_PIX_ENABLED
+    ) {
       isEnabled = process.env.OLIMPO_PAYMENT_PIX_ENABLED === 'true'
     } else if (
-      (system === 'SAP' || system === 'ATHENAS') &&
+      PTC_SYSTEM_OPTIONS.includes(system) &&
       process.env.ATHENAS_PAYMENT_PIX_ENABLED
     ) {
       isEnabled = process.env.ATHENAS_PAYMENT_PIX_ENABLED === 'true'

@@ -1,19 +1,23 @@
+const {
+  CLASSIFICATION_TYPE,
+} = require('../../constants/classification.constants')
+const {
+  CLASSROOM_COURSES,
+  DISTANCE_COURSES,
+  BLENDED_COURSES,
+} = require('../../constants/course.constants')
+const { PTC_SYSTEM_OPTIONS } = require('../../constants/system.constants')
 const config = require('../../utils/config')
+
 const ingresso = config.kroton.ingresso
 
-const classroomCourse = ['PRESENCIAL']
-const distanceCourse = ['A DISTÂNCIA', 'EAD']
-const blendedCourse = ['SEMIPRESENCIAL']
-
-const ptcSystemOptions = ['SAP', 'ATHENAS']
-
 module.exports = (classification, data) => {
-  if (classification === 'STUDENT') {
+  if (classification === CLASSIFICATION_TYPE.STUDENT) {
     return true
   }
 
   const system = data.sistema.toUpperCase()
-  if (ptcSystemOptions.includes(system)) {
+  if (PTC_SYSTEM_OPTIONS.includes(system)) {
     return true
   }
 
@@ -22,21 +26,21 @@ module.exports = (classification, data) => {
     data.inscricao.ofertas.primeiraOpcao.dsModalidade.toUpperCase()
 
   if (
-    classroomCourse.includes(modality) &&
+    CLASSROOM_COURSES.includes(modality) &&
     enrollmentDate >= ingresso.classroomCourseCycleDate
   ) {
     return true
   }
 
   if (
-    distanceCourse.includes(modality) &&
+    DISTANCE_COURSES.includes(modality) &&
     enrollmentDate >= ingresso.distanceCourseCycleDate
   ) {
     return true
   }
 
   if (
-    blendedCourse.includes(modality) &&
+    BLENDED_COURSES.includes(modality) &&
     enrollmentDate >= ingresso.blendedCourseCycleDate
   ) {
     return true
