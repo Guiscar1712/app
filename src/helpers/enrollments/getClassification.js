@@ -40,7 +40,7 @@ module.exports = (data) => {
 
   const classificacao = data.inscricao.classificacao
 
-  const classification = classificacao.descricao?.toUpperCase()
+  const classification = classificacao?.descricao?.toUpperCase()
 
   if (STUDENT.includes(classification)) {
     return CLASSIFICATION_TYPE.STUDENT
