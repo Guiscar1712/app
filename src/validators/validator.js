@@ -59,8 +59,7 @@ ValidationContract.prototype.isPhone = (value, code, message) => {
   }
 }
 
-ValidationContract.prototype.
-duplicateRegister = (value, code, message) => {
+ValidationContract.prototype.duplicateRegister = (value, code, message) => {
   if (value) {
     errors.push({ code, message })
   }
@@ -86,6 +85,12 @@ ValidationContract.prototype.isDateValid = (value, code, message) => {
 
   const date = new Date(value)
   if (isNaN(date) && date.toString() === 'Invalid Date') {
+    errors.push({ code, message })
+  }
+}
+
+ValidationContract.prototype.isEqual = (value, valueEqual, code, message) => {
+  if (value !== valueEqual) {
     errors.push({ code, message })
   }
 }

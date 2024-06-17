@@ -27,17 +27,21 @@ module.exports = class EnrollmentList {
       }
 
       const enrollments = []
+      const enrollmentErrors = []
 
       data.forEach((element) => {
         const enrollmentsDto = new EnrollmentsDto(element)
-        if (enrollmentsDto.status !== 'ERROR') {
+
+        if (enrollmentsDto.errors) {
+          enrollmentErrors.push(enrollmentsDto)
+        } else {
           delete enrollmentsDto.contract
           enrollments.push(enrollmentsDto)
         }
       })
 
       const enrollmentsSort = Util.sortNewest(enrollments, 'enrollmentDate')
-      step.value.addData(enrollmentsSort)
+      step.value.addData({ enrollmentErrors: enrollmentErrors })
       return enrollmentsSort
     } catch (error) {
       step.value.addData(error)

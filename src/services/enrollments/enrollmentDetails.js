@@ -30,15 +30,8 @@ module.exports = class EnrollmentDetails {
 
       const enrollmentsDto = new EnrollmentsDto(data)
 
-      if (
-        !enrollmentsDto ||
-        !enrollmentsDto.businessKey ||
-        enrollmentsDto.status === 'ERROR'
-      ) {
-        throw new ClientServerError('Unexpected Content', {
-          method: 'EnrollmentsDto',
-          data,
-        })
+      if (enrollmentsDto.errors) {
+        throw new ClientServerError('Unexpected Content', enrollmentsDto)
       }
 
       await getAdmissionsTest(enrollmentsDto, data)

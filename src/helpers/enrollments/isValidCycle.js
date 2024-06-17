@@ -8,17 +8,21 @@ const {
 } = require('../../constants/course.constants')
 const { PTC_SYSTEM_OPTIONS } = require('../../constants/system.constants')
 const config = require('../../utils/config')
+const enrollmentConstants = require('../../constants/enrollment.constants')
+const Validator = require('../../validators/validator')
 
 const ingresso = config.kroton.ingresso
 
 module.exports = (classification, data) => {
+  const contract = new Validator()
+
   if (classification === CLASSIFICATION_TYPE.STUDENT) {
-    return true
+    return contract
   }
 
   const system = data.sistema.toUpperCase()
   if (PTC_SYSTEM_OPTIONS.includes(system)) {
-    return true
+    return contract
   }
 
   const enrollmentDate = new Date(data.inscricao.dataInscricao)
@@ -29,22 +33,24 @@ module.exports = (classification, data) => {
     CLASSROOM_COURSES.includes(modality) &&
     enrollmentDate >= ingresso.classroomCourseCycleDate
   ) {
-    return true
+    return contract
   }
 
   if (
     DISTANCE_COURSES.includes(modality) &&
     enrollmentDate >= ingresso.distanceCourseCycleDate
   ) {
-    return true
+    return contract
   }
 
   if (
     BLENDED_COURSES.includes(modality) &&
     enrollmentDate >= ingresso.blendedCourseCycleDate
   ) {
-    return true
+    return contract
   }
 
-  return false
+  contract.errorsPush(enrollmentConstants.INVALID_CYCLE)
+
+  return contract
 }

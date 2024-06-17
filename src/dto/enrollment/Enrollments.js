@@ -4,18 +4,37 @@ const {
   PTC_SYSTEM_OPTIONS,
 } = require('../../constants/system.constants')
 const { EnrollmentsHelpers } = require('../../helpers')
+const { requestValidate } = require('../../validators/enrollments')
+const constants = require('../../constants/enrollment.constants')
+
 class EnrollmentDto {
   constructor(data) {
+    const contract = requestValidate(data)
+    if (!contract.isValid()) {
+      data.errors = {
+        status: STATUS.ERROR,
+        code: constants.CODE,
+        errors: contract.errors(),
+      }
+
+      return data
+    }
     const classification = EnrollmentsHelpers.getClassification(data)
-    if (classification === STATUS.ERROR) {
-      this.status = STATUS.ERROR
-      return
+    if (classification.errors) {
+      data.errors = classification.errors
+      return data
     }
 
     const isValidCycle = EnrollmentsHelpers.isValidCycle(classification, data)
-    if (!isValidCycle) {
-      this.status = STATUS.ERROR
-      return
+
+    if (!isValidCycle.isValid()) {
+      data.errors = {
+        status: STATUS.ERROR,
+        code: constants.CODE,
+        errors: isValidCycle.errors(),
+      }
+
+      return data
     }
 
     this.classification = classification
